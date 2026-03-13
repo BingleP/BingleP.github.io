@@ -17,7 +17,6 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      /* Restored Original Pastel Palette */
       --win-bg: #c8d4e8;
       --win-titlebar: #7a9cc4;
       --win-titlebar-end: #b8cce4;
@@ -33,6 +32,9 @@
       --text-mid: #4a5a6a;
       --accent: #7a9cc4;
       --taskbar: #a8bcd4;
+      --steam-dark: #171a21;
+      --steam-blue: #1b2838;
+      --steam-text: #c7d5e0;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,7 +42,6 @@
     body {
       font-family: 'Nunito', sans-serif;
       background-color: var(--win-bg);
-      /* Restored Original Gradient Background */
       background-image:
         radial-gradient(circle at 20% 20%, rgba(212,196,240,0.4) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, rgba(196,232,212,0.4) 0%, transparent 50%),
@@ -57,7 +58,6 @@
       padding: 20px;
     }
 
-    /* Restored Icons with Original Styling */
     .desktop-icons {
       display: flex;
       flex-direction: column;
@@ -99,7 +99,6 @@
       border-radius: 4px;
     }
 
-    /* Window Logic with Original "Refined" Borders */
     .window {
       position: absolute;
       background: var(--win-body);
@@ -121,7 +120,6 @@
       pointer-events: none;
     }
 
-    /* Titlebars with Original Gradients and Color Variants */
     .titlebar {
       background: linear-gradient(90deg, var(--win-titlebar) 0%, var(--win-titlebar-end) 100%);
       padding: 4px 8px;
@@ -135,6 +133,7 @@
     .window.pink .titlebar     { background: linear-gradient(90deg, #c47a8a, #e4b8c4); }
     .window.lavender .titlebar { background: linear-gradient(90deg, #8a7ac4, #c4b8e4); }
     .window.mint .titlebar     { background: linear-gradient(90deg, #7ac48a, #b8e4c4); }
+    .window.steam .titlebar    { background: linear-gradient(90deg, var(--steam-dark), #2a475e); }
 
     .window.inactive .titlebar { filter: grayscale(0.7) opacity(0.8); }
 
@@ -168,7 +167,6 @@
       padding: 12px;
     }
 
-    /* Taskbar with Restored Styling */
     .taskbar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -224,7 +222,6 @@
       border: 1px inset var(--win-border-dark);
     }
 
-    /* Mobile Logic: Stacking + Padding */
     @media (max-width: 700px) {
       #desktop {
         overflow-y: auto;
@@ -253,10 +250,22 @@
       .taskbar-clock { display: none; }
     }
 
-    /* Utility Styles from Original */
     .profile-pic { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--win-border-dark); object-fit: cover; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #7ac47a; box-shadow: 0 0 4px #7ac47a; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    .steam-link-btn {
+      display: inline-block;
+      background: #4c6b22;
+      color: white;
+      padding: 6px 12px;
+      text-decoration: none;
+      font-family: 'VT323';
+      border-bottom: 2px solid #2e4115;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    .steam-link-btn:hover { background: #5a7e2a; }
   </style>
 </head>
 <body>
@@ -274,6 +283,10 @@
     <div class="icon-item" onclick="openWindow('win-train')">
       <div class="icon-img">🚂</div>
       <span class="icon-text">Train.png</span>
+    </div>
+    <div class="icon-item" onclick="openWindow('win-steam')">
+      <div class="icon-img" style="background:#1b2838;">🎮</div>
+      <span class="icon-text">Steam.lnk</span>
     </div>
   </div>
 
@@ -333,6 +346,28 @@
       <p style="font-family:'VT323'; font-size:13px; text-align:center; margin-top:8px;">🚂 VIA Rail 154 Turbotrain — absolute unit</p>
     </div>
   </div>
+
+  <div id="win-steam" class="window steam" style="width: 320px; top: 250px; left: 400px; display: none;">
+    <div class="titlebar">
+      <div style="display:flex; align-items:center; gap:6px;"><span>🎮</span> <span class="titlebar-text">Steam</span></div>
+      <div style="display:flex; gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-steam')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-steam')">✕</div>
+      </div>
+    </div>
+    <div class="window-body" style="background: var(--steam-blue); color: var(--steam-text);">
+      <div style="text-align:center; padding: 10px;">
+        <h3 style="font-family:'VT323'; color: #66c0f4; font-size: 24px;">BINGLEPUSS</h3>
+        <p style="font-size: 12px; margin-bottom: 5px; opacity: 0.8;">Status: In-Game</p>
+        <div class="inset" style="background: rgba(0,0,0,0.3); border: 1px solid #2a475e; margin: 10px 0;">
+          <p style="font-family:'VT323'; font-size: 14px;">"no ads, no trackers, no hair."</p>
+        </div>
+        <a href="https://steamcommunity.com/id/binglepuss/" target="_blank" class="steam-link-btn">
+           VIEW PROFILE
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="taskbar">
@@ -345,7 +380,6 @@
   const windows = document.querySelectorAll('.window');
   const taskbarItems = document.getElementById('taskbar-items');
 
-  // Dragging Logic
   windows.forEach(win => {
     const titlebar = win.querySelector('.titlebar');
     let isDragging = false;
@@ -401,7 +435,13 @@
         const title = win.querySelector('.titlebar-text').innerText;
         const btn = document.createElement('div');
         btn.className = `task-item ${win.classList.contains('active') && !win.classList.contains('minimized') ? 'active' : ''}`;
-        btn.innerHTML = `<span>📁</span> ${title.split(' ')[0]}`;
+        
+        let icon = '📁';
+        if(win.id === 'win-steam') icon = '🎮';
+        if(win.id === 'win-train') icon = '🚂';
+        if(win.id === 'win-profile') icon = '👤';
+        
+        btn.innerHTML = `<span>${icon}</span> ${title.split(' ')[0]}`;
         btn.onclick = () => {
           if (win.classList.contains('minimized') || !win.classList.contains('active')) {
             openWindow(win.id);
