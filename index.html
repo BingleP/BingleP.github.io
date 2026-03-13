@@ -3,24 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>kerrick.ca — welcome :)</title>
+  <title>kerrick.ca — OS</title>
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      /* Refined 90s Palette */
-      --win-bg: #82a3c7; /* Classic blue-grey desktop */
+      --win-bg: #82a3c7; 
       --win-body: #ced4da;
-      --win-titlebar: #000080; /* Classic dark blue */
+      --win-titlebar: #000080;
       --win-titlebar-end: #1084d0;
       --win-border-light: #ffffff;
       --win-border-dark: #808080;
       --win-border-darker: #050505;
-      
-      --pastel-pink: #f2c4ce;
-      --pastel-lavender: #d4c4f0;
-      --pastel-mint: #c4e8d4;
       --text-dark: #000000;
-      --accent: #000080;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,49 +22,65 @@
     body {
       font-family: 'Nunito', sans-serif;
       background-color: var(--win-bg);
-      /* Added a subtle grid pattern to look like a lo-res monitor */
       background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
       background-size: 20px 20px;
-      min-height: 100vh;
-      padding: 40px 20px 60px;
-      color: var(--text-dark);
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden; /* Prevent body scroll, we use windows */
+      cursor: default;
     }
 
-    /* Desktop Icons */
+    /* Desktop Area */
+    #desktop {
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 36px);
+      padding: 20px;
+    }
+
     .desktop-icons {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: fit-content;
     }
 
     .icon-item {
-        width: 70px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-        cursor: pointer;
-        color: white;
-        text-shadow: 1px 1px 2px black;
-        font-size: 12px;
+      width: 75px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      font-size: 12px;
+      user-select: none;
     }
 
+    .icon-item:hover .icon-img { filter: brightness(1.2); }
     .icon-img { font-size: 32px; margin-bottom: 4px; }
 
+    /* Window Styles */
     .window {
+      position: absolute;
       background: var(--win-body);
       border: 2px solid;
       border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
-      box-shadow: inset 1px 1px 0 var(--win-border-light), 2px 2px 5px rgba(0,0,0,0.3);
-      margin-bottom: 24px;
-      position: relative;
-      z-index: 2;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+      min-width: 250px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67), opacity 0.2s;
+      z-index: 10;
     }
+
+    .window.minimized {
+      transform: scale(0.2) translateY(500px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .window.active { z-index: 100; }
 
     .titlebar {
       background: linear-gradient(90deg, var(--win-titlebar) 0%, var(--win-titlebar-end) 100%);
@@ -78,6 +88,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      cursor: move;
+      user-select: none;
+    }
+
+    .window.inactive .titlebar {
+      background: linear-gradient(90deg, #808080, #b5b5b5);
     }
 
     .titlebar-text {
@@ -87,6 +103,8 @@
       font-weight: bold;
     }
 
+    .titlebar-controls { display: flex; gap: 2px; }
+
     .win-btn {
       width: 18px;
       height: 16px;
@@ -94,91 +112,20 @@
       border: 1px solid;
       border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
       font-size: 10px;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
 
-    .window-body { padding: 12px; }
-
-    .inset-panel {
-      background: white;
-      border: 2px solid;
-      border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
-      padding: 15px;
+    .win-btn:active {
+      border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
+    .window-body { padding: 10px; overflow-y: auto; flex-grow: 1; }
 
-    @media (max-width: 850px) {
-      .layout { grid-template-columns: 1fr; }
-      .desktop-icons { display: none; }
-    }
-
-    /* Start Menu Styles */
-    .start-menu {
-        position: fixed;
-        bottom: 36px;
-        left: 2px;
-        width: 200px;
-        background: var(--win-body);
-        border: 2px solid;
-        border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
-        display: none;
-        z-index: 101;
-    }
-
-    .start-menu-sidebar {
-        width: 25px;
-        background: linear-gradient(to top, #000080, #1084d0);
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-        color: white;
-        padding: 10px 5px;
-        font-family: 'VT323', monospace;
-        font-weight: bold;
-    }
-
-    .start-option {
-        padding: 8px 10px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        font-size: 13px;
-    }
-
-    .start-option:hover {
-        background: var(--win-titlebar);
-        color: white;
-    }
-
-    /* The Moving Marquee Styling */
-    .marquee-container {
-        background: #000;
-        color: #0f0; /* Matrix green for contrast */
-        font-family: 'VT323', monospace;
-        padding: 5px;
-        border: 2px inset #808080;
-    }
-
-    /* Profile Pic refinement */
-    .profile-pic-container {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto 15px;
-        border: 3px solid var(--win-border-dark);
-        background: #fff;
-        padding: 3px;
-    }
-
+    /* Taskbar */
     .taskbar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
@@ -202,156 +149,210 @@
       display: flex;
       align-items: center;
       gap: 5px;
+      cursor: pointer;
     }
 
-    .taskbar-item {
-        background: #eee;
-        border: 2px solid;
-        border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
-        padding: 2px 10px;
-        font-size: 12px;
-        max-width: 150px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+    .task-item {
+      height: 28px;
+      min-width: 100px;
+      max-width: 160px;
+      background: var(--win-body);
+      border: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
+      font-size: 12px;
+      padding: 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .task-item.active {
+      background: #e0e0e0;
+      border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
+      font-weight: bold;
     }
 
     .clock {
-        margin-left: auto;
-        border: 2px inset #808080;
-        padding: 2px 8px;
-        font-family: 'VT323', monospace;
-        font-size: 14px;
+      margin-left: auto;
+      border: 2px inset #808080;
+      padding: 2px 8px;
+      font-family: 'VT323', monospace;
+      font-size: 14px;
+    }
+    
+    .inset {
+      background: white;
+      border: 2px inset #808080;
+      padding: 10px;
     }
   </style>
 </head>
 <body>
 
+<div id="desktop">
   <div class="desktop-icons">
-      <div class="icon-item">
-          <div class="icon-img">🖥️</div>
-          <span>My Computer</span>
-      </div>
-      <div class="icon-item">
-          <div class="icon-img">🗑️</div>
-          <span>Trash</span>
-      </div>
+    <div class="icon-item" onclick="openWindow('win-about')">
+      <div class="icon-img">👤</div>
+      <span>About Me</span>
+    </div>
+    <div class="icon-item" onclick="openWindow('win-train')">
+      <div class="icon-img">🚂</div>
+      <span>Train.jpg</span>
+    </div>
+    <div class="icon-item" onclick="openWindow('win-notes')">
+      <div class="icon-img">📝</div>
+      <span>Readme.txt</span>
+    </div>
   </div>
 
-  <div class="layout">
-    <div class="left-col">
-      <div class="window">
-        <div class="titlebar">
-          <div class="titlebar-left" style="display:flex; align-items:center; gap:5px;">
-            <span>👤</span>
-            <span class="titlebar-text">User Profile</span>
-          </div>
-          <div class="win-btn">✕</div>
-        </div>
-        <div class="window-body">
-          <div class="profile-pic-container">
-            <img src="diesel.png" alt="kerrick" style="width: 100%; height: 100%; object-fit: cover;"/>
-          </div>
-          <h2 style="text-align:center; font-family:'VT323'; color:var(--accent);">KERRICK</h2>
-          <p style="text-align:center; font-size:12px; margin-bottom:10px;">Tech Wizard & Master of Shine</p>
-          <div class="inset-panel" style="background: #f0f0f0;">
-             <div style="display:flex; align-items:center; gap:10px; font-size:12px;">
-                 <div style="width:10px; height:10px; background:#0f0; border-radius:50%; box-shadow: 0 0 5px #0f0;"></div>
-                 STATUS: ONLINE & VIBING
-             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="window">
-        <div class="titlebar">
-            <span class="titlebar-text">Explorer.exe</span>
-            <div class="win-btn">✕</div>
-        </div>
-        <div class="window-body">
-            <ul style="list-style:none; font-size: 14px;">
-                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Projects/</a></li>
-                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Lab_Notes/</a></li>
-                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Setup/</a></li>
-            </ul>
-        </div>
+  <div id="win-about" class="window" style="width: 350px; top: 50px; left: 150px;">
+    <div class="titlebar">
+      <span class="titlebar-text">About Kerrick</span>
+      <div class="titlebar-controls">
+        <div class="win-btn" onclick="minimizeWindow('win-about')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-about')">✕</div>
       </div>
     </div>
-
-    <div class="right-col">
-      <div class="window">
-        <div class="titlebar">
-          <span class="titlebar-text">welcome.txt - Notepad</span>
-          <div class="win-btn">✕</div>
-        </div>
-        <div class="marquee-container">
-            <marquee scrollamount="6">>> SYSTEM INITIALIZED... WELCOME TO KERRICK.CA... NO ADS... NO TRACKERS... NO HAIR... <<</marquee>
-        </div>
-        <div class="window-body">
-          <div class="inset-panel" style="font-size:15px; line-height:1.6;">
-            <h1 style="font-family:'VT323'; font-size:40px; margin-bottom:10px; border-bottom: 2px solid #eee;">HEY! I'M KERRICK.</h1>
-            <p>Bald by genetics, fuelled by caffeine. I spend my time breaking things on purpose to figure out how they work.</p>
-            <p style="margin-top:10px;">Gaming when I should be sleeping, and making the internet do what I want. My head reflects the monitor glow like a beacon of pure nerd energy.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="window">
-        <div class="titlebar" style="background: linear-gradient(90deg, #008080, #00ced1);">
-          <span class="titlebar-text">CoolTrain.jpg - Imaging</span>
-          <div class="win-btn">✕</div>
-        </div>
-        <div class="window-body">
-            <div style="border: 2px inset #808080; background:#000;">
-                <img src="cooltrainpicture.png" alt="VIA Rail 154" style="width: 100%; display: block; opacity: 0.9;">
-            </div>
-            <p style="font-size:11px; margin-top:5px; font-style:italic;">File Size: 1.2MB | Resolution: 800x600</p>
-        </div>
+    <div class="window-body">
+      <div class="inset" style="text-align: center;">
+        <img src="diesel.png" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid #888;">
+        <h2 style="font-family: 'VT323'; color: #000080;">KERRICK</h2>
+        <p style="font-size: 13px;">Bald by genetics. Wired by caffeine.</p>
       </div>
     </div>
   </div>
 
-  <div class="start-menu" id="startMenu">
-      <div style="display:flex;">
-          <div class="start-menu-sidebar">Kerrick OS</div>
-          <div style="flex-grow:1;">
-              <div class="start-option">📂 Programs</div>
-              <div class="start-option">🔍 Search</div>
-              <div class="start-option">⚙️ Settings</div>
-              <hr>
-              <div class="start-option">🔒 Shutdown...</div>
-          </div>
+  <div id="win-notes" class="window" style="width: 450px; top: 150px; left: 300px;">
+    <div class="titlebar">
+      <span class="titlebar-text">welcome.txt - Notepad</span>
+      <div class="titlebar-controls">
+        <div class="win-btn" onclick="minimizeWindow('win-notes')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-notes')">✕</div>
       </div>
+    </div>
+    <div class="window-body">
+      <div class="inset" style="min-height: 200px; font-family: 'VT323'; font-size: 18px;">
+        Hey! I'm kerrick. 👋<br><br>
+        i spend my time breaking things on purpose to figure out how they work.
+        no ads, no trackers, no hair. 🫡
+      </div>
+    </div>
   </div>
 
-  <div class="taskbar">
-    <button class="start-btn" onclick="toggleStart()">
-        <span style="font-size:18px;">🪟</span> Start
-    </button>
-    <div class="taskbar-item">👤 User Profile</div>
-    <div class="taskbar-item" style="box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2); background:#ccc;">📝 welcome.txt</div>
-    <div class="clock" id="clock">12:00 PM</div>
+  <div id="win-train" class="window" style="width: 400px; top: 100px; left: 500px;">
+    <div class="titlebar">
+      <span class="titlebar-text">CoolTrain.png - Paint</span>
+      <div class="titlebar-controls">
+        <div class="win-btn" onclick="minimizeWindow('win-train')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-train')">✕</div>
+      </div>
+    </div>
+    <div class="window-body">
+      <div class="inset" style="background: #000; padding: 2px;">
+        <img src="cooltrainpicture.png" alt="Train" style="width: 100%;">
+      </div>
+    </div>
   </div>
+</div>
 
-  <script>
-    function updateClock() {
-      const now = new Date();
-      document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
+<div class="taskbar">
+  <div class="start-btn">🪟 Start</div>
+  <div id="taskbar-items" style="display: flex; gap: 4px;"></div>
+  <div class="clock" id="clock">12:00 PM</div>
+</div>
 
-    function toggleStart() {
-        const menu = document.getElementById('startMenu');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
+<script>
+  const windows = document.querySelectorAll('.window');
+  const taskbarItems = document.getElementById('taskbar-items');
 
-    // Close start menu when clicking desktop
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.start-btn') && !e.target.closest('.start-menu')) {
-            document.getElementById('startMenu').style.display = 'none';
-        }
+  // 1. Dragging Logic
+  windows.forEach(win => {
+    const titlebar = win.querySelector('.titlebar');
+    let isDragging = false;
+    let offset = { x: 0, y: 0 };
+
+    titlebar.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      offset.x = e.clientX - win.offsetLeft;
+      offset.y = e.clientY - win.offsetTop;
+      focusWindow(win.id);
     });
-  </script>
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      win.style.left = (e.clientX - offset.x) + 'px';
+      win.style.top = (e.clientY - offset.y) + 'px';
+    });
+
+    document.addEventListener('mouseup', () => isDragging = false);
+    
+    // Focus on click
+    win.addEventListener('mousedown', () => focusWindow(win.id));
+  });
+
+  // 2. Window Management
+  function focusWindow(id) {
+    windows.forEach(w => {
+        w.classList.remove('active');
+        w.classList.add('inactive');
+    });
+    const win = document.getElementById(id);
+    win.classList.add('active');
+    win.classList.remove('inactive');
+    updateTaskbar();
+  }
+
+  function minimizeWindow(id) {
+    document.getElementById(id).classList.add('minimized');
+    updateTaskbar();
+  }
+
+  function closeWindow(id) {
+    document.getElementById(id).style.display = 'none';
+    updateTaskbar();
+  }
+
+  function openWindow(id) {
+    const win = document.getElementById(id);
+    win.style.display = 'flex';
+    win.classList.remove('minimized');
+    focusWindow(id);
+  }
+
+  // 3. Taskbar Sync
+  function updateTaskbar() {
+    taskbarItems.innerHTML = '';
+    windows.forEach(win => {
+      if (win.style.display !== 'none') {
+        const title = win.querySelector('.titlebar-text').innerText;
+        const btn = document.createElement('div');
+        btn.className = `task-item ${win.classList.contains('active') && !win.classList.contains('minimized') ? 'active' : ''}`;
+        btn.innerHTML = `<span>📂</span> ${title}`;
+        btn.onclick = () => {
+          if (win.classList.contains('minimized') || !win.classList.contains('active')) {
+            openWindow(win.id);
+          } else {
+            minimizeWindow(win.id);
+          }
+        };
+        taskbarItems.appendChild(btn);
+      }
+    });
+  }
+
+  // Clock
+  function updateClock() {
+    document.getElementById('clock').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+  
+  // Initial state
+  updateTaskbar();
+</script>
+
 </body>
 </html>
