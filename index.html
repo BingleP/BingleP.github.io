@@ -7,21 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --win-bg: #c8d4e8;
-      --win-titlebar: #7a9cc4;
-      --win-titlebar-end: #b8cce4;
+      /* Refined 90s Palette */
+      --win-bg: #82a3c7; /* Classic blue-grey desktop */
+      --win-body: #ced4da;
+      --win-titlebar: #000080; /* Classic dark blue */
+      --win-titlebar-end: #1084d0;
       --win-border-light: #ffffff;
-      --win-border-dark: #6a7f9a;
-      --win-border-darker: #3a4f6a;
-      --win-body: #dce8f5;
+      --win-border-dark: #808080;
+      --win-border-darker: #050505;
+      
       --pastel-pink: #f2c4ce;
       --pastel-lavender: #d4c4f0;
       --pastel-mint: #c4e8d4;
-      --pastel-blue: #c4d8f0;
-      --text-dark: #2a3a4a;
-      --text-mid: #4a5a6a;
-      --accent: #7a9cc4;
-      --taskbar: #a8bcd4;
+      --text-dark: #000000;
+      --accent: #000080;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,534 +28,329 @@
     body {
       font-family: 'Nunito', sans-serif;
       background-color: var(--win-bg);
-      background-image:
-        radial-gradient(circle at 20% 20%, rgba(212,196,240,0.4) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(196,232,212,0.4) 0%, transparent 50%),
-        radial-gradient(circle at 60% 20%, rgba(242,196,206,0.3) 0%, transparent 40%);
+      /* Added a subtle grid pattern to look like a lo-res monitor */
+      background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
       min-height: 100vh;
-      padding: 20px 20px 60px;
+      padding: 40px 20px 60px;
       color: var(--text-dark);
-      cursor: default;
+      overflow-x: hidden;
     }
+
+    /* Desktop Icons */
+    .desktop-icons {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        z-index: 1;
+    }
+
+    .icon-item {
+        width: 70px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        cursor: pointer;
+        color: white;
+        text-shadow: 1px 1px 2px black;
+        font-size: 12px;
+    }
+
+    .icon-img { font-size: 32px; margin-bottom: 4px; }
 
     .window {
       background: var(--win-body);
-      border-top: 2px solid var(--win-border-light);
-      border-left: 2px solid var(--win-border-light);
-      border-right: 2px solid var(--win-border-darker);
-      border-bottom: 2px solid var(--win-border-darker);
-      box-shadow: 2px 2px 0 var(--win-border-dark), 4px 4px 12px rgba(0,0,0,0.15);
-      margin-bottom: 16px;
-      animation: windowOpen 0.2s ease-out forwards;
-      transform-origin: top left;
+      border: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
+      box-shadow: inset 1px 1px 0 var(--win-border-light), 2px 2px 5px rgba(0,0,0,0.3);
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 2;
     }
-
-    @keyframes windowOpen {
-      from { transform: scale(0.95); opacity: 0; }
-      to   { transform: scale(1);    opacity: 1; }
-    }
-
-    .window:nth-child(2) { animation-delay: 0.08s; opacity: 0; animation-fill-mode: forwards; }
-    .window:nth-child(3) { animation-delay: 0.16s; opacity: 0; animation-fill-mode: forwards; }
-    .window:nth-child(4) { animation-delay: 0.24s; opacity: 0; animation-fill-mode: forwards; }
 
     .titlebar {
       background: linear-gradient(90deg, var(--win-titlebar) 0%, var(--win-titlebar-end) 100%);
-      padding: 4px 6px;
+      padding: 3px 5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      user-select: none;
-    }
-
-    .titlebar-left {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .titlebar-icon {
-      width: 16px;
-      height: 16px;
-      font-size: 13px;
-      line-height: 16px;
-      text-align: center;
     }
 
     .titlebar-text {
       font-family: 'VT323', monospace;
       font-size: 16px;
       color: white;
-      text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-      letter-spacing: 0.5px;
+      font-weight: bold;
     }
-
-    .titlebar-buttons { display: flex; gap: 3px; }
 
     .win-btn {
-      width: 16px;
-      height: 14px;
-      font-size: 9px;
-      line-height: 13px;
-      text-align: center;
-      background: var(--win-bg);
-      border-top: 1px solid var(--win-border-light);
-      border-left: 1px solid var(--win-border-light);
-      border-right: 1px solid var(--win-border-darker);
-      border-bottom: 1px solid var(--win-border-darker);
+      width: 18px;
+      height: 16px;
+      background: var(--win-body);
+      border: 1px solid;
+      border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      color: var(--text-dark);
-      font-weight: bold;
-      user-select: none;
-      transition: filter 0.1s;
     }
 
-    .win-btn:hover { filter: brightness(1.1); }
-    .win-btn:active {
-      border-top: 1px solid var(--win-border-darker);
-      border-left: 1px solid var(--win-border-darker);
-      border-right: 1px solid var(--win-border-light);
-      border-bottom: 1px solid var(--win-border-light);
-    }
+    .window-body { padding: 12px; }
 
-    .window-body { padding: 14px 16px; }
-
-    .inset {
+    .inset-panel {
       background: white;
-      border-top: 1px solid var(--win-border-dark);
-      border-left: 1px solid var(--win-border-dark);
-      border-right: 1px solid var(--win-border-light);
-      border-bottom: 1px solid var(--win-border-light);
-      padding: 10px 12px;
+      border: 2px solid;
+      border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark);
+      padding: 15px;
     }
 
     .layout {
       display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 16px;
-      max-width: 960px;
+      grid-template-columns: 300px 1fr;
+      gap: 20px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
-    @media (max-width: 700px) {
+    @media (max-width: 850px) {
       .layout { grid-template-columns: 1fr; }
+      .desktop-icons { display: none; }
     }
 
-    .profile-pic-wrap {
-      text-align: center;
-      margin-bottom: 12px;
+    /* Start Menu Styles */
+    .start-menu {
+        position: fixed;
+        bottom: 36px;
+        left: 2px;
+        width: 200px;
+        background: var(--win-body);
+        border: 2px solid;
+        border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
+        display: none;
+        z-index: 101;
     }
 
-    .profile-pic {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-lavender));
-      border-top: 2px solid var(--win-border-light);
-      border-left: 2px solid var(--win-border-light);
-      border-right: 2px solid var(--win-border-dark);
-      border-bottom: 2px solid var(--win-border-dark);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 42px;
-      margin-bottom: 8px;
+    .start-menu-sidebar {
+        width: 25px;
+        background: linear-gradient(to top, #000080, #1084d0);
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        color: white;
+        padding: 10px 5px;
+        font-family: 'VT323', monospace;
+        font-weight: bold;
     }
 
-    .profile-name {
-      font-family: 'VT323', monospace;
-      font-size: 26px;
-      color: var(--accent);
-      letter-spacing: 1px;
+    .start-option {
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        font-size: 13px;
     }
 
-    .profile-tagline {
-      font-size: 11px;
-      color: var(--text-mid);
-      margin-top: 2px;
+    .start-option:hover {
+        background: var(--win-titlebar);
+        color: white;
     }
 
-    .status-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: var(--text-mid);
+    /* The Moving Marquee Styling */
+    .marquee-container {
+        background: #000;
+        color: #0f0; /* Matrix green for contrast */
+        font-family: 'VT323', monospace;
+        padding: 5px;
+        border: 2px inset #808080;
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #7ac47a;
-      box-shadow: 0 0 4px #7ac47a;
-      animation: pulse 2s infinite;
-      flex-shrink: 0;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .nav-links { list-style: none; }
-    .nav-links li { border-bottom: 1px dashed #b8cce4; }
-    .nav-links li:last-child { border-bottom: none; }
-
-    .nav-links a {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 4px;
-      font-size: 13px;
-      color: var(--text-dark);
-      text-decoration: none;
-      transition: background 0.1s;
-    }
-
-    .nav-links a:hover {
-      background: var(--pastel-blue);
-      color: var(--accent);
-    }
-
-    .about-text {
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-dark);
-    }
-
-    .about-text p + p { margin-top: 8px; }
-
-    .interests {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .interest-tag {
-      background: white;
-      border-top: 1px solid var(--win-border-light);
-      border-left: 1px solid var(--win-border-light);
-      border-right: 1px solid var(--win-border-dark);
-      border-bottom: 1px solid var(--win-border-dark);
-      padding: 6px 8px;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: background 0.15s;
-    }
-
-    .interest-tag:hover { background: var(--pastel-lavender); }
-
-    .update-entry {
-      padding: 8px 0;
-      border-bottom: 1px dashed #b8cce4;
-      font-size: 12px;
-    }
-
-    .update-entry:last-child { border-bottom: none; }
-
-    .update-date {
-      font-family: 'VT323', monospace;
-      font-size: 15px;
-      color: var(--accent);
-    }
-
-    .update-msg {
-      margin-top: 2px;
-      color: var(--text-mid);
-      line-height: 1.5;
-    }
-
-    .section-label {
-      font-family: 'VT323', monospace;
-      font-size: 13px;
-      color: var(--text-mid);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: #b8cce4;
-    }
-
-    .marquee-wrap {
-      background: white;
-      border-top: 1px solid var(--win-border-dark);
-      border-left: 1px solid var(--win-border-dark);
-      border-right: 1px solid var(--win-border-light);
-      border-bottom: 1px solid var(--win-border-light);
-      overflow: hidden;
-      padding: 4px 0;
-      margin-bottom: 12px;
-    }
-
-    .marquee-text {
-      display: inline-block;
-      white-space: nowrap;
-      font-family: 'VT323', monospace;
-      font-size: 15px;
-      color: var(--accent);
-      animation: marquee 22s linear infinite;
-      padding-left: 100%;
-    }
-
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-200%); }
+    /* Profile Pic refinement */
+    .profile-pic-container {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+        border: 3px solid var(--win-border-dark);
+        background: #fff;
+        padding: 3px;
     }
 
     .taskbar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
       height: 36px;
-      background: var(--taskbar);
+      background: var(--win-body);
       border-top: 2px solid var(--win-border-light);
       display: flex;
       align-items: center;
-      padding: 0 8px;
-      gap: 6px;
-      z-index: 100;
+      padding: 2px 4px;
+      gap: 4px;
+      z-index: 1000;
     }
 
     .start-btn {
-      background: var(--win-bg);
-      border-top: 2px solid var(--win-border-light);
-      border-left: 2px solid var(--win-border-light);
-      border-right: 2px solid var(--win-border-darker);
-      border-bottom: 2px solid var(--win-border-darker);
-      padding: 2px 10px;
-      font-family: 'VT323', monospace;
-      font-size: 16px;
+      height: 28px;
+      padding: 0 8px;
+      background: var(--win-body);
+      border: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-darker) var(--win-border-darker) var(--win-border-light);
       font-weight: bold;
-      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 5px;
-      color: var(--text-dark);
-      user-select: none;
     }
 
-    .start-btn:active {
-      border-top: 2px solid var(--win-border-darker);
-      border-left: 2px solid var(--win-border-darker);
-      border-right: 2px solid var(--win-border-light);
-      border-bottom: 2px solid var(--win-border-light);
+    .taskbar-item {
+        background: #eee;
+        border: 2px solid;
+        border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
+        padding: 2px 10px;
+        font-size: 12px;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .taskbar-clock {
-      margin-left: auto;
-      font-family: 'VT323', monospace;
-      font-size: 15px;
-      color: var(--text-dark);
-      background: var(--win-bg);
-      border-top: 1px solid var(--win-border-dark);
-      border-left: 1px solid var(--win-border-dark);
-      border-right: 1px solid var(--win-border-light);
-      border-bottom: 1px solid var(--win-border-light);
-      padding: 2px 8px;
-      min-width: 60px;
-      text-align: center;
+    .clock {
+        margin-left: auto;
+        border: 2px inset #808080;
+        padding: 2px 8px;
+        font-family: 'VT323', monospace;
+        font-size: 14px;
     }
-
-    .taskbar-task {
-      background: var(--win-bg);
-      border-top: 1px solid var(--win-border-dark);
-      border-left: 1px solid var(--win-border-dark);
-      border-right: 1px solid var(--win-border-light);
-      border-bottom: 1px solid var(--win-border-light);
-      padding: 2px 10px;
-      font-family: 'VT323', monospace;
-      font-size: 14px;
-      color: var(--text-dark);
-      cursor: pointer;
-    }
-
-    .window.pink .titlebar     { background: linear-gradient(90deg, #c47a8a, #e4b8c4); }
-    .window.lavender .titlebar { background: linear-gradient(90deg, #8a7ac4, #c4b8e4); }
-    .window.mint .titlebar     { background: linear-gradient(90deg, #7ac48a, #b8e4c4); }
   </style>
 </head>
 <body>
 
-  <div class="layout">
-
-    <!-- Left column -->
-    <div class="left-col">
-
-      <!-- Profile -->
-      <div class="window pink">
-        <div class="titlebar">
-          <div class="titlebar-left">
-            <span class="titlebar-icon">🌸</span>
-            <span class="titlebar-text">kerrick.ca</span>
-          </div>
-          <div class="titlebar-buttons">
-            <div class="win-btn">_</div>
-            <div class="win-btn">□</div>
-            <div class="win-btn">✕</div>
-          </div>
-        </div>
-        <div class="window-body">
-          <div class="profile-pic-wrap">
-            <div class="profile-pic" style="overflow: hidden; padding: 0;">
-              <img src="diesel.png" alt="kerrick" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"/>
-            </div>
-            <div class="profile-name">kerrick</div>
-            <div class="profile-tagline">bald. gamer. tech wizard. 🎮💻</div>
-          </div>
-          <div class="inset">
-            <div class="status-bar">
-              <div class="status-dot"></div>
-              <span>online and vibing</span>
-            </div>
-          </div>
-        </div>
+  <div class="desktop-icons">
+      <div class="icon-item">
+          <div class="icon-img">🖥️</div>
+          <span>My Computer</span>
       </div>
+      <div class="icon-item">
+          <div class="icon-img">🗑️</div>
+          <span>Trash</span>
+      </div>
+  </div>
 
-      <!-- Navigation -->
+  <div class="layout">
+    <div class="left-col">
       <div class="window">
         <div class="titlebar">
-          <div class="titlebar-left">
-            <span class="titlebar-icon">📁</span>
-            <span class="titlebar-text">navigate.exe</span>
+          <div class="titlebar-left" style="display:flex; align-items:center; gap:5px;">
+            <span>👤</span>
+            <span class="titlebar-text">User Profile</span>
           </div>
-          <div class="titlebar-buttons">
-            <div class="win-btn">_</div>
-            <div class="win-btn">□</div>
-            <div class="win-btn">✕</div>
-          </div>
+          <div class="win-btn">✕</div>
         </div>
-        <div class="window-body" style="padding: 8px 10px;">
-          <div class="inset" style="text-align: center; padding: 14px 10px;">
-            <div style="font-size: 22px; margin-bottom: 6px;">🚧</div>
-            <div style="font-family: 'VT323', monospace; font-size: 17px; color: var(--accent); letter-spacing: 1px;">pages coming soon</div>
-            <div style="font-size: 11px; color: var(--text-mid); margin-top: 4px;">check back later :)</div>
+        <div class="window-body">
+          <div class="profile-pic-container">
+            <img src="diesel.png" alt="kerrick" style="width: 100%; height: 100%; object-fit: cover;"/>
+          </div>
+          <h2 style="text-align:center; font-family:'VT323'; color:var(--accent);">KERRICK</h2>
+          <p style="text-align:center; font-size:12px; margin-bottom:10px;">Tech Wizard & Master of Shine</p>
+          <div class="inset-panel" style="background: #f0f0f0;">
+             <div style="display:flex; align-items:center; gap:10px; font-size:12px;">
+                 <div style="width:10px; height:10px; background:#0f0; border-radius:50%; box-shadow: 0 0 5px #0f0;"></div>
+                 STATUS: ONLINE & VIBING
+             </div>
           </div>
         </div>
       </div>
 
+      <div class="window">
+        <div class="titlebar">
+            <span class="titlebar-text">Explorer.exe</span>
+            <div class="win-btn">✕</div>
+        </div>
+        <div class="window-body">
+            <ul style="list-style:none; font-size: 14px;">
+                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Projects/</a></li>
+                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Lab_Notes/</a></li>
+                <li style="margin-bottom:8px;">📁 <a href="#" style="color:blue;">Setup/</a></li>
+            </ul>
+        </div>
+      </div>
     </div>
 
-    <!-- Right column -->
     <div class="right-col">
-
-      <!-- Welcome -->
-      <div class="window lavender" style="margin-bottom: 16px;">
-        <div class="titlebar" style="padding: 6px 8px;">
-          <div class="titlebar-left">
-            <span class="titlebar-icon">💌</span>
-            <span class="titlebar-text" style="font-size: 18px;">welcome.txt — Notepad</span>
-          </div>
-          <div class="titlebar-buttons">
-            <div class="win-btn">_</div>
-            <div class="win-btn">□</div>
-            <div class="win-btn">✕</div>
-          </div>
-        </div>
-        <div class="window-body" style="padding: 0;">
-          <div class="marquee-wrap" style="margin-bottom: 0; border-bottom: 2px solid var(--win-border-dark);">
-            <span class="marquee-text">💡 yes i am bald. no i will not put on a hat. &nbsp;&nbsp;&nbsp; 🎮 currently losing at video games &nbsp;&nbsp;&nbsp; 💻 making the internet do what i want &nbsp;&nbsp;&nbsp; 🚧 always under construction &nbsp;&nbsp;&nbsp;</span>
-          </div>
-          <div style="padding: 20px 24px 16px; background: white; border-top: none;">
-            <div style="font-family: 'VT323', monospace; font-size: 48px; color: var(--accent); line-height: 1; letter-spacing: 2px; margin-bottom: 4px;">kerrick.ca</div>
-            <div style="font-family: 'VT323', monospace; font-size: 18px; color: #a88ac4; letter-spacing: 1px; margin-bottom: 16px;">bald. gamer. tech wizard. 🎮💻</div>
-            <div class="about-text">
-              <p>hey! i'm kerrick. bald by genetics, fuelled by coal and caffeine. 👋</p>
-              <p>i spend my time breaking things on purpose to figure out how they work, and gaming when i should probably be sleeping. my head reflects the monitor glow like a beacon of nerd energy.</p>
-              <p>this is my website. no ads, no trackers, no hair. just vibes and questionable tech decisions. 🫡</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Interests -->
       <div class="window">
         <div class="titlebar">
-          <div class="titlebar-left">
-            <span class="titlebar-icon">⭐</span>
-            <span class="titlebar-text">about_me.exe</span>
-          </div>
-          <div class="titlebar-buttons">
-            <div class="win-btn">_</div>
-            <div class="win-btn">□</div>
-            <div class="win-btn">✕</div>
-          </div>
+          <span class="titlebar-text">welcome.txt - Notepad</span>
+          <div class="win-btn">✕</div>
+        </div>
+        <div class="marquee-container">
+            <marquee scrollamount="6">>> SYSTEM INITIALIZED... WELCOME TO KERRICK.CA... NO ADS... NO TRACKERS... NO HAIR... <<</marquee>
         </div>
         <div class="window-body">
-          <div class="section-label">interests</div>
-          <div class="interests">
-            <div class="interest-tag">🎮 gaming</div>
-            <div class="interest-tag">💻 tech stuff</div>
-            <div class="interest-tag">🌐 web design</div>
-            <div class="interest-tag">🎵 music</div>
-            <div class="interest-tag">🔧 tinkering</div>
-            <div class="interest-tag">✨ being bald</div>
+          <div class="inset-panel" style="font-size:15px; line-height:1.6;">
+            <h1 style="font-family:'VT323'; font-size:40px; margin-bottom:10px; border-bottom: 2px solid #eee;">HEY! I'M KERRICK.</h1>
+            <p>Bald by genetics, fuelled by caffeine. I spend my time breaking things on purpose to figure out how they work.</p>
+            <p style="margin-top:10px;">Gaming when I should be sleeping, and making the internet do what I want. My head reflects the monitor glow like a beacon of pure nerd energy.</p>
           </div>
         </div>
       </div>
 
-      <!-- Train picture -->
-      <div class="window mint">
-        <div class="titlebar">
-          <div class="titlebar-left">
-            <span class="titlebar-icon">🚂</span>
-            <span class="titlebar-text">cooltrainpicture.png — Paint</span>
-          </div>
-          <div class="titlebar-buttons">
-            <div class="win-btn">_</div>
-            <div class="win-btn">□</div>
-            <div class="win-btn">✕</div>
-          </div>
+      <div class="window">
+        <div class="titlebar" style="background: linear-gradient(90deg, #008080, #00ced1);">
+          <span class="titlebar-text">CoolTrain.jpg - Imaging</span>
+          <div class="win-btn">✕</div>
         </div>
-        <div class="window-body" style="padding: 8px;">
-          <div class="inset" style="padding: 4px;">
-            <img src="cooltrainpicture.png" alt="VIA Rail 154 Turbotrain" style="width: 100%; display: block;"/>
-          </div>
-          <div style="font-family: 'VT323', monospace; font-size: 13px; color: var(--text-mid); margin-top: 6px; text-align: center;">
-            🚂 VIA Rail 154 Turbotrain — a absolute unit
-          </div>
+        <div class="window-body">
+            <div style="border: 2px inset #808080; background:#000;">
+                <img src="cooltrainpicture.png" alt="VIA Rail 154" style="width: 100%; display: block; opacity: 0.9;">
+            </div>
+            <p style="font-size:11px; margin-top:5px; font-style:italic;">File Size: 1.2MB | Resolution: 800x600</p>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- Taskbar -->
+  <div class="start-menu" id="startMenu">
+      <div style="display:flex;">
+          <div class="start-menu-sidebar">Kerrick OS</div>
+          <div style="flex-grow:1;">
+              <div class="start-option">📂 Programs</div>
+              <div class="start-option">🔍 Search</div>
+              <div class="start-option">⚙️ Settings</div>
+              <hr>
+              <div class="start-option">🔒 Shutdown...</div>
+          </div>
+      </div>
+  </div>
+
   <div class="taskbar">
-    <div class="start-btn">🪟 Start</div>
-    <div class="taskbar-task">🌸 kerrick.ca</div>
-    <div class="taskbar-task">📝 welcome.txt</div>
-    <div class="taskbar-clock" id="clock">12:00</div>
+    <button class="start-btn" onclick="toggleStart()">
+        <span style="font-size:18px;">🪟</span> Start
+    </button>
+    <div class="taskbar-item">👤 User Profile</div>
+    <div class="taskbar-item" style="box-shadow: inset 2px 2px 3px rgba(0,0,0,0.2); background:#ccc;">📝 welcome.txt</div>
+    <div class="clock" id="clock">12:00 PM</div>
   </div>
 
   <script>
     function updateClock() {
       const now = new Date();
-      const h = now.getHours().toString().padStart(2, '0');
-      const m = now.getMinutes().toString().padStart(2, '0');
-      document.getElementById('clock').textContent = h + ':' + m;
+      document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
     }
+    setInterval(updateClock, 1000);
     updateClock();
-    setInterval(updateClock, 10000);
 
-    document.querySelectorAll('.win-btn').forEach(btn => {
-      btn.addEventListener('click', e => {
-        e.stopPropagation();
-        const body = btn.closest('.window').querySelector('.window-body');
-        if (btn.textContent === '_') {
-          body.style.display = body.style.display === 'none' ? '' : 'none';
+    function toggleStart() {
+        const menu = document.getElementById('startMenu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Close start menu when clicking desktop
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.start-btn') && !e.target.closest('.start-menu')) {
+            document.getElementById('startMenu').style.display = 'none';
         }
-      });
     });
   </script>
 </body>
