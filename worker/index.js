@@ -1,5 +1,5 @@
-// BonziBUDDY Gemini Proxy — Cloudflare Worker
-// API key is stored as a secret: wrangler secret put GEMINI_API_KEY
+// BonziBUDDY Groq Proxy — Cloudflare Worker
+// API key is stored as a secret: wrangler secret put GROQ_API_KEY
 // Never put the actual key value in this file or anywhere in the repo.
 
 const ALLOWED_ORIGINS = ['https://kerrick.ca', 'https://binglep.github.io'];
@@ -42,32 +42,36 @@ export default {
       return new Response('Missing message', { status: 400, headers: corsHeaders });
     }
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${env.GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: [
-            ...history,
-            { role: 'user', parts: [{ text: message }] },
-          ],
-        }),
-      }
-    );
+    // Convert history from Gemini format to OpenAI format
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...history.map(m => ({ role: m.role === 'model' ? 'assistant' : 'user', content: m.parts[0].text })),
+      { role: 'user', content: message },
+    ];
 
-    const data = await geminiRes.json();
+    const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${env.GROQ_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages,
+        max_tokens: 150,
+      }),
+    });
 
-    if (!geminiRes.ok || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
-      // Return the raw Gemini error so it's visible during debugging
+    const data = await groqRes.json();
+
+    if (!groqRes.ok || !data.choices?.[0]?.message?.content) {
       return new Response(JSON.stringify({ error: data }), {
         status: 502,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    const reply = data.candidates[0].content.parts[0].text;
+    const reply = data.choices[0].message.content;
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
