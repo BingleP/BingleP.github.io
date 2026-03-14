@@ -470,8 +470,8 @@
 
     #screensaver-bouncer {
       position: absolute;
-      width: 120px;
-      height: 120px;
+      width: 250px;
+      height: 250px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -987,8 +987,8 @@
   function startScreensaver() {
     const ss = document.getElementById('screensaver');
     const bouncer = document.getElementById('screensaver-bouncer');
-    ssX  = Math.random() * (window.innerWidth  - 120);
-    ssY  = Math.random() * (window.innerHeight - 120);
+    ssX  = Math.random() * (window.innerWidth  - 250);
+    ssY  = Math.random() * (window.innerHeight - 250);
     ssDX = (Math.random() < 0.5 ? 1 : -1) * 1.5;
     ssDY = (Math.random() < 0.5 ? 1 : -1) * 1.5;
     bouncer.style.left = ssX + 'px';
@@ -1001,8 +1001,8 @@
     const bouncer = document.getElementById('screensaver-bouncer');
     ssX += ssDX;
     ssY += ssDY;
-    if (ssX <= 0 || ssX >= window.innerWidth  - 120) ssDX *= -1;
-    if (ssY <= 0 || ssY >= window.innerHeight - 120) ssDY *= -1;
+    if (ssX <= 0 || ssX >= window.innerWidth  - 250) ssDX *= -1;
+    if (ssY <= 0 || ssY >= window.innerHeight - 250) ssDY *= -1;
     bouncer.style.left = ssX + 'px';
     bouncer.style.top  = ssY + 'px';
     ssAnimFrame = requestAnimationFrame(animateBouncer);
