@@ -571,13 +571,29 @@
     }
     .steam-link-btn:hover { background: #5a7e2a; }
 
-    /* BonziBUDDY */
-    .window.bonzi .titlebar { background: linear-gradient(to right, #5a0a9e, #9b30e8); }
+    /* BonziBUDDY tray panel */
+    #bonzi-panel {
+      position: fixed;
+      bottom: 36px;
+      right: 48px;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      border: 2px solid;
+      border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light);
+      background: var(--win-bg);
+      z-index: 8000;
+      box-shadow: 2px 2px 0 #000;
+    }
+    #bonzi-panel.bonzi-hidden { display: none; }
+    .bonzi-tray-btn { width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; }
+    .bonzi-tray-btn:hover { border-color: var(--win-border-light) var(--win-border-dark) var(--win-border-dark) var(--win-border-light); }
+    .bonzi-tray-btn img { width: 20px; height: 20px; image-rendering: pixelated; }
     .bonzi-character { text-align: center; padding: 8px 8px 4px; border-bottom: 2px solid var(--win-border-dark); background: #1a0a2e; }
-    .bonzi-character img { height: 100px; image-rendering: pixelated; }
-    .bonzi-char-fallback { font-size: 64px; display: none; }
+    .bonzi-character img { height: 90px; image-rendering: pixelated; }
+    .bonzi-char-fallback { font-size: 56px; display: none; }
     .bonzi-speech { font-family: 'VT323'; font-size: 15px; color: #d4b0ff; margin-top: 4px; min-height: 20px; font-style: italic; }
-    .bonzi-chat { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; background: #0d0d1a; min-height: 0; }
+    .bonzi-chat { height: 180px; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 6px; background: #0d0d1a; }
     .bonzi-msg { font-family: 'VT323'; font-size: 16px; padding: 4px 8px; max-width: 90%; word-break: break-word; }
     .bonzi-msg.user { background: #2a1a4a; color: #c8a8ff; align-self: flex-end; }
     .bonzi-msg.bonzi { background: #1a0a2e; color: #e8d0ff; border-left: 3px solid #9b30e8; }
@@ -652,10 +668,6 @@
     <div class="icon-item" ondblclick="openWindow('win-train')">
       <div class="icon-img">🚂</div>
       <span class="icon-text">Train.png</span>
-    </div>
-    <div class="icon-item" ondblclick="openWindow('win-bonzi')">
-      <div class="icon-img">🦍</div>
-      <span class="icon-text">BonziBUDDY</span>
     </div>
     <div class="icon-item" ondblclick="openWindow('win-steam')">
       <div class="icon-img" style="background:#1b2838; padding:6px;">
@@ -774,29 +786,6 @@
   </div>
 </div>
 
-<div id="win-bonzi" class="window bonzi" style="width:310px; top:60px; left:420px; display:none;">
-  <div class="titlebar">
-    <div style="display:flex; align-items:center; gap:6px;"><span>🦍</span> <span class="titlebar-text">BonziBUDDY</span></div>
-    <div style="display:flex; gap:3px;">
-      <div class="win-btn" onclick="minimizeWindow('win-bonzi')">_</div>
-      <div class="win-btn" onclick="closeWindow('win-bonzi')">✕</div>
-    </div>
-  </div>
-  <div class="window-body" style="padding:0; display:flex; flex-direction:column; height:380px;">
-    <div class="bonzi-character">
-      <img src="bonzi.gif" alt="BonziBUDDY" onerror="this.style.display='none'; document.querySelector('.bonzi-char-fallback').style.display='block'">
-      <div class="bonzi-char-fallback">🦍</div>
-      <div class="bonzi-speech" id="bonzi-speech">Hiya! I'm BonziBUDDY! Ask me anything!</div>
-    </div>
-    <div class="bonzi-chat" id="bonzi-chat"></div>
-    <div class="bonzi-input-row">
-      <input class="bonzi-input" id="bonzi-input" type="text" placeholder="Say something..." onkeydown="if(event.key==='Enter') bonziSend()">
-      <button class="bonzi-send" onclick="bonziSend()">Send</button>
-      <button class="bonzi-tts-btn" id="bonzi-tts-toggle" onclick="bonziToggleTTS()" title="Toggle speech">🔊</button>
-    </div>
-  </div>
-</div>
-
 <div id="start-menu">
   <div class="start-menu-sidebar"><span>kerrick.ca</span></div>
   <div class="start-menu-items">
@@ -811,10 +800,6 @@
     <div class="start-menu-item" onclick="openWindow('win-steam'); toggleStart()">
       <span class="item-icon">🎮</span>
       <div class="start-menu-label">Steam.lnk<small>games n stuff</small></div>
-    </div>
-    <div class="start-menu-item" onclick="openWindow('win-bonzi'); toggleStart()">
-      <span class="item-icon">🦍</span>
-      <div class="start-menu-label">BonziBUDDY<small>your internet buddy</small></div>
     </div>
     <div class="start-menu-divider"></div>
     <a class="start-menu-item" href="https://github.com/BingleP/BinglesHTTPServer" target="_blank" onclick="toggleStart()">
@@ -837,9 +822,26 @@
   </div>
 </div>
 
+<div id="bonzi-panel">
+  <div class="bonzi-character">
+    <img src="bonzi.gif" alt="BonziBUDDY" onerror="this.style.display='none'; document.querySelector('.bonzi-char-fallback').style.display='block'">
+    <div class="bonzi-char-fallback">🦍</div>
+    <div class="bonzi-speech" id="bonzi-speech">Hiya! I'm BonziBUDDY! Ask me anything!</div>
+  </div>
+  <div class="bonzi-chat" id="bonzi-chat"></div>
+  <div class="bonzi-input-row">
+    <input class="bonzi-input" id="bonzi-input" type="text" placeholder="Say something..." onkeydown="if(event.key==='Enter') bonziSend()">
+    <button class="bonzi-send" onclick="bonziSend()">Send</button>
+    <button class="bonzi-tts-btn" id="bonzi-tts-toggle" onclick="bonziToggleTTS()" title="Toggle speech">🔊</button>
+  </div>
+</div>
+
 <div class="taskbar">
   <div class="start-btn" onclick="toggleStart()">🪟 Start</div>
   <div id="taskbar-items" style="display: flex; gap: 4px;"></div>
+  <div class="bonzi-tray-btn" onclick="bonziTogglePanel()" title="BonziBUDDY">
+    <img src="bonzi.gif" alt="🦍" onerror="this.textContent='🦍'; this.style.fontSize='16px'">
+  </div>
   <div class="taskbar-clock" id="clock">12:00</div>
 </div>
 
@@ -1084,10 +1086,15 @@
   setInterval(updateClock, 1000);
   updateClock();
   updateTaskbar();
+  // BonziBUDDY starts open
+  // (panel is visible by default, tray button hides it)
 
   // ── BonziBUDDY ────────────────────────────────────────────────
-  // After deploying the Cloudflare Worker, replace the URL below with your worker URL.
   const BONZI_WORKER_URL = 'https://bonzi-proxy.bonzibuddy.workers.dev/';
+
+  function bonziTogglePanel() {
+    document.getElementById('bonzi-panel').classList.toggle('bonzi-hidden');
+  }
 
   let bonziHistory = [];
   let bonziTTS = true;
