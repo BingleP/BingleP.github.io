@@ -17,21 +17,21 @@
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     :root {
-      --win-bg: #c8d4e8;
-      --win-titlebar: #7a9cc4;
-      --win-titlebar-end: #b8cce4;
-      --win-border-light: #ffffff;
-      --win-border-dark: #6a7f9a;
-      --win-border-darker: #3a4f6a;
-      --win-body: #dce8f5;
-      --pastel-pink: #f2c4ce;
-      --pastel-lavender: #d4c4f0;
-      --pastel-mint: #c4e8d4;
-      --pastel-blue: #c4d8f0;
-      --text-dark: #2a3a4a;
-      --text-mid: #4a5a6a;
-      --accent: #7a9cc4;
-      --taskbar: #a8bcd4;
+      --win-bg: #1a1a1a;
+      --win-titlebar: #3a3a3a;
+      --win-titlebar-end: #282828;
+      --win-border-light: #555555;
+      --win-border-dark: #2e2e2e;
+      --win-border-darker: #0d0d0d;
+      --win-body: #222222;
+      --pastel-pink: #3a1a22;
+      --pastel-lavender: #221a3a;
+      --pastel-mint: #1a2e22;
+      --pastel-blue: #1a222e;
+      --text-dark: #e0e0e0;
+      --text-mid: #888888;
+      --accent: #8aaccc;
+      --taskbar: #1c1c1c;
       --steam-dark: #171a21;
       --steam-blue: #1b2838;
       --steam-text: #c7d5e0;
@@ -43,9 +43,9 @@
       font-family: 'Nunito', sans-serif;
       background-color: var(--win-bg);
       background-image:
-        radial-gradient(circle at 20% 20%, rgba(212,196,240,0.4) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(196,232,212,0.4) 0%, transparent 50%),
-        radial-gradient(circle at 60% 20%, rgba(242,196,206,0.3) 0%, transparent 40%);
+        radial-gradient(circle at 20% 20%, rgba(40,30,60,0.5) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(20,40,30,0.4) 0%, transparent 50%),
+        radial-gradient(circle at 60% 20%, rgba(40,20,30,0.3) 0%, transparent 40%);
       height: 100vh;
       overflow: hidden;
       color: var(--text-dark);
@@ -133,9 +133,9 @@
       user-select: none;
     }
 
-    .window.pink .titlebar     { background: linear-gradient(90deg, #c47a8a, #e4b8c4); }
-    .window.lavender .titlebar { background: linear-gradient(90deg, #8a7ac4, #c4b8e4); }
-    .window.mint .titlebar     { background: linear-gradient(90deg, #7ac48a, #b8e4c4); }
+    .window.pink .titlebar     { background: linear-gradient(90deg, #6b1a2a, #3e1018); }
+    .window.lavender .titlebar { background: linear-gradient(90deg, #3a2278, #221455); }
+    .window.mint .titlebar     { background: linear-gradient(90deg, #1a5a2e, #0e3a1c); }
     .window.steam .titlebar    { background: linear-gradient(90deg, var(--steam-dark), #2a475e); }
 
     .window.inactive .titlebar { filter: grayscale(0.7) opacity(0.8); }
@@ -165,7 +165,7 @@
     .window-body { padding: 14px; overflow-y: auto; }
 
     .inset {
-      background: white;
+      background: #111111;
       border: 1px solid var(--win-border-dark);
       padding: 12px;
     }
@@ -323,7 +323,7 @@
 
     .cloud {
       position: absolute;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.04);
       border-radius: 50px;
       filter: blur(2px);
     }
@@ -332,7 +332,7 @@
     .cloud::after {
       content: '';
       position: absolute;
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.04);
       border-radius: 50%;
     }
 
@@ -554,7 +554,7 @@
       #context-menu { display: none !important; }
     }
 
-    .profile-pic { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--win-border-dark); object-fit: cover; }
+    .profile-pic { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--win-border-light); object-fit: cover; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #7ac47a; box-shadow: 0 0 4px #7ac47a; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
@@ -657,7 +657,7 @@
     <div class="window-body">
       <div style="text-align:center; margin-bottom:12px;">
         <img src="diesel.png" class="profile-pic" alt="kerrick">
-        <h2 style="font-family:'VT323'; color:var(--win-border-darker); margin-top:5px;">KERRICK</h2>
+        <h2 style="font-family:'VT323'; color:var(--text-dark); margin-top:5px;">KERRICK</h2>
         <p style="font-size:12px; color:var(--text-mid);">bald. gamer. deeply normal person. 🎮</p>
       </div>
       <div class="inset">
@@ -677,7 +677,7 @@
         <div class="win-btn" onclick="closeWindow('win-welcome')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="background: white;">
+    <div class="window-body" style="background: var(--win-body);">
         <h1 style="font-family:'VT323'; font-size:42px; color:var(--accent); line-height:1;">kerrick.ca</h1>
         <p style="font-family:'VT323'; font-size:18px; color:#a88ac4; margin-bottom:15px;">bald by genetics. funny on purpose.</p>
         <div style="font-size:14px; line-height:1.6; color:var(--text-dark);">
@@ -737,7 +737,7 @@
     <div class="window-body">
       <div style="text-align:center; margin-bottom:14px;">
         <div style="font-size:48px;">🖥️</div>
-        <div style="font-family:'VT323'; font-size:22px; color:var(--win-border-darker);">kerrick.ca OS</div>
+        <div style="font-family:'VT323'; font-size:22px; color:var(--text-dark);">kerrick.ca OS</div>
         <div style="font-size:11px; color:var(--text-mid);">Version 98.6 (Build BALD)</div>
       </div>
       <div class="inset">
