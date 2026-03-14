@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>kerrick.ca — welcome :)</title>
-  
+
   <meta name="title" content="kerrick.ca — welcome :)">
   <meta name="description" content="bald. gamer. tech wizard. 👋 No ads, no trackers, no hair.">
   <meta name="theme-color" content="#7a9cc4">
@@ -76,6 +76,8 @@
       user-select: none;
     }
 
+    .icon-item:hover .icon-img { background: rgba(255,255,255,0.95); }
+
     .icon-img {
       font-size: 28px;
       margin-bottom: 4px;
@@ -88,6 +90,7 @@
       border-radius: 12px;
       border: 1px solid var(--win-border-light);
       box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+      transition: background 0.1s;
     }
 
     .icon-text {
@@ -359,21 +362,164 @@
     .cloud-5 { width: 100px; height: 30px; top: 75%; animation: float-cloud 65s linear infinite 45s; opacity: 0.4; }
     .cloud-6 { width: 200px; height: 55px; top: 15%; animation: float-cloud 75s linear infinite 55s; opacity: 0.6; }
 
+    /* Right-click context menu */
+    #context-menu {
+      display: none;
+      position: fixed;
+      background: var(--win-bg);
+      border-top: 2px solid var(--win-border-light);
+      border-left: 2px solid var(--win-border-light);
+      border-right: 2px solid var(--win-border-darker);
+      border-bottom: 2px solid var(--win-border-darker);
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+      z-index: 3000;
+      min-width: 180px;
+      padding: 2px 0;
+    }
+
+    #context-menu.open { display: block; }
+
+    .ctx-item {
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      padding: 5px 16px;
+      cursor: pointer;
+      color: var(--text-dark);
+    }
+
+    .ctx-item:hover {
+      background: var(--win-titlebar);
+      color: white;
+    }
+
+    .ctx-divider {
+      height: 1px;
+      background: var(--win-border-dark);
+      margin: 3px 4px;
+      border-top: 1px solid var(--win-border-light);
+    }
+
+    /* Error popup */
+    #error-popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 5000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #error-popup.open { display: flex; }
+
+    #error-popup .error-box {
+      background: var(--win-body);
+      border-top: 2px solid var(--win-border-light);
+      border-left: 2px solid var(--win-border-light);
+      border-right: 2px solid var(--win-border-darker);
+      border-bottom: 2px solid var(--win-border-darker);
+      box-shadow: 4px 4px 16px rgba(0,0,0,0.3);
+      width: 340px;
+    }
+
+    #error-popup .error-titlebar {
+      background: linear-gradient(90deg, #c43a3a, #e47a7a);
+      padding: 4px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #error-popup .error-body {
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    #error-popup .error-icon { font-size: 36px; flex-shrink: 0; }
+
+    #error-popup .error-text { font-size: 13px; line-height: 1.5; }
+
+    #error-popup .error-btn {
+      display: block;
+      margin: 0 auto 14px;
+      padding: 4px 24px;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      background: var(--win-bg);
+      border-top: 2px solid var(--win-border-light);
+      border-left: 2px solid var(--win-border-light);
+      border-right: 2px solid var(--win-border-darker);
+      border-bottom: 2px solid var(--win-border-darker);
+      cursor: pointer;
+    }
+
+    /* Screensaver */
+    #screensaver {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #000;
+      z-index: 9000;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    #screensaver.active { display: block; }
+
+    #screensaver-bouncer {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #screensaver-bouncer img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
+
+    /* About This PC */
+    .about-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      padding: 3px 0;
+      border-bottom: 1px dotted var(--win-border-dark);
+    }
+
+    .about-row:last-child { border-bottom: none; }
+
+    .about-label { color: var(--text-mid); font-weight: 600; }
+    .about-value { font-family: 'VT323', monospace; font-size: 14px; }
+
+    /* Mobile */
     @media (max-width: 700px) {
       #desktop {
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         gap: 20px;
-        height: calc(100vh - 40px);
-        padding: 15px;
+        height: calc(100vh - 48px);
+        padding: 12px;
+        -webkit-overflow-scrolling: touch;
       }
+
       .desktop-icons {
         position: relative;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        gap: 16px;
       }
+
+      .icon-item { width: 72px; }
+
       .window {
         position: relative !important;
         top: 0 !important;
@@ -383,14 +529,35 @@
         opacity: 1 !important;
         display: flex !important;
       }
+
       .window.minimized { display: none !important; }
+
+      .taskbar {
+        height: 48px;
+        padding: 0 10px;
+      }
+
+      .start-btn {
+        font-size: 18px;
+        padding: 4px 14px;
+      }
+
+      .task-item { min-width: 80px; font-size: 15px; }
+
       .taskbar-clock { display: none; }
+
+      #start-menu {
+        width: 100%;
+        bottom: 48px;
+      }
+
+      #context-menu { display: none !important; }
     }
 
     .profile-pic { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--win-border-dark); object-fit: cover; }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #7ac47a; box-shadow: 0 0 4px #7ac47a; animation: pulse 2s infinite; }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-    
+
     .steam-link-btn {
       display: inline-block;
       background: #4c6b22;
@@ -416,21 +583,61 @@
   <div class="cloud cloud-6"></div>
 </div>
 
+<!-- Right-click context menu -->
+<div id="context-menu">
+  <div class="ctx-item" onclick="openWindow('win-about'); closeContextMenu()">🖥️ About This PC</div>
+  <div class="ctx-divider"></div>
+  <div class="ctx-item" onclick="refreshDesktop(); closeContextMenu()">🔄 Refresh</div>
+  <div class="ctx-item" onclick="startScreensaver(); closeContextMenu()">💤 Screensaver</div>
+</div>
+
+<!-- Error popup -->
+<div id="error-popup">
+  <div class="error-box">
+    <div class="error-titlebar">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:14px;">⚠️</span>
+        <span class="titlebar-text" style="color:white; font-family:'VT323'; font-size:17px;">BALD.EXE — Application Error</span>
+      </div>
+      <div class="win-btn" onclick="document.getElementById('error-popup').classList.remove('open')">✕</div>
+    </div>
+    <div class="error-body">
+      <div class="error-icon">💀</div>
+      <div class="error-text">
+        <strong>BALD.EXE has encountered a problem and needs to close.</strong>
+        <br><br>
+        Error code: 0x00000000_HAIR_NOT_FOUND<br>
+        <span style="color: var(--text-mid); font-size:11px;">We are sorry for the inconvenience.</span>
+      </div>
+    </div>
+    <button class="error-btn" onclick="document.getElementById('error-popup').classList.remove('open')">OK</button>
+  </div>
+</div>
+
+<!-- Screensaver -->
+<div id="screensaver" onclick="stopScreensaver()">
+  <div id="screensaver-bouncer">
+    <!-- src will be set when image is provided -->
+    <img id="screensaver-img" src="" alt="" style="display:none;">
+    <span id="screensaver-emoji" style="font-size:80px;">🖥️</span>
+  </div>
+</div>
+
 <div id="desktop">
   <div class="desktop-icons">
-    <div class="icon-item" onclick="openWindow('win-profile')">
+    <div class="icon-item" ondblclick="openWindow('win-profile')">
       <div class="icon-img">🌸</div>
       <span class="icon-text">User.exe</span>
     </div>
-    <div class="icon-item" onclick="openWindow('win-welcome')">
+    <div class="icon-item" ondblclick="openWindow('win-welcome')">
       <div class="icon-img">📝</div>
       <span class="icon-text">Welcome.txt</span>
     </div>
-    <div class="icon-item" onclick="openWindow('win-train')">
+    <div class="icon-item" ondblclick="openWindow('win-train')">
       <div class="icon-img">🚂</div>
       <span class="icon-text">Train.png</span>
     </div>
-    <div class="icon-item" onclick="openWindow('win-steam')">
+    <div class="icon-item" ondblclick="openWindow('win-steam')">
       <div class="icon-img" style="background:#1b2838;">🎮</div>
       <span class="icon-text">Steam.lnk</span>
     </div>
@@ -514,6 +721,31 @@
       </div>
     </div>
   </div>
+
+  <div id="win-about" class="window" style="width: 340px; top: 80px; left: 250px; display: none;">
+    <div class="titlebar">
+      <div style="display:flex; align-items:center; gap:6px;"><span>🖥️</span> <span class="titlebar-text">About This PC</span></div>
+      <div style="display:flex; gap:3px;">
+        <div class="win-btn" onclick="closeWindow('win-about')">✕</div>
+      </div>
+    </div>
+    <div class="window-body">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="font-size:48px;">🖥️</div>
+        <div style="font-family:'VT323'; font-size:22px; color:var(--win-border-darker);">kerrick.ca OS</div>
+        <div style="font-size:11px; color:var(--text-mid);">Version 98.6 (Build BALD)</div>
+      </div>
+      <div class="inset">
+        <div class="about-row"><span class="about-label">CPU</span><span class="about-value">Big Brain 9000™</span></div>
+        <div class="about-row"><span class="about-label">RAM</span><span class="about-value">Enough</span></div>
+        <div class="about-row"><span class="about-label">Hair</span><span class="about-value">0 KB</span></div>
+        <div class="about-row"><span class="about-label">Caffeine</span><span class="about-value">CRITICAL</span></div>
+        <div class="about-row"><span class="about-label">Uptime</span><span class="about-value">Too long</span></div>
+        <div class="about-row"><span class="about-label">Location</span><span class="about-value">Canada 🍁</span></div>
+        <div class="about-row"><span class="about-label">Licensed to</span><span class="about-value">KERRICK</span></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="start-menu">
@@ -541,6 +773,10 @@
       <div class="start-menu-label">Solitaire<small>python card game</small></div>
     </a>
     <div class="start-menu-divider"></div>
+    <div class="start-menu-item" onclick="openWindow('win-about'); toggleStart()">
+      <span class="item-icon">🖥️</span>
+      <div class="start-menu-label">About This PC<small>system specs</small></div>
+    </div>
     <a class="start-menu-item" href="https://github.com/BingleP" target="_blank" onclick="toggleStart()">
       <span class="item-icon">🐙</span>
       <div class="start-menu-label">GitHub<small>github.com/BingleP</small></div>
@@ -555,6 +791,7 @@
 </div>
 
 <script>
+  // ── Window management ──────────────────────────────────────────
   const windows = document.querySelectorAll('.window');
   const taskbarItems = document.getElementById('taskbar-items');
 
@@ -563,6 +800,7 @@
     let isDragging = false;
     let offset = { x: 0, y: 0 };
 
+    // Mouse drag
     titlebar.addEventListener('mousedown', (e) => {
       if (window.innerWidth <= 700) return;
       isDragging = true;
@@ -574,11 +812,32 @@
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
       win.style.left = (e.clientX - offset.x) + 'px';
-      win.style.top = (e.clientY - offset.y) + 'px';
+      win.style.top  = (e.clientY - offset.y) + 'px';
     });
 
     document.addEventListener('mouseup', () => isDragging = false);
+
+    // Touch drag
+    titlebar.addEventListener('touchstart', (e) => {
+      if (window.innerWidth <= 700) return;
+      const t = e.touches[0];
+      isDragging = true;
+      offset.x = t.clientX - win.offsetLeft;
+      offset.y = t.clientY - win.offsetTop;
+      focusWindow(win.id);
+    }, { passive: true });
+
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      const t = e.touches[0];
+      win.style.left = (t.clientX - offset.x) + 'px';
+      win.style.top  = (t.clientY - offset.y) + 'px';
+    }, { passive: true });
+
+    document.addEventListener('touchend', () => isDragging = false);
+
     win.addEventListener('mousedown', () => focusWindow(win.id));
+    win.addEventListener('touchstart', () => focusWindow(win.id), { passive: true });
   });
 
   function focusWindow(id) {
@@ -613,12 +872,13 @@
         const title = win.querySelector('.titlebar-text').innerText;
         const btn = document.createElement('div');
         btn.className = `task-item ${win.classList.contains('active') && !win.classList.contains('minimized') ? 'active' : ''}`;
-        
+
         let icon = '📁';
-        if(win.id === 'win-steam') icon = '🎮';
-        if(win.id === 'win-train') icon = '🚂';
-        if(win.id === 'win-profile') icon = '👤';
-        
+        if (win.id === 'win-steam')   icon = '🎮';
+        if (win.id === 'win-train')   icon = '🚂';
+        if (win.id === 'win-profile') icon = '👤';
+        if (win.id === 'win-about')   icon = '🖥️';
+
         btn.innerHTML = `<span>${icon}</span> ${title.split(' ')[0]}`;
         btn.onclick = () => {
           if (win.classList.contains('minimized') || !win.classList.contains('active')) {
@@ -632,6 +892,7 @@
     });
   }
 
+  // ── Start menu ─────────────────────────────────────────────────
   function toggleStart() {
     document.getElementById('start-menu').classList.toggle('open');
   }
@@ -641,11 +902,131 @@
     if (!menu.contains(e.target) && !e.target.closest('.start-btn')) {
       menu.classList.remove('open');
     }
+    closeContextMenu();
   });
 
+  // ── Right-click context menu ───────────────────────────────────
+  const ctxMenu = document.getElementById('context-menu');
+
+  document.getElementById('desktop').addEventListener('contextmenu', (e) => {
+    if (e.target.closest('.window') || e.target.closest('.desktop-icons')) return;
+    e.preventDefault();
+    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 190) + 'px';
+    ctxMenu.style.top  = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+    ctxMenu.classList.add('open');
+  });
+
+  function closeContextMenu() { ctxMenu.classList.remove('open'); }
+
+  function refreshDesktop() {
+    windows.forEach(w => {
+      w.classList.remove('active', 'inactive', 'minimized');
+    });
+    updateTaskbar();
+  }
+
+  // ── Error popup ────────────────────────────────────────────────
+  if (Math.random() < 0.3) {
+    setTimeout(() => {
+      document.getElementById('error-popup').classList.add('open');
+    }, 2000);
+  }
+
+  // ── Startup sound (Web Audio API) ──────────────────────────────
+  function playStartupSound() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const notes = [
+        { freq: 392.00, time: 0.0 },   // G4
+        { freq: 523.25, time: 0.18 },  // C5
+        { freq: 659.25, time: 0.36 },  // E5
+        { freq: 783.99, time: 0.54 },  // G5
+        { freq: 1046.5, time: 0.78 },  // C6
+      ];
+      notes.forEach(({ freq, time }) => {
+        const osc  = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0, ctx.currentTime + time);
+        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + time + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + time + 0.55);
+        osc.start(ctx.currentTime + time);
+        osc.stop(ctx.currentTime + time + 0.6);
+      });
+    } catch (e) {}
+  }
+
+  // Play on first user interaction (browser autoplay policy)
+  let soundPlayed = false;
+  document.addEventListener('click', () => {
+    if (!soundPlayed) { playStartupSound(); soundPlayed = true; }
+  }, { once: false });
+  document.addEventListener('keydown', () => {
+    if (!soundPlayed) { playStartupSound(); soundPlayed = true; }
+  }, { once: false });
+
+  // ── Screensaver ────────────────────────────────────────────────
+  const SCREENSAVER_DELAY = 60000; // 1 minute
+  let ssTimeout;
+  let ssAnimFrame;
+  let ssX, ssY, ssDX, ssDY;
+
+  function resetScreensaverTimer() {
+    clearTimeout(ssTimeout);
+    ssTimeout = setTimeout(startScreensaver, SCREENSAVER_DELAY);
+  }
+
+  function startScreensaver() {
+    const ss = document.getElementById('screensaver');
+    const bouncer = document.getElementById('screensaver-bouncer');
+    ssX  = Math.random() * (window.innerWidth  - 120);
+    ssY  = Math.random() * (window.innerHeight - 120);
+    ssDX = (Math.random() < 0.5 ? 1 : -1) * 1.5;
+    ssDY = (Math.random() < 0.5 ? 1 : -1) * 1.5;
+    bouncer.style.left = ssX + 'px';
+    bouncer.style.top  = ssY + 'px';
+    ss.classList.add('active');
+    animateBouncer();
+  }
+
+  function animateBouncer() {
+    const bouncer = document.getElementById('screensaver-bouncer');
+    ssX += ssDX;
+    ssY += ssDY;
+    if (ssX <= 0 || ssX >= window.innerWidth  - 120) ssDX *= -1;
+    if (ssY <= 0 || ssY >= window.innerHeight - 120) ssDY *= -1;
+    bouncer.style.left = ssX + 'px';
+    bouncer.style.top  = ssY + 'px';
+    ssAnimFrame = requestAnimationFrame(animateBouncer);
+  }
+
+  function stopScreensaver() {
+    document.getElementById('screensaver').classList.remove('active');
+    cancelAnimationFrame(ssAnimFrame);
+    resetScreensaverTimer();
+  }
+
+  ['mousemove','mousedown','keydown','touchstart'].forEach(ev => {
+    document.addEventListener(ev, () => {
+      if (document.getElementById('screensaver').classList.contains('active')) {
+        stopScreensaver();
+      } else {
+        resetScreensaverTimer();
+      }
+    }, { passive: true });
+  });
+
+  resetScreensaverTimer();
+
+  // ── Clock ──────────────────────────────────────────────────────
   function updateClock() {
     const now = new Date();
-    document.getElementById('clock').textContent = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent =
+      now.getHours().toString().padStart(2, '0') + ':' +
+      now.getMinutes().toString().padStart(2, '0');
   }
   setInterval(updateClock, 1000);
   updateClock();
