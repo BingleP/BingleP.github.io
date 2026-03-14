@@ -213,6 +213,92 @@
       border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
     }
 
+    /* Start Menu */
+    #start-menu {
+      display: none;
+      position: fixed;
+      bottom: 36px;
+      left: 0;
+      width: 240px;
+      background: var(--win-bg);
+      border-top: 2px solid var(--win-border-light);
+      border-left: 2px solid var(--win-border-light);
+      border-right: 2px solid var(--win-border-darker);
+      border-bottom: 2px solid var(--win-border-darker);
+      box-shadow: 4px 0 12px rgba(0,0,0,0.2);
+      z-index: 2000;
+      flex-direction: row;
+    }
+
+    #start-menu.open { display: flex; }
+
+    .start-menu-sidebar {
+      width: 28px;
+      background: linear-gradient(180deg, var(--win-titlebar) 0%, var(--win-border-darker) 100%);
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 6px;
+    }
+
+    .start-menu-sidebar span {
+      font-family: 'VT323', monospace;
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 2px;
+    }
+
+    .start-menu-items {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 0;
+    }
+
+    .start-menu-divider {
+      height: 1px;
+      background: var(--win-border-dark);
+      margin: 4px 6px;
+      border-top: 1px solid var(--win-border-light);
+    }
+
+    .start-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      font-family: 'VT323', monospace;
+      font-size: 17px;
+      color: var(--text-dark);
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .start-menu-item:hover {
+      background: var(--win-titlebar);
+      color: white;
+    }
+
+    .start-menu-item .item-icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+    }
+
+    .start-menu-label {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .start-menu-label small {
+      font-family: 'Nunito', sans-serif;
+      font-size: 10px;
+      opacity: 0.6;
+    }
+
     .taskbar-clock {
       margin-left: auto;
       font-family: 'VT323', monospace;
@@ -430,8 +516,40 @@
   </div>
 </div>
 
+<div id="start-menu">
+  <div class="start-menu-sidebar"><span>kerrick.ca</span></div>
+  <div class="start-menu-items">
+    <div class="start-menu-item" onclick="openWindow('win-profile'); toggleStart()">
+      <span class="item-icon">🌸</span>
+      <div class="start-menu-label">User.exe<small>who is this guy</small></div>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('win-welcome'); toggleStart()">
+      <span class="item-icon">📝</span>
+      <div class="start-menu-label">Welcome.txt<small>read me</small></div>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('win-steam'); toggleStart()">
+      <span class="item-icon">🎮</span>
+      <div class="start-menu-label">Steam.lnk<small>games n stuff</small></div>
+    </div>
+    <div class="start-menu-divider"></div>
+    <a class="start-menu-item" href="https://github.com/BingleP/BinglesHTTPServer" target="_blank" onclick="toggleStart()">
+      <span class="item-icon">🗄️</span>
+      <div class="start-menu-label">BinglesHTTPServer<small>python file server</small></div>
+    </a>
+    <a class="start-menu-item" href="https://github.com/BingleP/Solitaire" target="_blank" onclick="toggleStart()">
+      <span class="item-icon">🃏</span>
+      <div class="start-menu-label">Solitaire<small>python card game</small></div>
+    </a>
+    <div class="start-menu-divider"></div>
+    <a class="start-menu-item" href="https://github.com/BingleP" target="_blank" onclick="toggleStart()">
+      <span class="item-icon">🐙</span>
+      <div class="start-menu-label">GitHub<small>github.com/BingleP</small></div>
+    </a>
+  </div>
+</div>
+
 <div class="taskbar">
-  <div class="start-btn">🪟 Start</div>
+  <div class="start-btn" onclick="toggleStart()">🪟 Start</div>
   <div id="taskbar-items" style="display: flex; gap: 4px;"></div>
   <div class="taskbar-clock" id="clock">12:00</div>
 </div>
@@ -513,6 +631,17 @@
       }
     });
   }
+
+  function toggleStart() {
+    document.getElementById('start-menu').classList.toggle('open');
+  }
+
+  document.addEventListener('click', (e) => {
+    const menu = document.getElementById('start-menu');
+    if (!menu.contains(e.target) && !e.target.closest('.start-btn')) {
+      menu.classList.remove('open');
+    }
+  });
 
   function updateClock() {
     const now = new Date();
