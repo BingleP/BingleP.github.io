@@ -1138,8 +1138,13 @@
         body: JSON.stringify({ message, history: bonziHistory }),
       });
       const data = await res.json();
-      const reply = data.reply;
       document.getElementById('bonzi-thinking')?.remove();
+      if (!res.ok || !data.reply) {
+        console.error('BonziBUDDY worker error:', data);
+        bonziAddMessage('bonzi', 'Uh oh! Something went wrong. Check the browser console for details!');
+        return;
+      }
+      const reply = data.reply;
       bonziAddMessage('bonzi', reply);
       const speechEl = document.getElementById('bonzi-speech');
       speechEl.textContent = reply.length > 60 ? reply.slice(0, 57) + '...' : reply;

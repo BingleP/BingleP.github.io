@@ -43,7 +43,7 @@ export default {
     }
 
     const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -58,9 +58,16 @@ export default {
     );
 
     const data = await geminiRes.json();
-    const reply =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ??
-      "Uh oh! BonziBUDDY got a blue screen of death! Try again! 💀";
+
+    if (!geminiRes.ok || !data.candidates?.[0]?.content?.parts?.[0]?.text) {
+      // Return the raw Gemini error so it's visible during debugging
+      return new Response(JSON.stringify({ error: data }), {
+        status: 502,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const reply = data.candidates[0].content.parts[0].text;
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
