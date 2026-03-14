@@ -1,0 +1,10 @@
+name = "bonzi-proxy"
+main = "index.js"
+compatibility_date = "2025-01-01"
+
+# Deploy with: npx wrangler deploy
+#
+# After deploying, set your Gemini API key as a secret (never put it here):
+#   npx wrangler secret put GEMINI_API_KEY
+#
+# Then paste your worker URL into index.html where it says REPLACE_WITH_YOUR_WORKER_URL
