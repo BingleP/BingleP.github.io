@@ -605,6 +605,108 @@
     .bonzi-send:active { border-color: var(--win-border-dark) var(--win-border-light) var(--win-border-light) var(--win-border-dark); }
     .bonzi-tts-btn { font-family: 'VT323'; font-size: 18px; background: none; border: none; color: #9b30e8; cursor: pointer; padding: 0 2px; }
 
+    /* Floating BonziBUDDY */
+    #floating-bonzi {
+      position: fixed;
+      z-index: 7500;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 190px;
+    }
+
+    #floating-bonzi.active { display: flex; }
+
+    .float-bubble {
+      background: #fffde7;
+      border-top: 2px solid #fff;
+      border-left: 2px solid #fff;
+      border-right: 2px solid #555;
+      border-bottom: 2px solid #555;
+      box-shadow: 1px 1px 0 #000;
+      padding: 7px 10px;
+      font-family: 'VT323', monospace;
+      font-size: 16px;
+      color: #111;
+      max-width: 190px;
+      word-wrap: break-word;
+      line-height: 1.3;
+      position: relative;
+      margin-bottom: 6px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .float-bubble.visible { opacity: 1; pointer-events: auto; }
+
+    /* Speech bubble arrow pointing down */
+    .float-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top: 5px solid #555;
+    }
+
+    .float-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top: 4px solid #fffde7;
+      z-index: 1;
+    }
+
+    .float-bonzi-img {
+      width: 80px;
+      image-rendering: pixelated;
+      cursor: move;
+      display: block;
+    }
+
+    .float-input-row {
+      display: flex;
+      gap: 2px;
+      margin-top: 5px;
+      width: 100%;
+    }
+
+    .float-bonzi-input {
+      flex: 1;
+      font-family: 'VT323', monospace;
+      font-size: 15px;
+      background: #1a0a2e;
+      color: #e8d0ff;
+      border: 2px inset #333;
+      padding: 2px 5px;
+      min-width: 0;
+    }
+
+    .float-bonzi-input:focus { outline: none; }
+
+    .float-bonzi-send {
+      font-family: 'VT323', monospace;
+      font-size: 15px;
+      background: var(--win-bg);
+      border-top: 2px solid var(--win-border-light);
+      border-left: 2px solid var(--win-border-light);
+      border-right: 2px solid var(--win-border-darker);
+      border-bottom: 2px solid var(--win-border-darker);
+      padding: 1px 7px;
+      cursor: pointer;
+      color: var(--text-dark);
+      white-space: nowrap;
+    }
+
+    .float-bonzi-send:active {
+      border-color: var(--win-border-darker) var(--win-border-light) var(--win-border-light) var(--win-border-darker);
+    }
+
     /* Boot screen */
     #boot-screen {
       position: fixed;
@@ -730,12 +832,25 @@
   <div class="cloud cloud-6"></div>
 </div>
 
+<!-- Floating BonziBUDDY -->
+<div id="floating-bonzi">
+  <div class="float-bubble" id="float-bubble"></div>
+  <img src="bonzi.gif" class="float-bonzi-img" id="float-bonzi-img" alt="BonziBUDDY">
+  <div class="float-input-row">
+    <input class="float-bonzi-input" id="float-bonzi-input" type="text" placeholder="Ask Bonzi..." onkeydown="if(event.key==='Enter') floatBonziSend()">
+    <button class="float-bonzi-send" onclick="floatBonziSend()">Go</button>
+  </div>
+</div>
+
 <!-- Right-click context menu -->
 <div id="context-menu">
   <div class="ctx-item" onclick="openWindow('win-about'); closeContextMenu()">🖥️ About This PC</div>
   <div class="ctx-divider"></div>
   <div class="ctx-item" onclick="refreshDesktop(); closeContextMenu()">🔄 Refresh</div>
   <div class="ctx-item" onclick="startScreensaver(); closeContextMenu()">💤 Screensaver</div>
+  <div class="ctx-divider"></div>
+  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="bonzi.gif" style="width:16px;height:16px;vertical-align:middle;image-rendering:pixelated;margin-right:5px;">Call Bonzi</div>
+  <div id="ctx-send-home" class="ctx-item" style="display:none" onclick="sendBonziHome(); closeContextMenu()">🏠 Send Bonzi Home</div>
 </div>
 
 <!-- Error popup -->
@@ -1076,12 +1191,15 @@
 
   // ── Right-click context menu ───────────────────────────────────
   const ctxMenu = document.getElementById('context-menu');
+  let ctxClickX = 0, ctxClickY = 0;
 
   document.getElementById('desktop').addEventListener('contextmenu', (e) => {
     if (e.target.closest('.window') || e.target.closest('.desktop-icons')) return;
     e.preventDefault();
-    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 190) + 'px';
-    ctxMenu.style.top  = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+    ctxClickX = e.clientX;
+    ctxClickY = e.clientY;
+    ctxMenu.style.left = Math.min(e.clientX, window.innerWidth - 200) + 'px';
+    ctxMenu.style.top  = Math.min(e.clientY, window.innerHeight - 150) + 'px';
     ctxMenu.classList.add('open');
   });
 
@@ -1327,6 +1445,88 @@
       bonziAddMessage('bonzi', 'Uh oh! My modem disconnected! (Check the worker URL in the console)');
     }
   }
+
+  // ── Floating BonziBUDDY ────────────────────────────────────────
+  let bubbleFadeTimer = null;
+
+  function showFloatBubble(text) {
+    const bubble = document.getElementById('float-bubble');
+    bubble.textContent = text;
+    bubble.classList.add('visible');
+    if (bubbleFadeTimer) clearTimeout(bubbleFadeTimer);
+    // Random between 10-20 seconds
+    const delay = 10000 + Math.random() * 10000;
+    bubbleFadeTimer = setTimeout(() => bubble.classList.remove('visible'), delay);
+  }
+
+  function callBonziFromMenu() {
+    const fb = document.getElementById('floating-bonzi');
+    const fw = 190, fh = 220;
+    let x = Math.min(Math.max(ctxClickX - fw / 2, 10), window.innerWidth  - fw - 10);
+    let y = Math.min(Math.max(ctxClickY - fh / 2, 10), window.innerHeight - fh - 50);
+    fb.style.left = x + 'px';
+    fb.style.top  = y + 'px';
+    fb.classList.add('active');
+    document.getElementById('bonzi-panel').classList.add('bonzi-hidden');
+    document.getElementById('ctx-call-bonzi').style.display = 'none';
+    document.getElementById('ctx-send-home').style.display  = 'block';
+    showFloatBubble("Hiya! Whatcha need? 🦍");
+  }
+
+  function sendBonziHome() {
+    document.getElementById('floating-bonzi').classList.remove('active');
+    document.getElementById('float-bubble').classList.remove('visible');
+    document.getElementById('bonzi-panel').classList.remove('bonzi-hidden');
+    document.getElementById('ctx-call-bonzi').style.display = 'block';
+    document.getElementById('ctx-send-home').style.display  = 'none';
+    if (bubbleFadeTimer) { clearTimeout(bubbleFadeTimer); bubbleFadeTimer = null; }
+  }
+
+  async function floatBonziSend() {
+    const input = document.getElementById('float-bonzi-input');
+    const message = input.value.trim();
+    if (!message) return;
+    input.value = '';
+    showFloatBubble('...');
+    try {
+      const res = await fetch(BONZI_WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message, history: bonziHistory }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.reply) { showFloatBubble('Uh oh! Something went wrong!'); return; }
+      const reply = data.reply;
+      showFloatBubble(reply);
+      bonziHistory.push(
+        { role: 'user',  parts: [{ text: message }] },
+        { role: 'model', parts: [{ text: reply }] }
+      );
+      if (bonziHistory.length > 20) bonziHistory = bonziHistory.slice(-20);
+      bonziSpeak(reply);
+    } catch {
+      showFloatBubble("My modem disconnected! 📡");
+    }
+  }
+
+  // Drag the floating Bonzi by his image
+  (function() {
+    const fb = document.getElementById('floating-bonzi');
+    const handle = document.getElementById('float-bonzi-img');
+    let dragging = false, ox = 0, oy = 0;
+    handle.addEventListener('mousedown', (e) => {
+      dragging = true;
+      ox = e.clientX - fb.offsetLeft;
+      oy = e.clientY - fb.offsetTop;
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      fb.style.left = Math.max(0, Math.min(e.clientX - ox, window.innerWidth  - 200)) + 'px';
+      fb.style.top  = Math.max(0, Math.min(e.clientY - oy, window.innerHeight - 240)) + 'px';
+    });
+    document.addEventListener('mouseup', () => dragging = false);
+  })();
 </script>
 </body>
 </html>
