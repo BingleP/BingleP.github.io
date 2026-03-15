@@ -1487,6 +1487,7 @@
     const message = input.value.trim();
     if (!message) return;
     input.value = '';
+    bonziAddMessage('user', message);
     showFloatBubble('...');
     try {
       const res = await fetch(BONZI_WORKER_URL, {
@@ -1495,9 +1496,10 @@
         body: JSON.stringify({ message, history: bonziHistory }),
       });
       const data = await res.json();
-      if (!res.ok || !data.reply) { showFloatBubble('Uh oh! Something went wrong!'); return; }
+      if (!res.ok || !data.reply) { showFloatBubble('Uh oh! Something went wrong!'); bonziAddMessage('bonzi', 'Uh oh! Something went wrong!'); return; }
       const reply = data.reply;
       showFloatBubble(reply);
+      bonziAddMessage('bonzi', reply);
       bonziHistory.push(
         { role: 'user',  parts: [{ text: message }] },
         { role: 'model', parts: [{ text: reply }] }
@@ -1506,6 +1508,7 @@
       bonziSpeak(reply);
     } catch {
       showFloatBubble("My modem disconnected! 📡");
+      bonziAddMessage('bonzi', 'My modem disconnected! 📡');
     }
   }
 
