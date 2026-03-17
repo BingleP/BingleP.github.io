@@ -35,6 +35,7 @@ async function handleSteam(env, corsHeaders) {
     status: STATUS[player.personastate] ?? 'Offline',
     online: player.personastate > 0,
     country: player.loccountrycode ?? null,
+    timecreated: player.timecreated ?? null,
     gameCount: gamesData.response.game_count ?? 0,
     level: badgesData.response.player_level ?? 0,
     recentGames: (recentData.response.games ?? []).map(g => ({

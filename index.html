@@ -1022,39 +1022,21 @@
     </div>
     <div class="window-body" style="background: var(--steam-blue); color: var(--steam-text); padding: 10px;">
       <div style="text-align:center; margin-bottom: 8px;">
-        <h3 style="font-family:'VT323'; color: #66c0f4; font-size: 28px; margin: 0;">BINGLEPUSS</h3>
-        <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">🇨🇦 Canada &nbsp;·&nbsp; Level <span id="steam-level">75</span> &nbsp;·&nbsp; 15 years on Steam</p>
-        <p id="steam-status" style="font-size: 11px; margin: 3px 0; color: #7ac47a;"></p>
+        <h3 id="steam-name" style="font-family:'VT323'; color: #66c0f4; font-size: 28px; margin: 0;"></h3>
+        <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">Level <span id="steam-level"></span> &nbsp;·&nbsp; <span id="steam-years"></span> on Steam</p>
+        <p id="steam-status" style="font-size: 11px; margin: 3px 0;"></p>
       </div>
 
       <div style="display:flex; justify-content:space-around; margin: 8px 0; text-align:center;">
         <div>
-          <div id="steam-games" style="font-family:'VT323'; font-size: 22px; color: #66c0f4;">458</div>
+          <div id="steam-games" style="font-family:'VT323'; font-size: 22px; color: #66c0f4;"></div>
           <div style="font-size: 10px; opacity: 0.7;">GAMES</div>
         </div>
-        <div>
-          <div style="font-family:'VT323'; font-size: 22px; color: #66c0f4;">3,604</div>
-          <div style="font-size: 10px; opacity: 0.7;">ACHIEVEMENTS</div>
-        </div>
-        <div>
-          <div style="font-family:'VT323'; font-size: 22px; color: #66c0f4;">4</div>
-          <div style="font-size: 10px; opacity: 0.7;">PERFECT GAMES</div>
-        </div>
-      </div>
-
-      <div class="inset" style="background: rgba(0,0,0,0.3); border: 1px solid #2a475e; margin: 8px 0; padding: 6px 8px;">
-        <p style="font-size: 10px; opacity: 0.6; margin: 0 0 3px 0; text-transform: uppercase; letter-spacing: 1px;">⭐ Favourite Game</p>
-        <p style="font-family:'VT323'; font-size: 16px; color: #66c0f4; margin: 0;">Fallout: New Vegas</p>
-        <p style="font-size: 10px; opacity: 0.7; margin: 2px 0 0 0;">253 hrs · 75/75 achievements · "truly one of the greatest of all time"</p>
       </div>
 
       <div class="inset" style="background: rgba(0,0,0,0.3); border: 1px solid #2a475e; margin: 8px 0; padding: 6px 8px;">
         <p style="font-size: 10px; opacity: 0.6; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">🕹️ Recent Activity</p>
-        <div id="steam-recent" style="font-size: 11px; line-height: 1.6;">
-          <div>Ready or Not <span style="opacity:0.6;">— 152 hrs</span></div>
-          <div>Fishing Planet <span style="opacity:0.6;">— 36 hrs</span></div>
-          <div>Marathon <span style="opacity:0.6;">— 30 hrs</span></div>
-        </div>
+        <div id="steam-recent" style="font-size: 11px; line-height: 1.6; color: var(--text-mid);">Loading...</div>
       </div>
 
       <div style="text-align:center; margin-top: 8px;">
@@ -1516,21 +1498,28 @@
       const d = await res.json();
       if (d.error) return;
 
-      const lvl = document.getElementById('steam-level');
-      const games = document.getElementById('steam-games');
+      const name   = document.getElementById('steam-name');
+      const lvl    = document.getElementById('steam-level');
+      const years  = document.getElementById('steam-years');
+      const games  = document.getElementById('steam-games');
       const status = document.getElementById('steam-status');
       const recent = document.getElementById('steam-recent');
 
-      if (lvl) lvl.textContent = d.level;
-      if (games) games.textContent = d.gameCount.toLocaleString();
+      if (name)   name.textContent = d.name.toUpperCase();
+      if (lvl)    lvl.textContent  = d.level;
+      if (games)  games.textContent = d.gameCount.toLocaleString();
+      if (years && d.timecreated) {
+        const yrs = Math.floor((Date.now() / 1000 - d.timecreated) / (365.25 * 24 * 3600));
+        years.textContent = `${yrs} year${yrs !== 1 ? 's' : ''}`;
+      }
       if (status) {
         status.textContent = d.online ? `● ${d.status}` : `○ ${d.status}`;
-        status.style.color = d.online ? '#7ac47a' : '#888';
+        status.style.color = d.online ? '#7ac47a' : '#888888';
       }
-      if (recent && d.recentGames.length) {
-        recent.innerHTML = d.recentGames
-          .map(g => `<div>${g.name} <span style="opacity:0.6;">— ${g.hours} hrs</span></div>`)
-          .join('');
+      if (recent) {
+        recent.innerHTML = d.recentGames.length
+          ? d.recentGames.map(g => `<div>${g.name} <span style="opacity:0.6;">— ${g.hours} hrs</span></div>`).join('')
+          : '<div style="opacity:0.5;">No recent activity</div>';
       }
     } catch {}
   }
