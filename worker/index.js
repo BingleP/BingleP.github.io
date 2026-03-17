@@ -4,6 +4,50 @@
 
 const ALLOWED_ORIGINS = ['https://kerrick.ca', 'https://binglep.github.io'];
 
+const STEAM_VANITY = 'binglepuss';
+
+async function handleSteam(env, corsHeaders) {
+  const key = env.STEAM_API_KEY;
+  if (!key) return new Response(JSON.stringify({ error: 'Steam API key not configured' }), { status: 503, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+
+  // Resolve vanity URL to Steam64 ID
+  const vanityRes = await fetch(`https://api.steampowered.com/ISteamUser/ResolveVanityURL/v1/?key=${key}&vanityurl=${STEAM_VANITY}`);
+  const vanityData = await vanityRes.json();
+  const steamId = vanityData.response?.steamid;
+  if (!steamId) return new Response(JSON.stringify({ error: 'Could not resolve Steam ID' }), { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+
+  const [summaryRes, gamesRes, recentRes, badgesRes] = await Promise.all([
+    fetch(`https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=${key}&steamids=${steamId}`),
+    fetch(`https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=${key}&steamid=${steamId}`),
+    fetch(`https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=${key}&steamid=${steamId}&count=3`),
+    fetch(`https://api.steampowered.com/IPlayerService/GetBadges/v1/?key=${key}&steamid=${steamId}`),
+  ]);
+
+  const [summaryData, gamesData, recentData, badgesData] = await Promise.all([
+    summaryRes.json(), gamesRes.json(), recentRes.json(), badgesRes.json(),
+  ]);
+
+  const player = summaryData.response.players[0];
+  const STATUS = ['Offline', 'Online', 'Busy', 'Away', 'Snooze', 'Looking to Trade', 'Looking to Play'];
+
+  const result = {
+    name: player.personaname,
+    status: STATUS[player.personastate] ?? 'Offline',
+    online: player.personastate > 0,
+    country: player.loccountrycode ?? null,
+    gameCount: gamesData.response.game_count ?? 0,
+    level: badgesData.response.player_level ?? 0,
+    recentGames: (recentData.response.games ?? []).map(g => ({
+      name: g.name,
+      hours: Math.round(g.playtime_forever / 60),
+    })),
+  };
+
+  return new Response(JSON.stringify(result), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'max-age=300' },
+  });
+}
+
 const SYSTEM_PROMPT =
   'You are BonziBUDDY, a fun and slightly mischievous purple gorilla assistant ' +
   'from the early 2000s internet. Keep responses short (2-3 sentences max), ' +
@@ -18,12 +62,18 @@ export default {
 
     const corsHeaders = {
       'Access-Control-Allow-Origin': corsOrigin,
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
     };
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { headers: corsHeaders });
+    }
+
+    const url = new URL(request.url);
+
+    if (request.method === 'GET' && url.pathname === '/steam') {
+      return handleSteam(env, corsHeaders);
     }
 
     if (request.method !== 'POST') {

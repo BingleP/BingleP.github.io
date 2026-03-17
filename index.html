@@ -1023,12 +1023,13 @@
     <div class="window-body" style="background: var(--steam-blue); color: var(--steam-text); padding: 10px;">
       <div style="text-align:center; margin-bottom: 8px;">
         <h3 style="font-family:'VT323'; color: #66c0f4; font-size: 28px; margin: 0;">BINGLEPUSS</h3>
-        <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">🇨🇦 Canada &nbsp;·&nbsp; Level 75 &nbsp;·&nbsp; 15 years on Steam</p>
+        <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">🇨🇦 Canada &nbsp;·&nbsp; Level <span id="steam-level">75</span> &nbsp;·&nbsp; 15 years on Steam</p>
+        <p id="steam-status" style="font-size: 11px; margin: 3px 0; color: #7ac47a;"></p>
       </div>
 
       <div style="display:flex; justify-content:space-around; margin: 8px 0; text-align:center;">
         <div>
-          <div style="font-family:'VT323'; font-size: 22px; color: #66c0f4;">458</div>
+          <div id="steam-games" style="font-family:'VT323'; font-size: 22px; color: #66c0f4;">458</div>
           <div style="font-size: 10px; opacity: 0.7;">GAMES</div>
         </div>
         <div>
@@ -1049,7 +1050,7 @@
 
       <div class="inset" style="background: rgba(0,0,0,0.3); border: 1px solid #2a475e; margin: 8px 0; padding: 6px 8px;">
         <p style="font-size: 10px; opacity: 0.6; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">🕹️ Recent Activity</p>
-        <div style="font-size: 11px; line-height: 1.6;">
+        <div id="steam-recent" style="font-size: 11px; line-height: 1.6;">
           <div>Ready or Not <span style="opacity:0.6;">— 152 hrs</span></div>
           <div>Fishing Planet <span style="opacity:0.6;">— 36 hrs</span></div>
           <div>Marathon <span style="opacity:0.6;">— 30 hrs</span></div>
@@ -1506,6 +1507,41 @@
 
   // ── BonziBUDDY ────────────────────────────────────────────────
   const BONZI_WORKER_URL = 'https://bonzi-proxy.bonzibuddy.workers.dev/';
+
+  async function loadSteamData() {
+    try {
+      const res = await fetch(BONZI_WORKER_URL + 'steam');
+      if (!res.ok) return;
+      const d = await res.json();
+      if (d.error) return;
+
+      const lvl = document.getElementById('steam-level');
+      const games = document.getElementById('steam-games');
+      const status = document.getElementById('steam-status');
+      const recent = document.getElementById('steam-recent');
+
+      if (lvl) lvl.textContent = d.level;
+      if (games) games.textContent = d.gameCount.toLocaleString();
+      if (status) {
+        status.textContent = d.online ? `● ${d.status}` : `○ ${d.status}`;
+        status.style.color = d.online ? '#7ac47a' : '#888';
+      }
+      if (recent && d.recentGames.length) {
+        recent.innerHTML = d.recentGames
+          .map(g => `<div>${g.name} <span style="opacity:0.6;">— ${g.hours} hrs</span></div>`)
+          .join('');
+      }
+    } catch {}
+  }
+
+  // Load Steam data on open, refresh on each open
+  const _origOpenWindow = openWindow;
+  function openWindow(id) {
+    _origOpenWindow(id);
+    if (id === 'win-steam') loadSteamData();
+  }
+
+  loadSteamData();
 
   function bonziTogglePanel() {
     document.getElementById('bonzi-panel').classList.toggle('bonzi-hidden');
