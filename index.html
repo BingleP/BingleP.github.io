@@ -157,6 +157,21 @@
     .pt73-nowplaying { font-family:'VT323',monospace; font-size:15px; color:var(--text-mid); padding:4px 8px; background:#111; border:1px solid var(--win-border-dark); }
     .pt73-nowplaying span { color:#7ab3e0; }
 
+    /* Solitaire */
+    .window.cards .titlebar { background: linear-gradient(90deg, #0d2b0d, #1a4a1a); }
+    #sol-game-body { background:#1a4a1a; padding:10px; user-select:none; }
+    .sol-card { width:56px; height:80px; border-radius:5px; border:1px solid #bbb; background:#fafafa; position:relative; cursor:pointer; flex-shrink:0; box-shadow:1px 2px 4px rgba(0,0,0,0.4); }
+    .sol-card.red { color:#c0150f; }
+    .sol-card.black { color:#111; }
+    .sol-card.face-down { background:repeating-linear-gradient(45deg,#1a3a8a,#1a3a8a 5px,#102878 5px,#102878 10px); border-color:#102878; cursor:default; }
+    .sol-card.sol-sel { box-shadow:0 0 0 2px #ffd700, 1px 2px 4px rgba(0,0,0,0.4); }
+    .sol-tl { position:absolute; top:3px; left:4px; font-family:'VT323'; font-size:15px; line-height:1.1; text-align:center; pointer-events:none; }
+    .sol-br { position:absolute; bottom:3px; right:4px; font-family:'VT323'; font-size:15px; line-height:1.1; text-align:center; transform:rotate(180deg); pointer-events:none; }
+    .sol-empty { width:56px; height:80px; border-radius:5px; border:2px dashed rgba(255,255,255,0.2); display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,0.25); font-size:22px; cursor:pointer; flex-shrink:0; }
+    .sol-tab-col { position:relative; width:56px; flex-shrink:0; }
+    .sol-btn { font-family:'VT323',monospace; font-size:16px; padding:2px 10px; background:var(--win-bg); cursor:pointer; color:var(--text-dark); border-top:1px solid var(--win-border-light); border-left:1px solid var(--win-border-light); border-right:1px solid var(--win-border-darker); border-bottom:1px solid var(--win-border-darker); }
+    .sol-btn:hover { background:#2a2a2a; }
+
     .window.inactive .titlebar { filter: grayscale(0.7) opacity(0.8); }
 
     .titlebar-text {
@@ -921,6 +936,10 @@
       <div class="icon-img">🚂</div>
       <span class="icon-text">Train.png</span>
     </div>
+    <div class="icon-item" ondblclick="openWindow('win-solitaire')">
+      <div class="icon-img">🃏</div>
+      <span class="icon-text">Solitaire</span>
+    </div>
     <div class="icon-item" ondblclick="openWindow('win-pt73')">
       <div class="icon-img">⚓</div>
       <span class="icon-text">PT-73</span>
@@ -1039,6 +1058,45 @@
 
       <div style="text-align:center; margin-top: 8px;">
         <a href="https://steamcommunity.com/id/binglepuss/" target="_blank" class="steam-link-btn">VIEW PROFILE</a>
+      </div>
+    </div>
+  </div>
+
+  <div id="win-solitaire" class="window cards" style="width:480px; top:60px; left:200px; display:none;">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:6px;"><span>🃏</span><span class="titlebar-text">Solitaire</span></div>
+      <div style="display:flex;gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-solitaire')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-solitaire')">✕</div>
+      </div>
+    </div>
+    <div class="window-body" style="padding:0;">
+      <div id="sol-game-body" style="background:#1a4a1a;padding:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-family:'VT323';font-size:18px;color:#7ac47a;">Score: <span id="sol-score">0</span></span>
+          <div style="display:flex;gap:6px;">
+            <button class="sol-btn" onclick="Solitaire.undo()">Undo</button>
+            <button class="sol-btn" onclick="Solitaire.newGame()">New Game</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:flex-start;">
+          <div id="sol-stock"></div>
+          <div id="sol-waste"></div>
+          <div style="flex:1"></div>
+          <div id="sol-f0"></div>
+          <div id="sol-f1"></div>
+          <div id="sol-f2"></div>
+          <div id="sol-f3"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start;">
+          <div id="sol-t0" class="sol-tab-col"></div>
+          <div id="sol-t1" class="sol-tab-col"></div>
+          <div id="sol-t2" class="sol-tab-col"></div>
+          <div id="sol-t3" class="sol-tab-col"></div>
+          <div id="sol-t4" class="sol-tab-col"></div>
+          <div id="sol-t5" class="sol-tab-col"></div>
+          <div id="sol-t6" class="sol-tab-col"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -1589,6 +1647,185 @@
       bonziAddMessage('bonzi', 'My modem disconnected! 📡');
     }
   }
+
+  // ========== SOLITAIRE ==========
+  const Solitaire = (() => {
+    const SUITS = ['H','D','S','C'];
+    const SYM   = {H:'♥',D:'♦',S:'♠',C:'♣'};
+    const VALS  = [null,'A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    const isRed = s => s==='H'||s==='D';
+
+    let stock, waste, found, tab, sel, hist, score;
+
+    function init() {
+      let deck = [];
+      for (const s of SUITS) for (let v=1;v<=13;v++) deck.push({s,v,up:false});
+      for (let i=deck.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [deck[i],deck[j]]=[deck[j],deck[i]]; }
+      tab=Array.from({length:7},()=>[]); found=Array.from({length:4},()=>[]);
+      waste=[]; sel=null; hist=[]; score=0;
+      for (let i=0;i<7;i++) for (let j=0;j<=i;j++) { const c=deck.pop(); if(j===i)c.up=true; tab[i].push(c); }
+      stock=deck;
+      save(); render();
+    }
+
+    const clonePile = p => p.map(c=>({...c}));
+
+    function save() {
+      hist.push({stock:clonePile(stock),waste:clonePile(waste),found:found.map(clonePile),tab:tab.map(clonePile),score});
+      if (hist.length>60) hist.shift();
+    }
+
+    function undo() {
+      if (hist.length<=1) return;
+      hist.pop();
+      const s=hist[hist.length-1];
+      stock=clonePile(s.stock); waste=clonePile(s.waste);
+      found=s.found.map(clonePile); tab=s.tab.map(clonePile); score=s.score;
+      sel=null; render();
+    }
+
+    function draw() {
+      if (!stock.length) { if (!waste.length) return; stock=waste.reverse().map(c=>({...c,up:false})); waste=[]; }
+      const c=stock.pop(); c.up=true; waste.push(c);
+      sel=null; save(); render();
+    }
+
+    const canTab   = (c,t) => !t ? c.v===13 : isRed(c.s)!==isRed(t.s) && c.v===t.v-1;
+    const canFound = (c,p) => !p.length ? c.v===1 : c.s===p[p.length-1].s && c.v===p[p.length-1].v+1;
+
+    function click(type,idx,ci) {
+      if (type==='stock') { sel=null; draw(); return; }
+      if (sel && sel.type===type && sel.idx===idx && (type!=='t'||sel.ci===ci)) { sel=null; render(); return; }
+      if (sel) { if (tryMove(sel,{type,idx,ci})) { sel=null; return; } }
+      if (type==='waste'&&waste.length) sel={type:'waste'};
+      else if (type==='t') { const p=tab[idx]; if(ci>=0&&ci<p.length&&p[ci].up) sel={type:'t',idx,ci}; else sel=null; }
+      else if (type==='f'&&found[idx].length) sel={type:'f',idx};
+      else sel=null;
+      render();
+    }
+
+    function tryMove(src,dest) {
+      let cards,srcPile;
+      if (src.type==='waste') { if(!waste.length)return false; cards=[waste[waste.length-1]]; srcPile=waste; }
+      else if (src.type==='t') { const p=tab[src.idx]; cards=p.slice(src.ci); srcPile=p; }
+      else return false;
+      if (!cards.length) return false;
+      const top=cards[0]; let ok=false;
+      if (dest.type==='f') {
+        if (cards.length!==1) return false;
+        if (canFound(top,found[dest.idx])) { found[dest.idx].push(srcPile.pop()); score+=10; ok=true; }
+      } else if (dest.type==='t') {
+        if (src.type==='t'&&dest.idx===src.idx) return false;
+        const dp=tab[dest.idx];
+        if (canTab(top, dp.length?dp[dp.length-1]:null)) {
+          const mv = src.type==='t' ? tab[src.idx].splice(src.ci) : [waste.pop()];
+          tab[dest.idx].push(...mv);
+          if (src.type==='waste') score+=5;
+          ok=true;
+        }
+      }
+      if (ok) {
+        if (src.type==='t') { const p=tab[src.idx]; if(p.length&&!p[p.length-1].up){p[p.length-1].up=true;score+=5;} }
+        save(); render(); checkWin(); return true;
+      }
+      return false;
+    }
+
+    function autoMove(type,idx,ci) {
+      let card,pile;
+      if (type==='waste') { if(!waste.length)return; card=waste[waste.length-1]; pile=waste; }
+      else if (type==='t') { const p=tab[idx]; if(ci!==p.length-1||!p[ci].up)return; card=p[ci]; pile=p; }
+      else return;
+      for (let fi=0;fi<4;fi++) {
+        if (canFound(card,found[fi])) {
+          found[fi].push(pile.pop()); score+=10;
+          if (type==='t'){const p=tab[idx];if(p.length&&!p[p.length-1].up){p[p.length-1].up=true;score+=5;}}
+          sel=null; save(); render(); checkWin(); return;
+        }
+      }
+    }
+
+    function checkWin() {
+      if (found.every(p=>p.length===13)) {
+        setTimeout(()=>{
+          const b=document.getElementById('sol-game-body');
+          if(b) b.innerHTML=`<div style="text-align:center;padding:60px 20px;font-family:'VT323'"><div style="font-size:52px;color:#7ac47a">🎉 YOU WIN! 🎉</div><div style="font-size:24px;color:var(--text-mid);margin:12px 0">Final Score: ${score}</div><button class="sol-btn" style="font-size:20px;padding:6px 20px" onclick="Solitaire.newGame()">Play Again</button></div>`;
+        },400);
+      }
+    }
+
+    function mkCard(card,onCk,onDbl,isSel) {
+      const el=document.createElement('div');
+      el.className=`sol-card${card.up?(isRed(card.s)?' red':' black'):' face-down'}${isSel?' sol-sel':''}`;
+      if (card.up) {
+        const v=VALS[card.v],s=SYM[card.s];
+        el.innerHTML=`<span class="sol-tl">${v}<br>${s}</span><span class="sol-br">${v}<br>${s}</span>`;
+      }
+      if (onCk)  el.onclick  = onCk;
+      if (onDbl) el.ondblclick = e=>{e.stopPropagation();onDbl();};
+      return el;
+    }
+
+    function mkEmpty(onCk,label) {
+      const el=document.createElement('div'); el.className='sol-empty';
+      if (label) el.textContent=label;
+      if (onCk)  el.onclick=onCk;
+      return el;
+    }
+
+    function render() {
+      const sc=document.getElementById('sol-score'); if(sc) sc.textContent=score;
+
+      // Stock
+      const stockEl=document.getElementById('sol-stock');
+      if (stockEl) {
+        stockEl.innerHTML='';
+        if (stock.length) {
+          const c=mkCard({s:'S',v:0,up:false},()=>click('stock'));
+          c.title=`${stock.length} cards remaining`; stockEl.appendChild(c);
+        } else { stockEl.appendChild(mkEmpty(()=>click('stock'),'↺')); }
+      }
+
+      // Waste
+      const wasteEl=document.getElementById('sol-waste');
+      if (wasteEl) {
+        wasteEl.innerHTML='';
+        if (waste.length) {
+          const c=mkCard(waste[waste.length-1],()=>click('waste'),()=>autoMove('waste'),sel?.type==='waste');
+          wasteEl.appendChild(c);
+        } else { wasteEl.appendChild(mkEmpty(null,'')); }
+      }
+
+      // Foundations
+      for (let i=0;i<4;i++) {
+        const el=document.getElementById(`sol-f${i}`); if(!el) continue;
+        el.innerHTML='';
+        if (found[i].length) { el.appendChild(mkCard(found[i][found[i].length-1],()=>click('f',i))); }
+        else { el.appendChild(mkEmpty(()=>click('f',i),['♥','♦','♠','♣'][i])); }
+      }
+
+      // Tableau
+      for (let i=0;i<7;i++) {
+        const el=document.getElementById(`sol-t${i}`); if(!el) continue;
+        el.innerHTML='';
+        const pile=tab[i];
+        if (!pile.length) { el.style.height='82px'; el.appendChild(mkEmpty(()=>click('t',i,0),'')); continue; }
+        el.style.height=(pile.length*22+58)+'px';
+        pile.forEach((card,j)=>{
+          const isSel=sel?.type==='t'&&sel.idx===i&&j>=sel.ci;
+          const c=card.up
+            ? mkCard(card,()=>click('t',i,j),()=>autoMove('t',i,j),isSel)
+            : mkCard(card,null);
+          c.style.position='absolute'; c.style.top=(j*22)+'px'; c.style.zIndex=j+1;
+          el.appendChild(c);
+        });
+      }
+    }
+
+    return { init, undo, newGame: init };
+  })();
+
+  Solitaire.init();
 
   // PT-73 — McHale's Navy
   const pt73Data = {
