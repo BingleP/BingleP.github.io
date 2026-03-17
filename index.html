@@ -588,6 +588,15 @@
       .bonzi-tray-btn { width: 40px; height: 40px; }
       .bonzi-tray-btn img { width: 32px; height: 32px; }
 
+      /* Solitaire: scale 7 card columns to fit screen width */
+      /* available = 100vw - 24px (outer pad) - 16px (game pad) - 6*4px (gaps) = 100vw - 64px */
+      #sol-game-body { padding: 8px; }
+      #sol-top-row, #sol-tab-row { gap: 4px !important; }
+      .sol-card, .sol-empty { width: calc((100vw - 64px) / 7); height: calc((100vw - 64px) * 80 / 392); }
+      .sol-tab-col { width: calc((100vw - 64px) / 7); }
+      .sol-tl, .sol-br { font-size: calc((100vw - 64px) / 49 * 0.24); }
+      .sol-empty { font-size: calc((100vw - 64px) / 49 * 0.4); }
+
       #start-menu {
         width: 100%;
         bottom: 48px;
@@ -1070,7 +1079,7 @@
             <button class="sol-btn" onclick="Solitaire.newGame()">New Game</button>
           </div>
         </div>
-        <div style="display:flex;gap:8px;margin-bottom:12px;align-items:flex-start;">
+        <div id="sol-top-row" style="display:flex;gap:8px;margin-bottom:12px;align-items:flex-start;">
           <div id="sol-stock"></div>
           <div id="sol-waste"></div>
           <div style="flex:1"></div>
@@ -1079,7 +1088,7 @@
           <div id="sol-f2"></div>
           <div id="sol-f3"></div>
         </div>
-        <div style="display:flex;gap:8px;align-items:flex-start;">
+        <div id="sol-tab-row" style="display:flex;gap:8px;align-items:flex-start;">
           <div id="sol-t0" class="sol-tab-col"></div>
           <div id="sol-t1" class="sol-tab-col"></div>
           <div id="sol-t2" class="sol-tab-col"></div>
