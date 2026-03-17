@@ -1284,6 +1284,7 @@
     win.style.display = 'flex';
     win.classList.remove('minimized');
     focusWindow(id);
+    if (id === 'win-steam') loadSteamData();
   }
 
   function updateTaskbar() {
@@ -1532,13 +1533,6 @@
           .join('');
       }
     } catch {}
-  }
-
-  // Load Steam data on open, refresh on each open
-  const _origOpenWindow = openWindow;
-  function openWindow(id) {
-    _origOpenWindow(id);
-    if (id === 'win-steam') loadSteamData();
   }
 
   loadSteamData();
