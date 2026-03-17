@@ -28,7 +28,7 @@ A retro Windows 98-style personal homepage for [kerrick.ca](https://kerrick.ca).
 - Chat history (last 20 messages), speech bubbles, and text-to-speech
 
 ### Start Menu
-- Links to GitHub projects: BinglesHTTPServer, Solitaire, LiberalBot, jellyfin-invidious-channel
+- Links to GitHub projects: BinglesHTTPServer, Solitaire, LiberalBot, jellyfin-youtube-feed
 - About This PC shortcut
 - GitHub profile link
 
