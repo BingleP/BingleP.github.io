@@ -193,11 +193,21 @@
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       cursor: se-resize;
       z-index: 9999;
-      background: linear-gradient(135deg, transparent 50%, var(--win-border-dark) 50%, transparent 60%, var(--win-border-dark) 60%, transparent 70%, var(--win-border-dark) 70%, transparent 80%, var(--win-border-dark) 80%, transparent 90%, var(--win-border-dark) 90%);
+      background: linear-gradient(135deg,
+        transparent 40%,
+        var(--win-border-light) 40%, var(--win-border-light) 46%,
+        transparent 46%,
+        transparent 56%,
+        var(--win-border-light) 56%, var(--win-border-light) 62%,
+        transparent 62%,
+        transparent 72%,
+        var(--win-border-light) 72%, var(--win-border-light) 78%,
+        transparent 78%
+      );
     }
 
     .inset {

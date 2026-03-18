@@ -169,9 +169,10 @@
     const solWin  = document.getElementById('win-solitaire');
     const solBody = document.getElementById('sol-game-body');
     if (solWin && solBody) {
-      const BASE_W = 480;
+      let baseW = 0;
       new ResizeObserver(() => {
-        solBody.style.zoom = solWin.clientWidth / BASE_W;
+        if (!baseW) baseW = solWin.clientWidth;
+        solBody.style.zoom = solWin.clientWidth / baseW;
       }).observe(solWin);
     }
   }
