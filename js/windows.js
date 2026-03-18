@@ -8,6 +8,27 @@
     let isDragging = false;
     let offset = { x: 0, y: 0 };
 
+    // ── Resize handle ──────────────────────────────────────────────
+    if (window.innerWidth > 700) {
+      const handle = document.createElement('div');
+      handle.className = 'resize-handle';
+      win.appendChild(handle);
+
+      let isResizing = false, rsX, rsY, rsW, rsH;
+      handle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        rsX = e.clientX; rsY = e.clientY;
+        rsW = win.offsetWidth; rsH = win.offsetHeight;
+        e.preventDefault(); e.stopPropagation();
+      });
+      document.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        win.style.width  = Math.max(200, rsW + e.clientX - rsX) + 'px';
+        win.style.height = Math.max(80,  rsH + e.clientY - rsY) + 'px';
+      });
+      document.addEventListener('mouseup', () => isResizing = false);
+    }
+
     // Mouse drag
     titlebar.addEventListener('mousedown', (e) => {
       if (window.innerWidth <= 700) return;

@@ -187,7 +187,18 @@
 
     .window-body { padding: 14px; overflow-y: auto; flex: 1; min-height: 0; }
 
-    .window { overflow: hidden; resize: both; min-width: 200px; min-height: 80px; }
+    .window { overflow: hidden; min-width: 200px; min-height: 80px; }
+
+    .resize-handle {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 16px;
+      height: 16px;
+      cursor: se-resize;
+      z-index: 9999;
+      background: linear-gradient(135deg, transparent 50%, var(--win-border-dark) 50%, transparent 60%, var(--win-border-dark) 60%, transparent 70%, var(--win-border-dark) 70%, transparent 80%, var(--win-border-dark) 80%, transparent 90%, var(--win-border-dark) 90%);
+    }
 
     .inset {
       background: #111111;
