@@ -969,6 +969,10 @@
       </div>
       <span class="icon-text">Steam.lnk</span>
     </div>
+    <div class="icon-item" ondblclick="openWindow('win-iss')">
+      <div class="icon-img">🛰️</div>
+      <span class="icon-text">ISS.exe</span>
+    </div>
   </div>
 
   <div id="win-profile" class="window pink" style="width: 300px; top: 30px; left: 150px; display:none;">
@@ -1153,6 +1157,26 @@
       </div>
     </div>
   </div>
+
+  <div id="win-iss" class="window navy" style="width: 660px; top: 60px; left: 200px; display:none;">
+    <div class="titlebar">
+      <div style="display:flex; align-items:center; gap:6px;"><span>🛰️</span> <span class="titlebar-text">ISS Live — Earth from Space</span></div>
+      <div style="display:flex; gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-iss')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-iss')">✕</div>
+      </div>
+    </div>
+    <div class="window-body" style="padding:0; overflow:hidden;">
+      <iframe
+        src="https://www.youtube.com/embed/xAieE-QtOeM?autoplay=1&mute=1"
+        width="660"
+        height="371"
+        style="display:block; border:none;"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+  </div>
 </div>
 
 <div id="start-menu">
@@ -1299,6 +1323,7 @@
         if (win.id === 'win-train')   icon = '🚂';
         if (win.id === 'win-profile') icon = '👤';
         if (win.id === 'win-about')   icon = '🖥️';
+        if (win.id === 'win-iss')     icon = '🛰️';
 
         btn.innerHTML = `<span>${icon}</span> ${title.split(' ')[0]}`;
         btn.onclick = () => {
