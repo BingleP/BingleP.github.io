@@ -129,7 +129,7 @@
     .window.steam .titlebar    { background: linear-gradient(90deg, var(--steam-dark), #2a475e); }
     .window.navy .titlebar     { background: linear-gradient(90deg, #0a1e3d, #163366); }
 
-    .pt73-body { display:flex; flex:none; height:300px; padding:0; }
+    .pt73-body { display:flex; flex:1; min-height:0; padding:0; }
     .pt73-sidebar { width:215px; min-width:215px; display:flex; flex-direction:column; border-right:2px solid var(--win-border-dark); min-height:0; overflow:hidden; }
     .pt73-tabs { display:flex; border-bottom:2px solid var(--win-border-dark); }
     .pt73-tab { flex:1; font-family:'VT323',monospace; font-size:16px; padding:5px 0; cursor:pointer; background:var(--win-bg); border:none; border-right:1px solid var(--win-border-dark); color:var(--text-mid); text-align:center; transition:background 0.1s; }
@@ -141,7 +141,7 @@
     .pt73-ep:hover { background:rgba(100,150,200,0.12); color:var(--text-dark); }
     .pt73-ep.playing { color:#7ab3e0; background:rgba(10,30,60,0.6); }
     .pt73-player { flex:1; display:flex; flex-direction:column; padding:10px; gap:8px; }
-    .pt73-iframe-wrap { flex:1; background:#000; border-top:2px solid var(--win-border-dark); border-left:2px solid var(--win-border-dark); border-right:2px solid var(--win-border-light); border-bottom:2px solid var(--win-border-light); }
+    .pt73-iframe-wrap { width:100%; aspect-ratio:4/3; background:#000; border-top:2px solid var(--win-border-dark); border-left:2px solid var(--win-border-dark); border-right:2px solid var(--win-border-light); border-bottom:2px solid var(--win-border-light); }
     .pt73-iframe-wrap iframe { width:100%; height:100%; border:none; display:block; }
     .pt73-nowplaying { font-family:'VT323',monospace; font-size:15px; color:var(--text-mid); padding:4px 8px; background:#111; border:1px solid var(--win-border-dark); }
     .pt73-nowplaying span { color:#7ab3e0; }
@@ -187,7 +187,7 @@
     }
 
     .window-body { padding: 14px; overflow-y: auto; flex: 1; min-height: 0; }
-    .window-body.pt73-body { flex: none; }
+    .window-body.pt73-body { flex: 1; }
 
     .window { overflow: hidden; min-width: 200px; min-height: 80px; }
 

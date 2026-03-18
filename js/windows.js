@@ -164,6 +164,27 @@
     updateTaskbar();
   }
 
+  // ── PT-73: maintain 4:3 aspect ratio when window width changes ──
+  const pt73Win = document.getElementById('win-pt73');
+  if (pt73Win && window.innerWidth > 700) {
+    let lastPt73W = 0;
+    new ResizeObserver(() => {
+      const w = pt73Win.offsetWidth;
+      if (w === lastPt73W) return;
+      lastPt73W = w;
+      const titlebar   = pt73Win.querySelector('.titlebar');
+      const sidebar    = pt73Win.querySelector('.pt73-sidebar');
+      const player     = pt73Win.querySelector('.pt73-player');
+      const nowplaying = pt73Win.querySelector('.pt73-nowplaying');
+      const cs         = getComputedStyle(player);
+      const padV       = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const gap        = parseFloat(cs.gap) || 8;
+      const videoW     = w - sidebar.offsetWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const videoH     = videoW * (3 / 4);
+      pt73Win.style.height = Math.round(titlebar.offsetHeight + padV + gap + videoH + nowplaying.offsetHeight + 4) + 'px';
+    }).observe(pt73Win);
+  }
+
   // ── Solitaire scaling ───────────────────────────────────────────
   if (window.innerWidth > 700) {
     const solWin  = document.getElementById('win-solitaire');
