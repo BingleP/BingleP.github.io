@@ -51,18 +51,28 @@ Add one of these classes alongside `window` to get a coloured titlebar:
 |-----------|-------------|
 | Normal content with padding | `<div class="window-body">` |
 | Content that needs to flush to the edges (no padding) | `<div class="window-body window-body-flush">` |
-| Fixed-height body that must not grow (e.g. sidebar + scroll area) | Add `flex:none` via a specific CSS rule AND set explicit `height` on the window — see the PT-73 pattern below |
+| Window body with a sidebar + scrollable list (no fixed height) | Use `flex:1; min-height:0; padding:0` on the body class — see the PT-73 pattern below |
 
-#### The PT-73 fixed-height pattern
+#### The PT-73 sidebar + aspect-ratio player pattern
 
-When the window contains a scrollable sidebar or any layout where you need an exact height:
+When the window contains a fixed-width sidebar and a media player that should maintain an aspect ratio as the window is resized:
 
-1. Set explicit height on the window: `style="width:600px; height:360px; ..."`
-2. In CSS, target the body with a double-class selector (so it beats `.window-body { flex:1 }`):
+1. Give the body `flex:1; min-height:0; padding:0` (fills window, no fixed height):
    ```css
-   .window-body.your-body-class { flex: none; height: 300px; }
+   .your-body-class { display:flex; flex:1; min-height:0; padding:0; }
+   .window-body.your-body-class { flex: 1; }   /* beats the base .window-body rule */
    ```
-3. Make sure any scrollable child has `flex:1; min-height:0; overflow-y:auto` and its parent column container has `min-height:0; overflow:hidden`.
+2. Give the media element `width:100%; aspect-ratio:4/3` (or whatever ratio) instead of `flex:1` — height follows width automatically.
+3. Make the scrollable sidebar column have `min-height:0; overflow:hidden` so it clips to the flex row height.
+4. Add a `ResizeObserver` in `windows.js` that fires on **width** changes and sets `win.style.height` to keep the window snapped to the correct proportions:
+   ```js
+   new ResizeObserver(() => {
+     const w = win.offsetWidth;
+     if (w === lastW) return; lastW = w;
+     const videoW = w - sidebar.offsetWidth - hPad;
+     win.style.height = Math.round(titlebar.offsetHeight + vPad + gap + videoW * (3/4) + nowplaying.offsetHeight + 4) + 'px';
+   }).observe(win);
+   ```
 
 #### If the window has a coloured background that should fill extra height
 
@@ -154,7 +164,7 @@ Create `js/yourfeature.js` and add a script tag at the bottom of `index.html`, *
 <script src="js/yourfeature.js?v=1"></script>
 ```
 
-**Current version in use:** all scripts are at `?v=3`, CSS at `?v=3`.
+**Current version in use:** `windows.js` and `style.css` are at `?v=4`; all other scripts at `?v=3`.
 
 Increment the version number any time you change the file — GitHub Pages (Fastly CDN) caches aggressively and will serve stale files otherwise. This has caused bugs before.
 
@@ -192,7 +202,9 @@ The `.window-body` rule sets `flex:1` which overrides any `height` you set on th
 Bump `style.css?v=N` in the `<link>` tag whenever you change the stylesheet. Same for any JS files you change. GitHub Pages CDN will serve stale content indefinitely otherwise.
 
 **Window resize**
-All windows get a 20×20px resize handle (bottom-right corner) injected by `windows.js` on desktop. No action needed — it's automatic. If a window's content should scale with its width (like solitaire), use a `ResizeObserver` + CSS `zoom` in `windows.js`.
+All windows get a 20×20px resize handle (bottom-right corner) injected by `windows.js` on desktop. No action needed — it's automatic. Two patterns for windows whose content should respond to resizing:
+- **Scale content proportionally** (Solitaire): `ResizeObserver` + CSS `zoom` on the content element
+- **Lock aspect ratio** (PT-73): `aspect-ratio` on the media element + `ResizeObserver` that sets `win.style.height` based on width changes only — see the PT-73 pattern above
 
 **Mobile**
 Below 700px the desktop layout collapses to a stacked scrollable list. Windows switch to `position:relative`. Drag and resize are disabled. Any fixed pixel heights in window bodies may need a `@media (max-width:700px)` override in `style.css` — see existing PT-73 and solitaire overrides at the bottom of the file for examples.
