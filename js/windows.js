@@ -2,19 +2,54 @@
   const windows = document.querySelectorAll('.window');
   const taskbarItems = document.getElementById('taskbar-items');
 
-  // ── Resize handles ─────────────────────────────────────────────
-  function addResizeHandles(win) {
-    ['n','s','e','w','ne','nw','se','sw'].forEach(dir => {
-      const handle = document.createElement('div');
-      handle.className = `resize-handle ${dir}`;
-      win.appendChild(handle);
+  // ── Resize by edge proximity ────────────────────────────────────
+  const EDGE = 6;
+  const CURSOR_MAP = { n:'n-resize', s:'s-resize', e:'e-resize', w:'w-resize', ne:'ne-resize', nw:'nw-resize', se:'se-resize', sw:'sw-resize' };
 
-      handle.addEventListener('mousedown', (e) => {
-        if (window.innerWidth <= 700) return;
+  function getResizeDir(e, win) {
+    const r = win.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const L = x <= EDGE, R = x >= r.width - EDGE;
+    const T = y <= EDGE, B = y >= r.height - EDGE;
+    if (T && L) return 'nw';
+    if (T && R) return 'ne';
+    if (B && L) return 'sw';
+    if (B && R) return 'se';
+    if (T) return 'n';
+    if (B) return 's';
+    if (L) return 'w';
+    if (R) return 'e';
+    return '';
+  }
+
+  if (window.innerWidth > 700) {
+    windows.forEach(win => {
+      let resizeDir = '';
+
+      win.addEventListener('mousemove', (e) => {
+        if (e.buttons) return; // don't change cursor mid-drag
+        resizeDir = getResizeDir(e, win);
+        win.style.cursor = CURSOR_MAP[resizeDir] || '';
+      });
+
+      win.addEventListener('mouseleave', () => {
+        if (!resizeDir) return;
+        resizeDir = '';
+        win.style.cursor = '';
+      });
+
+      win.addEventListener('mousedown', (e) => {
+        resizeDir = getResizeDir(e, win);
+        if (!resizeDir) return;
+        // north edge sits inside titlebar — let drag handle pure titlebar clicks
+        if (['n','ne','nw'].includes(resizeDir) && e.target.closest('.titlebar') && e.offsetY > EDGE) return;
+
         e.preventDefault();
         e.stopPropagation();
         focusWindow(win.id);
+        win.classList.add('resizing');
 
+        const dir = resizeDir;
         const startX = e.clientX, startY = e.clientY;
         const startW = win.offsetWidth,  startH = win.offsetHeight;
         const startL = win.offsetLeft,   startT = win.offsetTop;
@@ -33,6 +68,8 @@
           win.style.top    = t + 'px';
         }
         function onUp() {
+          win.classList.remove('resizing');
+          win.style.cursor = '';
           document.removeEventListener('mousemove', onMove);
           document.removeEventListener('mouseup', onUp);
         }
@@ -40,10 +77,6 @@
         document.addEventListener('mouseup', onUp);
       });
     });
-  }
-
-  if (window.innerWidth > 700) {
-    windows.forEach(win => addResizeHandles(win));
   }
 
   windows.forEach(win => {
