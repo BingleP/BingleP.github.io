@@ -2,6 +2,50 @@
   const windows = document.querySelectorAll('.window');
   const taskbarItems = document.getElementById('taskbar-items');
 
+  // ── Resize handles ─────────────────────────────────────────────
+  function addResizeHandles(win) {
+    ['n','s','e','w','ne','nw','se','sw'].forEach(dir => {
+      const handle = document.createElement('div');
+      handle.className = `resize-handle ${dir}`;
+      win.appendChild(handle);
+
+      handle.addEventListener('mousedown', (e) => {
+        if (window.innerWidth <= 700) return;
+        e.preventDefault();
+        e.stopPropagation();
+        focusWindow(win.id);
+
+        const startX = e.clientX, startY = e.clientY;
+        const startW = win.offsetWidth,  startH = win.offsetHeight;
+        const startL = win.offsetLeft,   startT = win.offsetTop;
+        const minW = 200, minH = 80;
+
+        function onMove(e) {
+          const dx = e.clientX - startX, dy = e.clientY - startY;
+          let w = startW, h = startH, l = startL, t = startT;
+          if (dir.includes('e')) w = Math.max(minW, startW + dx);
+          if (dir.includes('s')) h = Math.max(minH, startH + dy);
+          if (dir.includes('w')) { w = Math.max(minW, startW - dx); l = startL + startW - w; }
+          if (dir.includes('n')) { h = Math.max(minH, startH - dy); t = startT + startH - h; }
+          win.style.width  = w + 'px';
+          win.style.height = h + 'px';
+          win.style.left   = l + 'px';
+          win.style.top    = t + 'px';
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+    });
+  }
+
+  if (window.innerWidth > 700) {
+    windows.forEach(win => addResizeHandles(win));
+  }
+
   windows.forEach(win => {
     const titlebar = win.querySelector('.titlebar');
     let isDragging = false;
