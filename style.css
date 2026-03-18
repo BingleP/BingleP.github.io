@@ -186,6 +186,7 @@
     }
 
     .window-body { padding: 14px; overflow-y: auto; flex: 1; min-height: 0; }
+    .window-body.pt73-body { flex: none; }
 
     .window { overflow: hidden; min-width: 200px; min-height: 80px; }
 
