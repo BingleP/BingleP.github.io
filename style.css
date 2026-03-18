@@ -148,6 +148,7 @@
 
     /* Solitaire */
     .window.cards .titlebar { background: linear-gradient(90deg, #0d2b0d, #1a4a1a); }
+    #win-solitaire .window-body { background: #1a4a1a; }
     #sol-game-body { background:#1a4a1a; padding:10px; user-select:none; flex:1; }
     .sol-card { width:56px; height:80px; border-radius:5px; border:1px solid #bbb; background:#fafafa; position:relative; cursor:pointer; flex-shrink:0; box-shadow:1px 2px 4px rgba(0,0,0,0.4); }
     .sol-card.red { color:#c0150f; }
