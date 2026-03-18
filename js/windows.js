@@ -163,3 +163,15 @@
     });
     updateTaskbar();
   }
+
+  // ── Solitaire scaling ───────────────────────────────────────────
+  if (window.innerWidth > 700) {
+    const solWin  = document.getElementById('win-solitaire');
+    const solBody = document.getElementById('sol-game-body');
+    if (solWin && solBody) {
+      const BASE_W = 480;
+      new ResizeObserver(() => {
+        solBody.style.zoom = solWin.clientWidth / BASE_W;
+      }).observe(solWin);
+    }
+  }
