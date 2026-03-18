@@ -155,14 +155,12 @@
   // ── Mobile tweaks ─────────────────────────────────────────────
   if (window.innerWidth <= 700) {
     document.getElementById('bonzi-panel').classList.add('bonzi-hidden');
-  }
 
-  // ── Mobile icon tap ────────────────────────────────────────────
-  if (window.innerWidth <= 700) {
     document.querySelectorAll('.icon-item').forEach(icon => {
       const dblHandler = icon.getAttribute('ondblclick');
       if (dblHandler) {
-        icon.addEventListener('click', () => eval(dblHandler));
+        const id = /openWindow\('([^']+)'\)/.exec(dblHandler)?.[1];
+        if (id) icon.addEventListener('click', () => openWindow(id));
       }
     });
   }

@@ -60,7 +60,7 @@
   <div class="ctx-item" onclick="refreshDesktop(); closeContextMenu()">🔄 Refresh</div>
   <div class="ctx-item" onclick="startScreensaver(); closeContextMenu()">💤 Screensaver</div>
   <div class="ctx-divider"></div>
-  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="img/bonzi.gif" style="width:16px;height:16px;vertical-align:middle;image-rendering:pixelated;margin-right:5px;">Call Bonzi</div>
+  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="img/bonzi.gif" class="ctx-bonzi-icon">Call Bonzi</div>
   <div id="ctx-send-home" class="ctx-item" style="display:none" onclick="sendBonziHome(); closeContextMenu()">🏠 Send Bonzi Home</div>
 </div>
 
@@ -68,9 +68,9 @@
 <div id="error-popup">
   <div class="error-box">
     <div class="error-titlebar">
-      <div style="display:flex; align-items:center; gap:6px;">
+      <div class="titlebar-left">
         <span style="font-size:14px;">⚠️</span>
-        <span class="titlebar-text" style="color:white; font-family:'VT323'; font-size:17px;">BALD.EXE — Application Error</span>
+        <span class="titlebar-text">BALD.EXE — Application Error</span>
       </div>
       <div class="win-btn" onclick="document.getElementById('error-popup').classList.remove('open')">✕</div>
     </div>
@@ -148,20 +148,20 @@
 
   <div id="win-profile" class="window pink" style="width: 300px; top: 30px; left: 150px; display:none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>👤</span> <span class="titlebar-text">kerrick.ca</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>👤</span> <span class="titlebar-text">kerrick.ca</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-profile')">_</div>
         <div class="win-btn" onclick="closeWindow('win-profile')">✕</div>
       </div>
     </div>
     <div class="window-body">
-      <div style="text-align:center; margin-bottom:12px;">
+      <div class="profile-header">
         <img src="img/diesel.png" class="profile-pic" alt="kerrick">
         <h2 style="font-family:'VT323'; color:var(--text-dark); margin-top:5px;">KERRICK</h2>
         <p style="font-size:12px; color:var(--text-mid);">bald. gamer. deeply normal person. 🎮</p>
       </div>
       <div class="inset">
-        <div style="display:flex; align-items:center; gap:8px; font-size:12px;">
+        <div class="profile-status-row">
           <div class="status-dot"></div>
           <span>Online - Plotting with Bonzi</span>
         </div>
@@ -171,8 +171,8 @@
 
   <div id="win-welcome" class="window lavender" style="width: 480px; top: 100px; left: 320px;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>💌</span> <span class="titlebar-text">welcome.txt — Notepad</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>💌</span> <span class="titlebar-text">welcome.txt — Notepad</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-welcome')">_</div>
         <div class="win-btn" onclick="closeWindow('win-welcome')">✕</div>
       </div>
@@ -190,14 +190,14 @@
 
   <div id="win-train" class="window mint" style="width: 420px; top: 180px; left: 180px; display:none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>🚂</span> <span class="titlebar-text">cooltrainpicture.png</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>🚂</span> <span class="titlebar-text">cooltrainpicture.png</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-train')">_</div>
         <div class="win-btn" onclick="closeWindow('win-train')">✕</div>
       </div>
     </div>
     <div class="window-body">
-      <div class="inset" style="padding:4px; background:#000;">
+      <div class="inset train-img-inset">
         <img src="img/cooltrainpicture.png" alt="Train" style="width:100%; display:block;">
       </div>
       <p style="font-family:'VT323'; font-size:13px; text-align:center; margin-top:8px;">🚂 VIA Rail 154 Turbotrain — absolute unit</p>
@@ -206,32 +206,32 @@
 
   <div id="win-steam" class="window steam" style="width: 320px; top: 250px; left: 400px; display: none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>🎮</span> <span class="titlebar-text">Steam</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>🎮</span> <span class="titlebar-text">Steam</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-steam')">_</div>
         <div class="win-btn" onclick="closeWindow('win-steam')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="background: var(--steam-blue); color: var(--steam-text); padding: 10px;">
-      <div style="text-align:center; margin-bottom: 8px;">
-        <h3 id="steam-name" style="font-family:'VT323'; color: #66c0f4; font-size: 28px; margin: 0;"></h3>
-        <p style="font-size: 11px; opacity: 0.7; margin: 2px 0;">Level <span id="steam-level"></span> &nbsp;·&nbsp; <span id="steam-years"></span> on Steam</p>
-        <p id="steam-status" style="font-size: 11px; margin: 3px 0;"></p>
+    <div class="window-body steam-body">
+      <div class="steam-header">
+        <h3 id="steam-name"></h3>
+        <p class="steam-meta">Level <span id="steam-level"></span> &nbsp;·&nbsp; <span id="steam-years"></span> on Steam</p>
+        <p id="steam-status"></p>
       </div>
 
-      <div style="display:flex; justify-content:space-around; margin: 8px 0; text-align:center;">
+      <div class="steam-stats-row">
         <div>
-          <div id="steam-games" style="font-family:'VT323'; font-size: 22px; color: #66c0f4;"></div>
-          <div style="font-size: 10px; opacity: 0.7;">GAMES</div>
+          <div id="steam-games"></div>
+          <div class="steam-games-label">GAMES</div>
         </div>
       </div>
 
-      <div class="inset" style="background: rgba(0,0,0,0.3); border: 1px solid #2a475e; margin: 8px 0; padding: 6px 8px;">
-        <p style="font-size: 10px; opacity: 0.6; margin: 0 0 4px 0; text-transform: uppercase; letter-spacing: 1px;">🕹️ Recent Activity</p>
-        <div id="steam-recent" style="font-size: 11px; line-height: 1.6; color: var(--text-mid);">Loading...</div>
+      <div class="steam-inset">
+        <p class="steam-activity-label">🕹️ Recent Activity</p>
+        <div id="steam-recent">Loading...</div>
       </div>
 
-      <div style="text-align:center; margin-top: 8px;">
+      <div class="steam-view-profile">
         <a href="https://steamcommunity.com/id/binglepuss/" target="_blank" class="steam-link-btn">VIEW PROFILE</a>
       </div>
     </div>
@@ -239,22 +239,22 @@
 
   <div id="win-solitaire" class="window cards" style="width:480px; top:60px; left:200px; display:none;">
     <div class="titlebar">
-      <div style="display:flex;align-items:center;gap:6px;"><span>🃏</span><span class="titlebar-text">Solitaire</span></div>
-      <div style="display:flex;gap:3px;">
+      <div class="titlebar-left"><span>🃏</span><span class="titlebar-text">Solitaire</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-solitaire')">_</div>
         <div class="win-btn" onclick="closeWindow('win-solitaire')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="padding:0;">
-      <div id="sol-game-body" style="background:#1a4a1a;padding:10px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+    <div class="window-body window-body-flush">
+      <div id="sol-game-body">
+        <div id="sol-score-row">
           <span style="font-family:'VT323';font-size:18px;color:#7ac47a;">Score: <span id="sol-score">0</span></span>
-          <div style="display:flex;gap:6px;">
+          <div class="sol-btn-group">
             <button class="sol-btn" onclick="Solitaire.undo()">Undo</button>
             <button class="sol-btn" onclick="Solitaire.newGame()">New Game</button>
           </div>
         </div>
-        <div id="sol-top-row" style="display:flex;gap:8px;margin-bottom:12px;align-items:flex-start;">
+        <div id="sol-top-row">
           <div id="sol-stock"></div>
           <div id="sol-waste"></div>
           <div style="flex:1"></div>
@@ -263,7 +263,7 @@
           <div id="sol-f2"></div>
           <div id="sol-f3"></div>
         </div>
-        <div id="sol-tab-row" style="display:flex;gap:8px;align-items:flex-start;">
+        <div id="sol-tab-row">
           <div id="sol-t0" class="sol-tab-col"></div>
           <div id="sol-t1" class="sol-tab-col"></div>
           <div id="sol-t2" class="sol-tab-col"></div>
@@ -278,13 +278,13 @@
 
   <div id="win-pt73" class="window navy" style="width:700px; top:50px; left:130px; display:none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>⚓</span> <span class="titlebar-text">PT-73 — McHale's Navy</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>⚓</span> <span class="titlebar-text">PT-73 — McHale's Navy</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-pt73')">_</div>
         <div class="win-btn" onclick="closeWindow('win-pt73')">✕</div>
       </div>
     </div>
-    <div class="window-body pt73-body" style="padding:0;">
+    <div class="window-body pt73-body">
       <div class="pt73-sidebar">
         <div class="pt73-tabs">
           <div class="pt73-tab active" onclick="pt73Season(1)">S1</div>
@@ -305,16 +305,16 @@
 
   <div id="win-about" class="window" style="width: 340px; top: 80px; left: 250px; display: none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>🖥️</span> <span class="titlebar-text">About This PC</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>🖥️</span> <span class="titlebar-text">About This PC</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="closeWindow('win-about')">✕</div>
       </div>
     </div>
     <div class="window-body">
-      <div style="text-align:center; margin-bottom:14px;">
-        <div style="font-size:48px;">🖥️</div>
-        <div style="font-family:'VT323'; font-size:22px; color:var(--text-dark);">kerrick.ca OS</div>
-        <div style="font-size:11px; color:var(--text-mid);">Version 98.6 (Build BALD)</div>
+      <div class="about-header">
+        <div class="about-icon">🖥️</div>
+        <div class="about-os-name">kerrick.ca OS</div>
+        <div class="about-os-version">Version 98.6 (Build BALD)</div>
       </div>
       <div class="inset">
         <div class="about-row"><span class="about-label">CPU</span><span class="about-value">Intel Pentium III 600MHz</span></div>
@@ -331,18 +331,18 @@
 
   <div id="win-iss" class="window navy" style="width: 660px; top: 60px; left: 200px; display:none;">
     <div class="titlebar">
-      <div style="display:flex; align-items:center; gap:6px;"><span>🛰️</span> <span class="titlebar-text">ISS Live — Earth from Space</span></div>
-      <div style="display:flex; gap:3px;">
+      <div class="titlebar-left"><span>🛰️</span> <span class="titlebar-text">ISS Live — Earth from Space</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-iss')">_</div>
         <div class="win-btn" onclick="closeWindow('win-iss')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="padding:0; overflow:hidden;">
+    <div class="window-body">
       <iframe
         src="https://www.youtube.com/embed/xAieE-QtOeM?autoplay=1&mute=1"
         width="660"
         height="371"
-        style="display:block; border:none;"
+        class="iss-iframe"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen
       ></iframe>
@@ -353,27 +353,27 @@
   <!-- Projects.exe -->
   <div id="win-projects" class="window lavender" style="width:500px; top:70px; left:180px; display:none;">
     <div class="titlebar">
-      <div style="display:flex;align-items:center;gap:6px;"><span>📁</span><span class="titlebar-text">Projects.exe — GitHub Repositories</span></div>
-      <div style="display:flex;gap:3px;">
+      <div class="titlebar-left"><span>📁</span><span class="titlebar-text">Projects.exe — GitHub Repositories</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-projects')">_</div>
         <div class="win-btn" onclick="closeWindow('win-projects')">✕</div>
       </div>
     </div>
-    <div id="projects-body" class="window-body" style="padding:0;max-height:420px;overflow-y:auto;">
+    <div id="projects-body" class="window-body">
       <div style="text-align:center;padding:20px;color:var(--text-mid);">Loading repositories...</div>
     </div>
   </div>
 
   <!-- Winamp.exe -->
-  <div id="win-winamp" class="window" style="width:280px; top:120px; left:420px; display:none; background:#1a1a1a;">
-    <div class="titlebar" style="background:linear-gradient(90deg,#2a2a2a,#1a1a1a);">
-      <div style="display:flex;align-items:center;gap:6px;font-family:'VT323',monospace;color:#57c29e;font-size:15px;">🎵 WINAMP</div>
-      <div style="display:flex;gap:3px;">
+  <div id="win-winamp" class="window" style="width:280px; top:120px; left:420px; display:none;">
+    <div class="titlebar">
+      <div class="titlebar-left winamp-title-label">🎵 WINAMP</div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-winamp')">_</div>
         <div class="win-btn" onclick="closeWindow('win-winamp')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="background:#1a1a1a;padding:8px;">
+    <div class="window-body">
       <div class="winamp-screen">
         <div class="winamp-scroll-wrap"><span class="winamp-scroll-text" id="wa-track-display">♫ select a track to play ♫</span></div>
         <div class="winamp-time" id="wa-time">▶ 0:00</div>
@@ -393,13 +393,13 @@
   <!-- MTG.exe -->
   <div id="win-mtg" class="window" style="width:280px; top:80px; left:500px; display:none;">
     <div class="titlebar">
-      <div style="display:flex;align-items:center;gap:6px;"><span>🧙</span><span class="titlebar-text">MTG.exe — Random Card</span></div>
-      <div style="display:flex;gap:3px;">
+      <div class="titlebar-left"><span>🧙</span><span class="titlebar-text">MTG.exe — Random Card</span></div>
+      <div class="titlebar-right">
         <div class="win-btn" onclick="minimizeWindow('win-mtg')">_</div>
         <div class="win-btn" onclick="closeWindow('win-mtg')">✕</div>
       </div>
     </div>
-    <div class="window-body" style="text-align:center;">
+    <div class="window-body">
       <div id="mtg-card-wrap"><div style="padding:20px;color:var(--text-mid);">Drawing a card...</div></div>
       <button class="mtg-btn" onclick="loadMTGCard()">🃏 Draw Another</button>
     </div>
@@ -474,7 +474,7 @@
 
 <div class="taskbar">
   <div class="start-btn" onclick="toggleStart()"><img src="img/kerrick.png" class="start-btn-logo" alt="">Start</div>
-  <div id="taskbar-items" style="display: flex; gap: 4px;"></div>
+  <div id="taskbar-items"></div>
   <div class="bonzi-tray-btn" onclick="bonziTogglePanel()" title="BonziBUDDY">
     <img src="img/bonzi.gif" alt="🦍" onerror="this.textContent='🦍'; this.style.fontSize='16px'">
   </div>

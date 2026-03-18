@@ -129,7 +129,7 @@
     .window.steam .titlebar    { background: linear-gradient(90deg, var(--steam-dark), #2a475e); }
     .window.navy .titlebar     { background: linear-gradient(90deg, #0a1e3d, #163366); }
 
-    .pt73-body { display:flex; height:430px; }
+    .pt73-body { display:flex; height:430px; padding:0; }
     .pt73-sidebar { width:215px; min-width:215px; display:flex; flex-direction:column; border-right:2px solid var(--win-border-dark); }
     .pt73-tabs { display:flex; border-bottom:2px solid var(--win-border-dark); }
     .pt73-tab { flex:1; font-family:'VT323',monospace; font-size:16px; padding:5px 0; cursor:pointer; background:var(--win-bg); border:none; border-right:1px solid var(--win-border-dark); color:var(--text-mid); text-align:center; transition:background 0.1s; }
@@ -564,6 +564,8 @@
     #winamp-iframe { display: block; width: 100%; border: none; margin-top: 6px; aspect-ratio: 16/9; }
 
     /* MTG.exe */
+    #win-mtg .window-body { text-align: center; }
+
     .mtg-card-img { width: 220px; border-radius: 10px; display: block; margin: 0 auto 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
     .mtg-btn {
       display: block; width: 100%; padding: 6px; font-family: 'VT323', monospace;
@@ -888,6 +890,215 @@
       font-size: 15px;
       color: #555;
       letter-spacing: 1px;
+    }
+
+    /* ── Extracted inline styles ───────────────────────────────── */
+
+    /* Titlebar inner layout helpers */
+    .titlebar-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .titlebar-right {
+      display: flex;
+      gap: 3px;
+    }
+
+    /* Taskbar items strip */
+    #taskbar-items {
+      display: flex;
+      gap: 4px;
+    }
+
+    /* Context menu — Bonzi icon */
+    .ctx-bonzi-icon {
+      width: 16px;
+      height: 16px;
+      vertical-align: middle;
+      image-rendering: pixelated;
+      margin-right: 5px;
+    }
+
+    /* Profile window */
+    .profile-header {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .profile-status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    /* About This PC window */
+    .about-header {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .about-icon { font-size: 48px; }
+
+    .about-os-name {
+      font-family: 'VT323';
+      font-size: 22px;
+      color: var(--text-dark);
+    }
+
+    .about-os-version {
+      font-size: 11px;
+      color: var(--text-mid);
+    }
+
+    /* Steam window body */
+    .steam-body {
+      background: var(--steam-blue);
+      color: var(--steam-text);
+      padding: 10px;
+    }
+
+    .steam-header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .steam-activity-label {
+      font-size: 10px;
+      opacity: 0.6;
+      margin: 0 0 4px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .steam-meta {
+      font-size: 11px;
+      opacity: 0.7;
+      margin: 2px 0;
+    }
+
+    #steam-status {
+      font-size: 11px;
+      margin: 3px 0;
+    }
+
+    .steam-stats-row {
+      display: flex;
+      justify-content: space-around;
+      margin: 8px 0;
+      text-align: center;
+    }
+
+    .steam-games-label {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .steam-inset {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid #2a475e;
+      margin: 8px 0;
+      padding: 6px 8px;
+    }
+
+    .steam-view-profile {
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    /* Solitaire layout rows */
+    #sol-top-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    #sol-tab-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    #sol-score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    #sol-score-row .sol-btn-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* window-body padding:0 variant */
+    .window-body-flush {
+      padding: 0;
+    }
+
+    /* Projects window body */
+    #projects-body {
+      padding: 0;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+
+    /* ISS window */
+    #win-iss .window-body {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* ISS iframe */
+    .iss-iframe {
+      display: block;
+      border: none;
+    }
+
+    /* Steam named elements */
+    #steam-name {
+      font-family: 'VT323';
+      color: #66c0f4;
+      font-size: 28px;
+      margin: 0;
+    }
+
+    #steam-games {
+      font-family: 'VT323';
+      font-size: 22px;
+      color: #66c0f4;
+    }
+
+    #steam-recent {
+      font-size: 11px;
+      line-height: 1.6;
+      color: var(--text-mid);
+    }
+
+    /* Winamp window overrides */
+    #win-winamp { background: #1a1a1a; }
+    #win-winamp .titlebar { background: linear-gradient(90deg, #2a2a2a, #1a1a1a); }
+    .winamp-title-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'VT323', monospace;
+      color: #57c29e;
+      font-size: 15px;
+    }
+
+    #win-winamp .window-body {
+      background: #1a1a1a;
+      padding: 8px;
+    }
+
+    /* Train image inset */
+    .train-img-inset {
+      padding: 4px;
+      background: #000;
     }
 
     /* Start button kerrick logo */
