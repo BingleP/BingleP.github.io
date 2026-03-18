@@ -12,9 +12,9 @@
   <meta property="og:url" content="https://kerrick.ca/">
   <meta property="og:title" content="kerrick.ca — welcome :)">
   <meta property="og:description" content="bald. gamer. genuinely funny. 🎮">
-  <meta property="og:image" content="https://kerrick.ca/kerrick.png">
+  <meta property="og:image" content="https://kerrick.ca/img/kerrick.png">
 
-  <link rel="icon" type="image/png" href="kerrick.png">
+  <link rel="icon" type="image/png" href="img/kerrick.png">
   <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -22,7 +22,7 @@
 
 <!-- Boot screen -->
 <div id="boot-screen">
-  <img src="kerrick.png" class="boot-logo" alt="Kerrick OS">
+  <img src="img/kerrick.png" class="boot-logo" alt="Kerrick OS">
   <div class="boot-title">KERRICK OS</div>
   <div class="boot-version">Version 98.6 (Build BALD)</div>
   <div class="boot-click-hint" id="boot-click-hint">[ Click anywhere to start ]</div>
@@ -46,7 +46,7 @@
 <!-- Floating BonziBUDDY -->
 <div id="floating-bonzi">
   <div class="float-bubble" id="float-bubble"></div>
-  <img src="bonzi.gif" class="float-bonzi-img" id="float-bonzi-img" alt="BonziBUDDY">
+  <img src="img/bonzi.gif" class="float-bonzi-img" id="float-bonzi-img" alt="BonziBUDDY">
   <div class="float-input-row">
     <input class="float-bonzi-input" id="float-bonzi-input" type="text" placeholder="Ask Bonzi..." onkeydown="if(event.key==='Enter') floatBonziSend()">
     <button class="float-bonzi-send" onclick="floatBonziSend()">Go</button>
@@ -60,7 +60,7 @@
   <div class="ctx-item" onclick="refreshDesktop(); closeContextMenu()">🔄 Refresh</div>
   <div class="ctx-item" onclick="startScreensaver(); closeContextMenu()">💤 Screensaver</div>
   <div class="ctx-divider"></div>
-  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="bonzi.gif" style="width:16px;height:16px;vertical-align:middle;image-rendering:pixelated;margin-right:5px;">Call Bonzi</div>
+  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="img/bonzi.gif" style="width:16px;height:16px;vertical-align:middle;image-rendering:pixelated;margin-right:5px;">Call Bonzi</div>
   <div id="ctx-send-home" class="ctx-item" style="display:none" onclick="sendBonziHome(); closeContextMenu()">🏠 Send Bonzi Home</div>
 </div>
 
@@ -91,7 +91,7 @@
 <div id="screensaver" onclick="stopScreensaver()">
   <div id="screensaver-bouncer">
     <!-- src will be set when image is provided -->
-    <img id="screensaver-img" src="kerrick.png" alt="kerrick">
+    <img id="screensaver-img" src="img/kerrick.png" alt="kerrick">
   </div>
 </div>
 
@@ -156,7 +156,7 @@
     </div>
     <div class="window-body">
       <div style="text-align:center; margin-bottom:12px;">
-        <img src="diesel.png" class="profile-pic" alt="kerrick">
+        <img src="img/diesel.png" class="profile-pic" alt="kerrick">
         <h2 style="font-family:'VT323'; color:var(--text-dark); margin-top:5px;">KERRICK</h2>
         <p style="font-size:12px; color:var(--text-mid);">bald. gamer. deeply normal person. 🎮</p>
       </div>
@@ -198,7 +198,7 @@
     </div>
     <div class="window-body">
       <div class="inset" style="padding:4px; background:#000;">
-        <img src="cooltrainpicture.png" alt="Train" style="width:100%; display:block;">
+        <img src="img/cooltrainpicture.png" alt="Train" style="width:100%; display:block;">
       </div>
       <p style="font-family:'VT323'; font-size:13px; text-align:center; margin-top:8px;">🚂 VIA Rail 154 Turbotrain — absolute unit</p>
     </div>
@@ -460,7 +460,7 @@
 
 <div id="bonzi-panel">
   <div class="bonzi-character">
-    <img src="bonzi.gif" alt="BonziBUDDY" onerror="this.style.display='none'; document.querySelector('.bonzi-char-fallback').style.display='block'">
+    <img src="img/bonzi.gif" alt="BonziBUDDY" onerror="this.style.display='none'; document.querySelector('.bonzi-char-fallback').style.display='block'">
     <div class="bonzi-char-fallback">🦍</div>
     <div class="bonzi-speech" id="bonzi-speech">Hiya! I'm BonziBUDDY! Ask me anything!</div>
   </div>
@@ -473,10 +473,10 @@
 </div>
 
 <div class="taskbar">
-  <div class="start-btn" onclick="toggleStart()"><img src="kerrick.png" class="start-btn-logo" alt="">Start</div>
+  <div class="start-btn" onclick="toggleStart()"><img src="img/kerrick.png" class="start-btn-logo" alt="">Start</div>
   <div id="taskbar-items" style="display: flex; gap: 4px;"></div>
   <div class="bonzi-tray-btn" onclick="bonziTogglePanel()" title="BonziBUDDY">
-    <img src="bonzi.gif" alt="🦍" onerror="this.textContent='🦍'; this.style.fontSize='16px'">
+    <img src="img/bonzi.gif" alt="🦍" onerror="this.textContent='🦍'; this.style.fontSize='16px'">
   </div>
   <div class="taskbar-clock" id="clock">12:00</div>
 </div>
