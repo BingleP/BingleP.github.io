@@ -129,7 +129,7 @@
     .window.steam .titlebar    { background: linear-gradient(90deg, var(--steam-dark), #2a475e); }
     .window.navy .titlebar     { background: linear-gradient(90deg, #0a1e3d, #163366); }
 
-    .pt73-body { display:flex; height:430px; padding:0; }
+    .pt73-body { display:flex; height:300px; padding:0; }
     .pt73-sidebar { width:215px; min-width:215px; display:flex; flex-direction:column; border-right:2px solid var(--win-border-dark); }
     .pt73-tabs { display:flex; border-bottom:2px solid var(--win-border-dark); }
     .pt73-tab { flex:1; font-family:'VT323',monospace; font-size:16px; padding:5px 0; cursor:pointer; background:var(--win-bg); border:none; border-right:1px solid var(--win-border-dark); color:var(--text-mid); text-align:center; transition:background 0.1s; }
