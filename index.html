@@ -540,6 +540,57 @@
     .about-label { color: var(--text-mid); font-weight: 600; }
     .about-value { font-family: 'VT323', monospace; font-size: 14px; }
 
+    /* Projects.exe */
+    .project-card {
+      display: block; padding: 9px 12px;
+      border-bottom: 1px solid var(--win-border-dark);
+      text-decoration: none; color: var(--text-dark); transition: background 0.1s;
+    }
+    .project-card:hover { background: rgba(255,255,255,0.04); }
+    .project-card:last-child { border-bottom: none; }
+    .project-name { font-family: 'VT323', monospace; font-size: 17px; color: var(--accent); }
+    .project-desc { font-size: 11px; color: var(--text-mid); margin-top: 2px; line-height: 1.4; }
+    .project-meta { display: flex; gap: 10px; margin-top: 5px; font-size: 10px; color: var(--text-mid); align-items: center; }
+    .project-lang { background: rgba(138,172,204,0.15); color: var(--accent); padding: 1px 6px; border-radius: 3px; }
+
+    /* Winamp.exe */
+    .winamp-screen {
+      background: #000; padding: 6px 8px; font-family: 'VT323', monospace;
+      font-size: 15px; color: #57c29e; border: 1px inset #444; margin-bottom: 6px;
+      white-space: nowrap; overflow: hidden;
+    }
+    .winamp-scroll-wrap { overflow: hidden; width: 100%; }
+    .winamp-scroll-text { display: inline-block; animation: wa-scroll 12s linear infinite; }
+    @keyframes wa-scroll { 0% { transform: translateX(100%); } 100% { transform: translateX(-200%); } }
+    .winamp-time { font-size: 13px; color: #3a9a6e; margin-top: 2px; letter-spacing: 2px; }
+    .winamp-controls { display: flex; gap: 3px; justify-content: center; margin-bottom: 8px; }
+    .wa-btn {
+      background: #2e2e2e; color: #bbb; border: 1px solid #555;
+      border-bottom-color: #1a1a1a; border-right-color: #1a1a1a;
+      padding: 2px 7px; cursor: pointer; font-family: 'VT323', monospace; font-size: 15px;
+      min-width: 28px; text-align: center;
+    }
+    .wa-btn:hover { background: #3a3a3a; color: #fff; }
+    .wa-btn:active { border-color: #1a1a1a; border-bottom-color: #555; border-right-color: #555; }
+    .wa-btn.active { color: #57c29e; }
+    .winamp-playlist { border: 1px solid #333; background: #0d0d0d; overflow-y: auto; max-height: 110px; }
+    .wa-track {
+      padding: 3px 8px; font-size: 11px; cursor: pointer; color: #666;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .wa-track:hover { background: #1a1a1a; color: #ccc; }
+    .wa-track.playing { color: #57c29e; background: #091409; }
+    #winamp-iframe { display: block; width: 100%; border: none; margin-top: 6px; aspect-ratio: 16/9; }
+
+    /* MTG.exe */
+    .mtg-card-img { width: 220px; border-radius: 10px; display: block; margin: 0 auto 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+    .mtg-btn {
+      display: block; width: 100%; padding: 6px; font-family: 'VT323', monospace;
+      font-size: 16px; background: var(--win-titlebar); color: var(--accent);
+      border: 1px solid var(--win-border-light); cursor: pointer; margin-top: 8px;
+    }
+    .mtg-btn:hover { background: #444; }
+
     /* Mobile */
     @media (max-width: 700px) {
       #desktop {
@@ -961,6 +1012,10 @@
       <div class="icon-img">🚂</div>
       <span class="icon-text">Train.png</span>
     </div>
+    <div class="icon-item" ondblclick="openWindow('win-projects')">
+      <div class="icon-img">📁</div>
+      <span class="icon-text">Projects.exe</span>
+    </div>
     <div class="icon-item" ondblclick="openWindow('win-steam')">
       <div class="icon-img" style="background:#1b2838; padding:6px;">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" style="width:100%;height:100%;">
@@ -983,6 +1038,14 @@
     <div class="icon-item" ondblclick="openWindow('win-iss')">
       <div class="icon-img">🛰️</div>
       <span class="icon-text">ISS.lnk</span>
+    </div>
+    <div class="icon-item" ondblclick="openWindow('win-winamp')">
+      <div class="icon-img">🎵</div>
+      <span class="icon-text">Winamp.exe</span>
+    </div>
+    <div class="icon-item" ondblclick="openWindow('win-mtg')">
+      <div class="icon-img">🧙</div>
+      <span class="icon-text">MTG.exe</span>
     </div>
   </div>
 
@@ -1190,9 +1253,77 @@
   </div>
 </div>
 
+  <!-- Projects.exe -->
+  <div id="win-projects" class="window lavender" style="width:500px; top:70px; left:180px; display:none;">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:6px;"><span>📁</span><span class="titlebar-text">Projects.exe — GitHub Repositories</span></div>
+      <div style="display:flex;gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-projects')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-projects')">✕</div>
+      </div>
+    </div>
+    <div id="projects-body" class="window-body" style="padding:0;max-height:420px;overflow-y:auto;">
+      <div style="text-align:center;padding:20px;color:var(--text-mid);">Loading repositories...</div>
+    </div>
+  </div>
+
+  <!-- Winamp.exe -->
+  <div id="win-winamp" class="window" style="width:280px; top:120px; left:420px; display:none; background:#1a1a1a;">
+    <div class="titlebar" style="background:linear-gradient(90deg,#2a2a2a,#1a1a1a);">
+      <div style="display:flex;align-items:center;gap:6px;font-family:'VT323',monospace;color:#57c29e;font-size:15px;">🎵 WINAMP</div>
+      <div style="display:flex;gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-winamp')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-winamp')">✕</div>
+      </div>
+    </div>
+    <div class="window-body" style="background:#1a1a1a;padding:8px;">
+      <div class="winamp-screen">
+        <div class="winamp-scroll-wrap"><span class="winamp-scroll-text" id="wa-track-display">♫ select a track to play ♫</span></div>
+        <div class="winamp-time" id="wa-time">▶ 0:00</div>
+      </div>
+      <div class="winamp-controls">
+        <button class="wa-btn" onclick="winampPrev()" title="Prev">⏮</button>
+        <button class="wa-btn" onclick="winampPlay()" title="Play">▶</button>
+        <button class="wa-btn" onclick="winampPause()" title="Pause">⏸</button>
+        <button class="wa-btn" onclick="winampStop()" title="Stop">⏹</button>
+        <button class="wa-btn" onclick="winampNext()" title="Next">⏭</button>
+      </div>
+      <div class="winamp-playlist" id="wa-playlist"></div>
+      <iframe id="winamp-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- MTG.exe -->
+  <div id="win-mtg" class="window" style="width:280px; top:80px; left:500px; display:none;">
+    <div class="titlebar">
+      <div style="display:flex;align-items:center;gap:6px;"><span>🧙</span><span class="titlebar-text">MTG.exe — Random Card</span></div>
+      <div style="display:flex;gap:3px;">
+        <div class="win-btn" onclick="minimizeWindow('win-mtg')">_</div>
+        <div class="win-btn" onclick="closeWindow('win-mtg')">✕</div>
+      </div>
+    </div>
+    <div class="window-body" style="text-align:center;">
+      <div id="mtg-card-wrap"><div style="padding:20px;color:var(--text-mid);">Drawing a card...</div></div>
+      <button class="mtg-btn" onclick="loadMTGCard()">🃏 Draw Another</button>
+    </div>
+  </div>
+
 <div id="start-menu">
   <div class="start-menu-sidebar"><span>kerrick.ca</span></div>
   <div class="start-menu-items">
+    <div class="start-menu-divider"></div>
+    <div class="start-menu-item" onclick="openWindow('win-projects'); toggleStart()">
+      <span class="item-icon">📁</span>
+      <div class="start-menu-label">Projects.exe<small>github repositories</small></div>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('win-winamp'); toggleStart()">
+      <span class="item-icon">🎵</span>
+      <div class="start-menu-label">Winamp.exe<small>music player</small></div>
+    </div>
+    <div class="start-menu-item" onclick="openWindow('win-mtg'); toggleStart()">
+      <span class="item-icon">🧙</span>
+      <div class="start-menu-label">MTG.exe<small>random card draw</small></div>
+    </div>
     <div class="start-menu-divider"></div>
     <a class="start-menu-item" href="https://github.com/BingleP/BinglesHTTPServer" target="_blank" onclick="toggleStart()">
       <span class="item-icon">🗄️</span>
@@ -1318,7 +1449,9 @@
     win.style.display = 'flex';
     win.classList.remove('minimized');
     focusWindow(id);
-    if (id === 'win-steam') loadSteamData();
+    if (id === 'win-steam')    loadSteamData();
+    if (id === 'win-projects') loadProjects();
+    if (id === 'win-mtg')      loadMTGCard();
   }
 
   function updateTaskbar() {
@@ -1330,11 +1463,14 @@
         btn.className = `task-item ${win.classList.contains('active') && !win.classList.contains('minimized') ? 'active' : ''}`;
 
         let icon = '📁';
-        if (win.id === 'win-steam')   icon = '🎮';
-        if (win.id === 'win-train')   icon = '🚂';
-        if (win.id === 'win-profile') icon = '👤';
-        if (win.id === 'win-about')   icon = '🖥️';
-        if (win.id === 'win-iss')     icon = '🛰️';
+        if (win.id === 'win-steam')    icon = '🎮';
+        if (win.id === 'win-train')    icon = '🚂';
+        if (win.id === 'win-profile')  icon = '👤';
+        if (win.id === 'win-about')    icon = '🖥️';
+        if (win.id === 'win-iss')      icon = '🛰️';
+        if (win.id === 'win-projects') icon = '📁';
+        if (win.id === 'win-winamp')   icon = '🎵';
+        if (win.id === 'win-mtg')      icon = '🧙';
 
         btn.innerHTML = `<span>${icon}</span> ${title.split(' ')[0]}`;
         btn.onclick = () => {
@@ -1594,6 +1730,102 @@
   }
 
   loadSteamData();
+
+  // ── Projects.exe ──────────────────────────────────────────────
+  async function loadProjects() {
+    const body = document.getElementById('projects-body');
+    if (body.dataset.loaded) return;
+    try {
+      const res = await fetch('https://api.github.com/users/BingleP/repos?sort=updated&per_page=20');
+      const repos = await res.json();
+      const filtered = repos.filter(r => !r.fork && r.name !== 'BingleP.github.io');
+      if (!filtered.length) { body.innerHTML = '<div style="padding:16px;color:var(--text-mid);">No repositories found.</div>'; return; }
+      body.innerHTML = filtered.map(r => `
+        <a class="project-card" href="${r.html_url}" target="_blank">
+          <div class="project-name">${r.name}</div>
+          ${r.description ? `<div class="project-desc">${r.description}</div>` : ''}
+          <div class="project-meta">
+            ${r.language ? `<span class="project-lang">${r.language}</span>` : ''}
+            ${r.stargazers_count > 0 ? `<span>⭐ ${r.stargazers_count}</span>` : ''}
+            ${r.topics?.length ? r.topics.slice(0,3).map(t=>`<span style="opacity:0.6;">#${t}</span>`).join('') : ''}
+          </div>
+        </a>`).join('');
+      body.dataset.loaded = '1';
+    } catch {
+      body.innerHTML = '<div style="padding:16px;color:var(--text-mid);">Could not load repositories.</div>';
+    }
+  }
+
+  // ── Winamp.exe ────────────────────────────────────────────────
+  // Update track IDs here to change the playlist
+  const winampTracks = [
+    { title: 'Rick Astley — Never Gonna Give You Up', id: 'dQw4w9WgXcQ' },
+    { title: 'Darude — Sandstorm',                   id: 'y6120QOlsfU' },
+    { title: 'Smash Mouth — All Star',               id: 'L_jWHffIx5E' },
+    { title: 'PSY — Gangnam Style',                  id: '9bZkp7q19f0' },
+  ];
+  let waCurrent = -1;
+  let waPlaying = false;
+
+  (function initWinamp() {
+    const list = document.getElementById('wa-playlist');
+    winampTracks.forEach((t, i) => {
+      const div = document.createElement('div');
+      div.className = 'wa-track';
+      div.textContent = `${String(i+1).padStart(2,'0')}. ${t.title}`;
+      div.onclick = () => winampLoadTrack(i, true);
+      list.appendChild(div);
+    });
+  })();
+
+  function winampLoadTrack(i, autoplay) {
+    waCurrent = i;
+    waPlaying = autoplay;
+    const t = winampTracks[i];
+    document.getElementById('wa-track-display').textContent = `♫ ${t.title} ♫`;
+    document.getElementById('winamp-iframe').src =
+      `https://www.youtube.com/embed/${t.id}?enablejsapi=1${autoplay ? '&autoplay=1' : ''}`;
+    document.querySelectorAll('.wa-track').forEach((el, idx) => {
+      el.classList.toggle('playing', idx === i);
+    });
+  }
+
+  function winampPlay()  {
+    if (waCurrent < 0) { winampLoadTrack(0, true); return; }
+    document.getElementById('winamp-iframe').contentWindow
+      .postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+    waPlaying = true;
+  }
+  function winampPause() {
+    document.getElementById('winamp-iframe').contentWindow
+      .postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+    waPlaying = false;
+  }
+  function winampStop() {
+    document.getElementById('winamp-iframe').src = '';
+    document.getElementById('wa-track-display').textContent = '♫ stopped ♫';
+    document.querySelectorAll('.wa-track').forEach(el => el.classList.remove('playing'));
+    waPlaying = false; waCurrent = -1;
+  }
+  function winampNext() { winampLoadTrack((waCurrent + 1) % winampTracks.length, waPlaying || waCurrent >= 0); }
+  function winampPrev() { winampLoadTrack((waCurrent - 1 + winampTracks.length) % winampTracks.length, waPlaying || waCurrent >= 0); }
+
+  // ── MTG.exe ───────────────────────────────────────────────────
+  async function loadMTGCard() {
+    const wrap = document.getElementById('mtg-card-wrap');
+    wrap.innerHTML = '<div style="padding:20px;color:var(--text-mid);">Drawing a card...</div>';
+    try {
+      const res = await fetch('https://api.scryfall.com/cards/random');
+      const card = await res.json();
+      const img = card.image_uris?.normal ?? card.card_faces?.[0]?.image_uris?.normal;
+      if (!img) throw new Error('no image');
+      wrap.innerHTML = `<img class="mtg-card-img" src="${img}" alt="${card.name}">
+        <div style="font-family:'VT323';font-size:18px;color:var(--accent);">${card.name}</div>
+        <div style="font-size:10px;color:var(--text-mid);margin-top:3px;">${card.set_name} · ${card.rarity}</div>`;
+    } catch {
+      wrap.innerHTML = '<div style="padding:16px;color:var(--text-mid);">Could not draw a card. Try again!</div>';
+    }
+  }
 
   function bonziTogglePanel() {
     document.getElementById('bonzi-panel').classList.toggle('bonzi-hidden');
