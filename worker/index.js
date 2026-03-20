@@ -122,7 +122,7 @@ export default {
       });
     }
 
-    const reply = data.choices[0].message.content;
+    const reply = data.choices[0].message.content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
 
     return new Response(JSON.stringify({ reply }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
