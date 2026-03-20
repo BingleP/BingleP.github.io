@@ -108,7 +108,7 @@ export default {
         'Authorization': `Bearer ${env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'openai/gpt-oss-120b',
+        model: 'qwen/qwen3-32b',
         messages,
         max_tokens: 500,
       }),
