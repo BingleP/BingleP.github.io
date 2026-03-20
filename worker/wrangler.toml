@@ -1,6 +1,7 @@
 name = "bonzi-proxy"
 main = "index.js"
 compatibility_date = "2025-01-01"
+account_id = "c4643698f02ea6d8457169e9c336275b"
 
 # Deploy with: npx wrangler deploy
 #

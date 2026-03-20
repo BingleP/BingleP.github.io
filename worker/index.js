@@ -107,9 +107,9 @@ export default {
         'Authorization': `Bearer ${env.GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'qwen/qwen3-32b',
         messages,
-        max_tokens: 150,
+        max_tokens: 500,
       }),
     });
 
