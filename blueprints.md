@@ -164,7 +164,7 @@ Create `js/yourfeature.js` and add a script tag at the bottom of `index.html`, *
 <script src="js/yourfeature.js?v=1"></script>
 ```
 
-**Current version in use:** `windows.js` and `style.css` are at `?v=4`; all other scripts at `?v=3`.
+**Current version in use:** `windows.js` and `style.css` are at `?v=5`; all other scripts at `?v=4`.
 
 Increment the version number any time you change the file — GitHub Pages (Fastly CDN) caches aggressively and will serve stale files otherwise. This has caused bugs before.
 
