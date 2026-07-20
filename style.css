@@ -55,7 +55,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  z-index: 2;
+  z-index: 8500;
   position: absolute;
   top: 20px;
   left: 20px;
@@ -158,11 +158,11 @@ body {
 .window.active { z-index: 100; }
 
 .window.inactive .titlebar {
-  filter: grayscale(0.6) brightness(0.85);
+  opacity: 0.8;
 }
 
 .window.active .titlebar {
-  filter: none;
+  opacity: 1;
 }
 
 .window.minimized {
@@ -895,7 +895,13 @@ body {
   background: #1a0a2e;
   z-index: 8000;
   box-shadow: 2px 2px 0 var(--btn-dark-shadow);
+  pointer-events: none;
 }
+
+#bonzi-panel input,
+#bonzi-panel button,
+#bonzi-panel img,
+#bonzi-panel .bonzi-tray-btn { pointer-events: auto; }
 #bonzi-panel.bonzi-hidden { display: none; }
 .bonzi-tray-btn { margin-left: auto; width: 26px; height: 26px; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 1px solid transparent; }
 .bonzi-tray-btn:hover { border-top: 2px solid var(--btn-highlight); border-left: 2px solid var(--btn-highlight); border-right: 2px solid var(--btn-shadow); border-bottom: 2px solid var(--btn-shadow); }

@@ -30,40 +30,62 @@
     }
 
     // Mouse drag
+    let dragStartX = 0, dragStartY = 0, baseLeft = 0, baseTop = 0;
     titlebar.addEventListener('mousedown', (e) => {
       if (window.innerWidth <= 700) return;
       isDragging = true;
-      offset.x = e.clientX - win.offsetLeft;
-      offset.y = e.clientY - win.offsetTop;
+      baseLeft = win.offsetLeft;
+      baseTop  = win.offsetTop;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
       focusWindow(win.id);
     });
 
     document.addEventListener('mousemove', (e) => {
       if (!isDragging) return;
-      win.style.left = (e.clientX - offset.x) + 'px';
-      win.style.top  = (e.clientY - offset.y) + 'px';
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      win.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
     });
 
-    document.addEventListener('mouseup', () => isDragging = false);
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      const dx = (win.offsetLeft - baseLeft);
+      const dy = (win.offsetTop - baseTop);
+      win.style.left = win.offsetLeft + 'px';
+      win.style.top  = win.offsetTop + 'px';
+      win.style.transform = '';
+    });
 
     // Touch drag
+    let tDragStartX = 0, tDragStartY = 0, tBaseLeft = 0, tBaseTop = 0;
     titlebar.addEventListener('touchstart', (e) => {
       if (window.innerWidth <= 700) return;
       const t = e.touches[0];
       isDragging = true;
-      offset.x = t.clientX - win.offsetLeft;
-      offset.y = t.clientY - win.offsetTop;
+      tBaseLeft = win.offsetLeft;
+      tBaseTop  = win.offsetTop;
+      tDragStartX = t.clientX;
+      tDragStartY = t.clientY;
       focusWindow(win.id);
     }, { passive: true });
 
     document.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       const t = e.touches[0];
-      win.style.left = (t.clientX - offset.x) + 'px';
-      win.style.top  = (t.clientY - offset.y) + 'px';
+      const dx = t.clientX - tDragStartX;
+      const dy = t.clientY - tDragStartY;
+      win.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
     }, { passive: true });
 
-    document.addEventListener('touchend', () => isDragging = false);
+    document.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      win.style.left = win.offsetLeft + 'px';
+      win.style.top  = win.offsetTop + 'px';
+      win.style.transform = '';
+    });
 
     win.addEventListener('mousedown', () => focusWindow(win.id));
     win.addEventListener('touchstart', () => focusWindow(win.id), { passive: true });
