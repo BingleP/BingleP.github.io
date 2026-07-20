@@ -62,23 +62,38 @@ Calls `https://api.scryfall.com/cards/random` each time the window opens or you 
 
 ## Stack
 
-Pure HTML, CSS, and vanilla JS. No frameworks, no build step, no dependencies.
-
-The only backend is a single Cloudflare Worker (`worker/index.js`) that handles two things: proxying the Steam Web API (to keep the key server-side) and proxying BonziBUDDY AI requests.
+**Frontend:** TypeScript, Vite, Bun. Self-hosted VT323 + Nunito fonts.  
+**Backend:** Single Cloudflare Worker (workers.dev) proxies Steam API + Groq AI for BonziBUDDY.  
+**Infrastructure:** Docker nginx on this machine, behind Cloudflare; deploys via `bun run deploy` → rsync to `/var/www/kerrick.ca`.
 
 ```
-index.html
-style.css
-js/
-  windows.js    — window management, drag, taskbar
-  system.js     — boot, screensaver, clock, startup sound
-  steam.js      — Steam API fetch
-  bonzi.js      — BonziBUDDY chat, floating mode, TTS
-  winamp.js     — Winamp player
-  projects.js   — GitHub repos
-  mtg.js        — Scryfall random card
-  solitaire.js  — Klondike solitaire game
-  pt73.js       — McHale's Navy episode data + player
+index.html       (root HTML, no inline handlers or styles — all via data-* + JS)
+src/
+  main.ts        (entry point, event delegation)
+  style.css      (all styles, @font-face for self-hosted fonts)
+  config.ts      (shared: worker URL, Steam vanity)
+  types.ts       (Steam, Scryfall, GitHub, Card, etc.)
+  windows.ts     (window manager — drag, resize, taskbar, z-order)
+  system.ts      (boot screen, startup sound, screensaver, clock)
+  bonzi.ts       (BonziBUDDY chat + floating mode + TTS)
+  steam.ts       (live Steam profile via worker, session-cached)
+  winamp.ts      (Winamp-style YouTube playlist player)
+  projects.ts    (GitHub repo list via public API, session-cached)
+  mtg.ts         (random Magic card via Scryfall API)
+  solitaire.ts   (Klondike solitaire — full game)
+  pt73.ts        (McHale's Navy episode browser + YouTube player)
 worker/
-  index.js      — Cloudflare Worker (Steam + BonziBUDDY proxy)
+  index.js       (Cloudflare Worker — Groq AI proxy + Steam API proxy)
 ```
+
+## Development
+
+```bash
+bun install              # install Vite + TypeScript
+bun run dev              # Vite dev server with HMR
+bun run build            # tsc --noEmit + vite build to dist/
+bun run preview          # serve dist/ locally to preview
+bun run deploy           # build + rsync to /var/www/kerrick.ca
+```
+
+The `data-click`, `data-dblclick`, and `data-keydown` attributes in the HTML are dispatched by `main.ts` — no inline event handlers. Adding a new action means adding an entry in the dispatch map in `main.ts` and the corresponding `@font-face` for any new fonts in `style.css`.

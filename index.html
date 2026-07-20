@@ -14,15 +14,13 @@
   <meta property="og:description" content="bald. gamer. genuinely funny. 🎮">
   <meta property="og:image" content="https://kerrick.ca/img/kerrick.png">
 
-  <link rel="icon" type="image/png" href="img/kerrick.png">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="icon" type="image/png" href="/img/kerrick.png">
+  <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
 
-<!-- Boot screen -->
 <div id="boot-screen">
-  <img src="img/kerrick.png" class="boot-logo" alt="Kerrick OS">
+  <img src="/img/kerrick.png" class="boot-logo" alt="Kerrick OS">
   <div class="boot-title">KERRICK OS</div>
   <div class="boot-version">Version 98.6 (Build BALD)</div>
   <div class="boot-click-hint" id="boot-click-hint">[ Click anywhere to start ]</div>
@@ -43,36 +41,33 @@
   <div class="cloud cloud-6"></div>
 </div>
 
-<!-- Floating BonziBUDDY -->
 <div id="floating-bonzi">
   <div class="float-bubble" id="float-bubble"></div>
-  <img src="img/bonzi.gif" class="float-bonzi-img" id="float-bonzi-img" alt="BonziBUDDY">
+  <img src="/img/bonzi.gif" class="float-bonzi-img" id="float-bonzi-img" alt="BonziBUDDY">
   <div class="float-input-row">
-    <input class="float-bonzi-input" id="float-bonzi-input" type="text" placeholder="Ask Bonzi..." onkeydown="if(event.key==='Enter') floatBonziSend()">
-    <button class="float-bonzi-send" onclick="floatBonziSend()">Go</button>
+    <input class="float-bonzi-input" id="float-bonzi-input" type="text" placeholder="Ask Bonzi..." data-keydown="float-bonzi:send">
+    <button class="float-bonzi-send" data-click="float-bonzi:send">Go</button>
   </div>
 </div>
 
-<!-- Right-click context menu -->
 <div id="context-menu">
-  <div class="ctx-item" onclick="openWindow('win-about'); closeContextMenu()">🖥️ About This PC</div>
+  <div class="ctx-item" data-click="window:win-about">🖥️ About This PC</div>
   <div class="ctx-divider"></div>
-  <div class="ctx-item" onclick="refreshDesktop(); closeContextMenu()">🔄 Refresh</div>
-  <div class="ctx-item" onclick="startScreensaver(); closeContextMenu()">💤 Screensaver</div>
+  <div class="ctx-item" data-click="system:refresh">🔄 Refresh</div>
+  <div class="ctx-item" data-click="system:screensaver">💤 Screensaver</div>
   <div class="ctx-divider"></div>
-  <div id="ctx-call-bonzi" class="ctx-item" onclick="callBonziFromMenu(); closeContextMenu()"><img src="img/bonzi.gif" class="ctx-bonzi-icon">Call Bonzi</div>
-  <div id="ctx-send-home" class="ctx-item" style="display:none" onclick="sendBonziHome(); closeContextMenu()">🏠 Send Bonzi Home</div>
+  <div id="ctx-call-bonzi" class="ctx-item" data-click="bonzi:call"><img src="/img/bonzi.gif" class="ctx-bonzi-icon">Call Bonzi</div>
+  <div id="ctx-send-home" class="ctx-item" data-click="bonzi:send-home">🏠 Send Bonzi Home</div>
 </div>
 
-<!-- Error popup -->
 <div id="error-popup">
   <div class="error-box">
     <div class="error-titlebar">
       <div class="titlebar-left">
-        <span style="font-size:14px;">⚠️</span>
+        <span class="error-title-icon">⚠️</span>
         <span class="titlebar-text">BALD.EXE — Application Error</span>
       </div>
-      <div class="win-btn" onclick="document.getElementById('error-popup').classList.remove('open')">✕</div>
+      <div class="win-btn" data-click="error:close">✕</div>
     </div>
     <div class="error-body">
       <div class="error-icon">💀</div>
@@ -80,54 +75,52 @@
         <strong>BALD.EXE has encountered a problem and needs to close.</strong>
         <br><br>
         Error code: 0x00000000_HAIR_NOT_FOUND<br>
-        <span style="color: var(--text-mid); font-size:11px;">We are sorry for the inconvenience.</span>
+        <span class="text-mid text-xs">We are sorry for the inconvenience.</span>
       </div>
     </div>
-    <button class="error-btn" onclick="document.getElementById('error-popup').classList.remove('open')">OK</button>
+    <button class="error-btn" data-click="error:close">OK</button>
   </div>
 </div>
 
-<!-- Screensaver -->
-<div id="screensaver" onclick="stopScreensaver()">
+<div id="screensaver" data-click="system:stop-screensaver">
   <div id="screensaver-bouncer">
-    <!-- src will be set when image is provided -->
-    <img id="screensaver-img" src="img/kerrick.png" alt="kerrick">
+    <img id="screensaver-img" src="/img/kerrick.png" alt="kerrick">
   </div>
 </div>
 
 <div id="desktop">
   <div class="desktop-icons">
     <div class="desktop-icon-group">
-      <div class="icon-item" ondblclick="openWindow('win-profile')">
+      <div class="icon-item" data-dblclick="window:win-profile">
         <div class="icon-img">👨‍🦲</div>
         <span class="icon-text">User.exe</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-welcome')">
+      <div class="icon-item" data-dblclick="window:win-welcome">
         <div class="icon-img">📝</div>
         <span class="icon-text">Welcome.txt</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-train')">
+      <div class="icon-item" data-dblclick="window:win-train">
         <div class="icon-img">🚂</div>
         <span class="icon-text">Train.png</span>
       </div>
     </div>
 
     <div class="desktop-icon-group">
-      <div class="icon-item" ondblclick="openWindow('win-projects')">
+      <div class="icon-item" data-dblclick="window:win-projects">
         <div class="icon-img">📁</div>
         <span class="icon-text">Projects.exe</span>
       </div>
-      <div class="icon-item" onclick="window.open('https://precip.kerrick.ca','_blank')">
-        <div class="icon-img"><img src="img/precip-tab.png" alt="Precip"></div>
+      <div class="icon-item" data-click="link:https://precip.kerrick.ca">
+        <div class="icon-img"><img src="/img/precip-tab.png" alt="Precip"></div>
         <span class="icon-text">Precip.lnk</span>
       </div>
-      <div class="icon-item" onclick="window.open('https://maple.kerrick.ca','_blank')">
-        <div class="icon-img"><img src="img/maple-icon.png" alt="Maple"></div>
+      <div class="icon-item" data-click="link:https://maple.kerrick.ca">
+        <div class="icon-img"><img src="/img/maple-icon.png" alt="Maple"></div>
         <span class="icon-text">Maple.lnk</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-steam')">
+      <div class="icon-item" data-dblclick="window:win-steam">
         <div class="icon-img steam-icon">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" style="width:100%;height:100%;">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="white" class="steam-svg-icon">
             <path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.663 0-3.015 1.353-3.015 3.015 0 1.662 1.352 3.015 3.015 3.015 1.663 0 3.015-1.353 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.252 0-2.265-1.014-2.265-2.265z"/>
           </svg>
         </div>
@@ -138,46 +131,45 @@
 
   <div class="desktop-icons desktop-icons-right">
     <div class="desktop-icon-group">
-      <div class="icon-item" ondblclick="openWindow('win-winamp')">
+      <div class="icon-item" data-dblclick="window:win-winamp">
         <div class="icon-img">🎵</div>
         <span class="icon-text">Winamp.exe</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-pt73')">
+      <div class="icon-item" data-dblclick="window:win-pt73">
         <div class="icon-img">⚓</div>
         <span class="icon-text">PT-73.lnk</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-iss')">
+      <div class="icon-item" data-dblclick="window:win-iss">
         <div class="icon-img">🛰️</div>
         <span class="icon-text">ISS.lnk</span>
       </div>
     </div>
 
     <div class="desktop-icon-group">
-      <div class="icon-item" ondblclick="openWindow('win-solitaire')">
+      <div class="icon-item" data-dblclick="window:win-solitaire">
         <div class="icon-img">🃏</div>
         <span class="icon-text">Solitaire.exe</span>
       </div>
-      <div class="icon-item" ondblclick="openWindow('win-mtg')">
+      <div class="icon-item" data-dblclick="window:win-mtg">
         <div class="icon-img">🧙</div>
         <span class="icon-text">MTG.exe</span>
       </div>
     </div>
   </div>
-  </div>
 
-  <div id="win-profile" class="window pink" style="width: 300px; top: 30px; left: 150px; display:none;">
+  <div id="win-profile" class="window pink" data-win-width="300" data-win-top="30" data-win-left="150" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>👤</span> <span class="titlebar-text">kerrick.ca</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-profile')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-profile')">✕</div>
+        <div class="win-btn" data-click="minimize:win-profile">_</div>
+        <div class="win-btn" data-click="close:win-profile">✕</div>
       </div>
     </div>
     <div class="window-body">
       <div class="profile-header">
-        <img src="img/diesel.png" class="profile-pic" alt="kerrick">
-        <h2 style="font-family:'VT323'; color:var(--text-dark); margin-top:5px;">KERRICK</h2>
-        <p style="font-size:12px; color:var(--text-mid);">bald. gamer. deeply normal person. 🎮</p>
+        <img src="/img/diesel.png" class="profile-pic" alt="kerrick">
+        <h2 class="profile-name">KERRICK</h2>
+        <p class="profile-tagline">bald. gamer. deeply normal person. 🎮</p>
       </div>
       <div class="inset">
         <div class="profile-status-row">
@@ -188,50 +180,50 @@
     </div>
   </div>
 
-  <div id="win-welcome" class="window lavender" style="width: 480px; top: 100px; left: 320px;">
+  <div id="win-welcome" class="window lavender" data-win-width="480" data-win-top="100" data-win-left="320">
     <div class="titlebar">
       <div class="titlebar-left"><span>💌</span> <span class="titlebar-text">welcome.txt — Notepad</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-welcome')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-welcome')">✕</div>
+        <div class="win-btn" data-click="minimize:win-welcome">_</div>
+        <div class="win-btn" data-click="close:win-welcome">✕</div>
       </div>
     </div>
-    <div class="window-body" style="background: var(--win-body);">
-        <h1 style="font-family:'VT323'; font-size:42px; color:var(--accent); line-height:1;">Kerrick Shaw-Vincent</h1>
-        <p style="font-family:'VT323'; font-size:18px; color:#6040a0; margin-bottom:15px;">bald by genetics. funny on purpose.</p>
-        <div style="font-size:14px; line-height:1.6; color:var(--text-dark);">
-          <p>Hey, I'm Kerrick. 👋 I've built AI tools at <strong>Brokk AI</strong>, ran my own tech repair business (<strong>Sitrep Solutions</strong>), and have opinions about trains that nobody asked for. Located in Chatham, ON. Reach me at <strong>kerrick@tuta.io</strong>.</p>
-          <p style="margin-top:10px;"><strong>Stops I've clocked in at:</strong> Brokk AI (enterprise AI tools for coders) → Sitrep Solutions (founded my own repair biz — hardware, software, the works) → Concentrix (keeping Chrysler dealerships' systems from catching fire) → TekSavvy (tech support for the masses, phone/email/chat).</p>
-          <p style="margin-top:10px;"><strong>What I actually know how to do:</strong> Fix your computer, write code, re-encode media, run ad campaigns, edit videos, manage a business, handle startup chaos, and yell at Discord bots I built myself.</p>
-          <p style="margin-top:10px;"><strong>Projects I actually shipped:</strong> <a href="https://github.com/BingleP/Conduit" target="_blank">Conduit</a> (media re-encoding that doesn't suck), <a href="https://github.com/BingleP/precip" target="_blank">Precip</a> (self-hosted weather console), <a href="https://github.com/BingleP/LiberalBot" target="_blank">LiberalBot</a> (Discord music bot), and this very website (kerrick.ca). All at github.com/BingleP.</p>
-          <p style="margin-top:10px;">Pokemon, Fallout, Elder Scrolls, MTG. If it has a health bar or mana cost I've probably sunk too many hours into it.</p>
-          <p style="margin-top:10px;">Pull up a chair. 🪑</p>
-        </div>
+    <div class="window-body welcome-body">
+      <h1 class="welcome-title">Kerrick Shaw-Vincent</h1>
+      <p class="welcome-subtitle">bald by genetics. funny on purpose.</p>
+      <div class="welcome-content">
+        <p>Hey, I'm Kerrick. 👋 I've built AI tools at <strong>Brokk AI</strong>, ran my own tech repair business (<strong>Sitrep Solutions</strong>), and have opinions about trains that nobody asked for. Located in Chatham, ON. Reach me at <strong>kerrick@tuta.io</strong>.</p>
+        <p><strong>Stops I've clocked in at:</strong> Brokk AI (enterprise AI tools for coders) → Sitrep Solutions (founded my own repair biz — hardware, software, the works) → Concentrix (keeping Chrysler dealerships' systems from catching fire) → TekSavvy (tech support for the masses, phone/email/chat).</p>
+        <p><strong>What I actually know how to do:</strong> Fix your computer, write code, re-encode media, run ad campaigns, edit videos, manage a business, handle startup chaos, and yell at Discord bots I built myself.</p>
+        <p><strong>Projects I actually shipped:</strong> <a href="https://github.com/BingleP/Conduit" target="_blank">Conduit</a> (media re-encoding that doesn't suck), <a href="https://github.com/BingleP/precip" target="_blank">Precip</a> (self-hosted weather console), <a href="https://github.com/BingleP/LiberalBot" target="_blank">LiberalBot</a> (Discord music bot), and this very website (kerrick.ca). All at github.com/BingleP.</p>
+        <p>Pokemon, Fallout, Elder Scrolls, MTG. If it has a health bar or mana cost I've probably sunk too many hours into it.</p>
+        <p>Pull up a chair. 🪑</p>
+      </div>
     </div>
   </div>
 
-  <div id="win-train" class="window mint" style="width: 420px; top: 180px; left: 180px; display:none;">
+  <div id="win-train" class="window mint" data-win-width="420" data-win-top="180" data-win-left="180" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🚂</span> <span class="titlebar-text">cooltrainpicture.png</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-train')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-train')">✕</div>
+        <div class="win-btn" data-click="minimize:win-train">_</div>
+        <div class="win-btn" data-click="close:win-train">✕</div>
       </div>
     </div>
     <div class="window-body">
       <div class="inset train-img-inset">
-        <img src="img/cooltrainpicture.png" alt="Train" style="width:100%; display:block;">
+        <img src="/img/cooltrainpicture.png" alt="Train" class="train-img">
       </div>
-      <p style="font-family:'VT323'; font-size:13px; text-align:center; margin-top:8px;">🚂 VIA Rail 154 Turbotrain — absolute unit</p>
+      <p class="train-caption">🚂 VIA Rail 154 Turbotrain — absolute unit</p>
     </div>
   </div>
 
-  <div id="win-steam" class="window steam" style="width: 320px; top: 250px; left: 400px; display: none;">
+  <div id="win-steam" class="window steam" data-win-width="320" data-win-top="250" data-win-left="400" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🎮</span> <span class="titlebar-text">Steam</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-steam')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-steam')">✕</div>
+        <div class="win-btn" data-click="minimize:win-steam">_</div>
+        <div class="win-btn" data-click="close:win-steam">✕</div>
       </div>
     </div>
     <div class="window-body steam-body">
@@ -240,52 +232,49 @@
         <p class="steam-meta">Level <span id="steam-level"></span> &nbsp;·&nbsp; <span id="steam-years"></span> on Steam</p>
         <p id="steam-status"></p>
       </div>
-
       <div class="steam-stats-row">
         <div>
           <div id="steam-games"></div>
           <div class="steam-games-label">GAMES</div>
         </div>
       </div>
-
       <div class="steam-inset">
         <p class="steam-activity-label">🕹️ Recent Activity</p>
         <div id="steam-recent">Loading...</div>
       </div>
-
       <div class="steam-view-profile">
         <a href="https://steamcommunity.com/id/binglepuss/" target="_blank" class="steam-link-btn">VIEW PROFILE</a>
       </div>
     </div>
   </div>
 
-  <div id="win-solitaire" class="window cards" style="width:480px; top:60px; left:200px; display:none;">
+  <div id="win-solitaire" class="window cards" data-win-width="480" data-win-top="60" data-win-left="200" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🃏</span><span class="titlebar-text">Solitaire</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-solitaire')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-solitaire')">✕</div>
+        <div class="win-btn" data-click="minimize:win-solitaire">_</div>
+        <div class="win-btn" data-click="close:win-solitaire">✕</div>
       </div>
     </div>
     <div class="window-body window-body-flush">
       <div id="sol-game-body">
-        <div id="sol-score-row" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-          <span style="font-family:'VT323';font-size:18px;color:#7ac47a;">Score: <span id="sol-score">0</span></span>
-          <div class="sol-btn-group" style="display:flex;gap:6px;">
-            <button class="sol-btn" onclick="Solitaire.undo()">Undo</button>
-            <button class="sol-btn" onclick="Solitaire.newGame()">New Game</button>
+        <div id="sol-score-row">
+          <span class="sol-score-label">Score: <span id="sol-score">0</span></span>
+          <div class="sol-btn-group">
+            <button class="sol-btn" data-click="solitaire:undo">Undo</button>
+            <button class="sol-btn" data-click="solitaire:new-game">New Game</button>
           </div>
         </div>
-        <div id="sol-top-row" style="display:flex;gap:8px;margin-bottom:12px;align-items:flex-start;">
+        <div id="sol-top-row">
           <div id="sol-stock"></div>
           <div id="sol-waste"></div>
-          <div style="flex:1"></div>
+          <div class="sol-flex"></div>
           <div id="sol-f0"></div>
           <div id="sol-f1"></div>
           <div id="sol-f2"></div>
           <div id="sol-f3"></div>
         </div>
-        <div id="sol-tab-row" style="display:flex;gap:8px;align-items:flex-start;">
+        <div id="sol-tab-row">
           <div id="sol-t0" class="sol-tab-col"></div>
           <div id="sol-t1" class="sol-tab-col"></div>
           <div id="sol-t2" class="sol-tab-col"></div>
@@ -298,21 +287,21 @@
     </div>
   </div>
 
-  <div id="win-pt73" class="window navy" style="width:600px; height:360px; top:50px; left:130px; display:none;">
+  <div id="win-pt73" class="window navy" data-win-width="600" data-win-height="360" data-win-top="50" data-win-left="130" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>⚓</span> <span class="titlebar-text">PT-73 — McHale's Navy</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-pt73')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-pt73')">✕</div>
+        <div class="win-btn" data-click="minimize:win-pt73">_</div>
+        <div class="win-btn" data-click="close:win-pt73">✕</div>
       </div>
     </div>
     <div class="window-body pt73-body">
       <div class="pt73-sidebar">
         <div class="pt73-tabs">
-          <div class="pt73-tab active" onclick="pt73Season(1)">S1</div>
-          <div class="pt73-tab" onclick="pt73Season(2)">S2</div>
-          <div class="pt73-tab" onclick="pt73Season(3)">S3</div>
-          <div class="pt73-tab" onclick="pt73Season(4)">S4</div>
+          <div class="pt73-tab active" data-click="pt73:season:1">S1</div>
+          <div class="pt73-tab" data-click="pt73:season:2">S2</div>
+          <div class="pt73-tab" data-click="pt73:season:3">S3</div>
+          <div class="pt73-tab" data-click="pt73:season:4">S4</div>
         </div>
         <div class="pt73-eplist" id="pt73-eplist"></div>
       </div>
@@ -325,11 +314,11 @@
     </div>
   </div>
 
-  <div id="win-about" class="window" style="width: 340px; top: 80px; left: 250px; display: none;">
+  <div id="win-about" class="window" data-win-width="340" data-win-top="80" data-win-left="250" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🖥️</span> <span class="titlebar-text">About This PC</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="closeWindow('win-about')">✕</div>
+        <div class="win-btn" data-click="close:win-about">✕</div>
       </div>
     </div>
     <div class="window-body">
@@ -351,12 +340,12 @@
     </div>
   </div>
 
-  <div id="win-iss" class="window navy" style="width: 660px; top: 60px; left: 200px; display:none;">
+  <div id="win-iss" class="window navy" data-win-width="660" data-win-top="60" data-win-left="200" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🛰️</span> <span class="titlebar-text">ISS Live — Earth from Space</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-iss')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-iss')">✕</div>
+        <div class="win-btn" data-click="minimize:win-iss">_</div>
+        <div class="win-btn" data-click="close:win-iss">✕</div>
       </div>
     </div>
     <div class="window-body">
@@ -370,29 +359,26 @@
       ></iframe>
     </div>
   </div>
-</div>
 
-  <!-- Projects.exe -->
-  <div id="win-projects" class="window lavender" style="width:500px; top:70px; left:180px; display:none;">
+  <div id="win-projects" class="window lavender" data-win-width="500" data-win-top="70" data-win-left="180" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>📁</span><span class="titlebar-text">Projects.exe — GitHub Repositories</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-projects')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-projects')">✕</div>
+        <div class="win-btn" data-click="minimize:win-projects">_</div>
+        <div class="win-btn" data-click="close:win-projects">✕</div>
       </div>
     </div>
     <div id="projects-body" class="window-body">
-      <div style="text-align:center;padding:20px;color:var(--text-mid);">Loading repositories...</div>
+      <div class="loading-text">Loading repositories...</div>
     </div>
   </div>
 
-  <!-- Winamp.exe -->
-  <div id="win-winamp" class="window" style="width:280px; top:120px; left:420px; display:none;">
+  <div id="win-winamp" class="window" data-win-width="280" data-win-top="120" data-win-left="420" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left winamp-title-label">🎵 WINAMP</div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-winamp')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-winamp')">✕</div>
+        <div class="win-btn" data-click="minimize:win-winamp">_</div>
+        <div class="win-btn" data-click="close:win-winamp">✕</div>
       </div>
     </div>
     <div class="window-body">
@@ -401,79 +387,79 @@
         <div class="winamp-time" id="wa-time">▶ 0:00</div>
       </div>
       <div class="winamp-controls">
-        <button class="wa-btn" onclick="winampPrev()" title="Prev">⏮</button>
-        <button class="wa-btn" onclick="winampPlay()" title="Play">▶</button>
-        <button class="wa-btn" onclick="winampPause()" title="Pause">⏸</button>
-        <button class="wa-btn" onclick="winampStop()" title="Stop">⏹</button>
-        <button class="wa-btn" onclick="winampNext()" title="Next">⏭</button>
+        <button class="wa-btn" data-click="winamp:prev" title="Prev">⏮</button>
+        <button class="wa-btn" data-click="winamp:play" title="Play">▶</button>
+        <button class="wa-btn" data-click="winamp:pause" title="Pause">⏸</button>
+        <button class="wa-btn" data-click="winamp:stop" title="Stop">⏹</button>
+        <button class="wa-btn" data-click="winamp:next" title="Next">⏭</button>
       </div>
       <div class="winamp-playlist" id="wa-playlist"></div>
       <iframe id="winamp-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
     </div>
   </div>
 
-  <!-- MTG.exe -->
-  <div id="win-mtg" class="window" style="width:280px; top:80px; left:500px; display:none;">
+  <div id="win-mtg" class="window" data-win-width="280" data-win-top="80" data-win-left="500" data-win-hidden="1">
     <div class="titlebar">
       <div class="titlebar-left"><span>🧙</span><span class="titlebar-text">MTG.exe — Random Card</span></div>
       <div class="titlebar-right">
-        <div class="win-btn" onclick="minimizeWindow('win-mtg')">_</div>
-        <div class="win-btn" onclick="closeWindow('win-mtg')">✕</div>
+        <div class="win-btn" data-click="minimize:win-mtg">_</div>
+        <div class="win-btn" data-click="close:win-mtg">✕</div>
       </div>
     </div>
     <div class="window-body">
-      <div id="mtg-card-wrap"><div style="padding:20px;color:var(--text-mid);">Drawing a card...</div></div>
-      <button class="mtg-btn" onclick="loadMTGCard()">🃏 Draw Another</button>
+      <div id="mtg-card-wrap"><div class="loading-text">Drawing a card...</div></div>
+      <button class="mtg-btn" data-click="mtg:load">🃏 Draw Another</button>
     </div>
   </div>
+</div>
 
 <div id="start-menu">
   <div class="start-menu-sidebar"><span>kerrick.ca</span></div>
   <div class="start-menu-items">
     <div class="start-menu-divider"></div>
-    <div class="start-menu-item" onclick="openWindow('win-projects'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-projects">
       <span class="item-icon">📁</span>
       <div class="start-menu-label">Projects.exe<small>github repositories</small></div>
     </div>
-    <div class="start-menu-item" onclick="openWindow('win-steam'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-steam">
       <span class="item-icon">🎮</span>
       <div class="start-menu-label">Steam.exe<small>steam profile</small></div>
     </div>
-    <div class="start-menu-item" onclick="openWindow('win-solitaire'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-solitaire">
       <span class="item-icon">🃏</span>
       <div class="start-menu-label">Solitaire.exe<small>card game</small></div>
     </div>
-    <div class="start-menu-item" onclick="openWindow('win-winamp'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-winamp">
       <span class="item-icon">🎵</span>
       <div class="start-menu-label">Winamp.exe<small>music player</small></div>
     </div>
-    <div class="start-menu-item" onclick="openWindow('win-mtg'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-mtg">
       <span class="item-icon">🧙</span>
       <div class="start-menu-label">MTG.exe<small>random card draw</small></div>
     </div>
     <div class="start-menu-divider"></div>
-    <a class="start-menu-item" href="https://github.com/BingleP/BinglesHTTPServer" target="_blank" onclick="toggleStart()">
+    <a class="start-menu-item" href="https://github.com/BingleP/BinglesHTTPServer" target="_blank" data-click="start:toggle">
       <span class="item-icon">🗄️</span>
       <div class="start-menu-label">BinglesHTTPServer<small>python file server</small></div>
     </a>
-    <a class="start-menu-item" href="https://github.com/BingleP/Solitaire" target="_blank" onclick="toggleStart()">
+    <a class="start-menu-item" href="https://github.com/BingleP/Solitaire" target="_blank" data-click="start:toggle">
       <span class="item-icon">🃏</span>
       <div class="start-menu-label">Solitaire<small>python card game</small></div>
     </a>
-    <a class="start-menu-item" href="https://github.com/BingleP/LiberalBot" target="_blank" onclick="toggleStart()">
+    <a class="start-menu-item" href="https://github.com/BingleP/LiberalBot" target="_blank" data-click="start:toggle">
       <span class="item-icon">🤖</span>
       <div class="start-menu-label">LiberalBot<small>discord music bot</small></div>
     </a>
-    <a class="start-menu-item" href="https://github.com/BingleP/jellyfin-youtube-feed" target="_blank" onclick="toggleStart()">
+    <a class="start-menu-item" href="https://github.com/BingleP/jellyfin-youtube-feed" target="_blank" data-click="start:toggle">
       <span class="item-icon">📺</span>
       <div class="start-menu-label">jellyfin-youtube-feed<small>jellyfin + youtube</small></div>
     </a>
     <div class="start-menu-divider"></div>
-    <div class="start-menu-item" onclick="openWindow('win-about'); toggleStart()">
+    <div class="start-menu-item" data-click="window:win-about">
       <span class="item-icon">🖥️</span>
       <div class="start-menu-label">About This PC<small>system specs</small></div>
     </div>
-    <a class="start-menu-item" href="https://github.com/BingleP" target="_blank" onclick="toggleStart()">
+    <a class="start-menu-item" href="https://github.com/BingleP" target="_blank" data-click="start:toggle">
       <span class="item-icon">🐙</span>
       <div class="start-menu-label">GitHub<small>github.com/BingleP</small></div>
     </a>
@@ -482,35 +468,27 @@
 
 <div id="bonzi-panel">
   <div class="bonzi-character">
-    <img src="img/bonzi.gif" alt="BonziBUDDY" onerror="this.style.display='none'; document.querySelector('.bonzi-char-fallback').style.display='block'">
+    <img src="/img/bonzi.gif" alt="BonziBUDDY" data-error="bonzi">
     <div class="bonzi-char-fallback">🦍</div>
     <div class="bonzi-speech" id="bonzi-speech">Hiya! I'm BonziBUDDY! Ask me anything!</div>
   </div>
   <div class="bonzi-chat" id="bonzi-chat"></div>
   <div class="bonzi-input-row">
-    <input class="bonzi-input" id="bonzi-input" type="text" placeholder="Say something..." onkeydown="if(event.key==='Enter') bonziSend()">
-    <button class="bonzi-send" onclick="bonziSend()">Send</button>
-    <button class="bonzi-tts-btn" id="bonzi-tts-toggle" onclick="bonziToggleTTS()" title="Toggle speech">🔊</button>
+    <input class="bonzi-input" id="bonzi-input" type="text" placeholder="Say something..." data-keydown="bonzi:send">
+    <button class="bonzi-send" data-click="bonzi:send">Send</button>
+    <button class="bonzi-tts-btn" id="bonzi-tts-toggle" data-click="bonzi:toggle-tts" title="Toggle speech">🔊</button>
   </div>
 </div>
 
 <div class="taskbar">
-  <div class="start-btn" onclick="toggleStart()"><img src="img/kerrick.png" class="start-btn-logo" alt="">Start</div>
-  <div id="taskbar-items" style="display:flex;gap:4px;"></div>
-  <div class="bonzi-tray-btn" onclick="bonziTogglePanel()" title="BonziBUDDY">
-    <img src="img/bonzi.gif" alt="🦍" onerror="this.textContent='🦍'; this.style.fontSize='16px'">
+  <div class="start-btn" data-click="start:toggle"><img src="/img/kerrick.png" class="start-btn-logo" alt="">Start</div>
+  <div id="taskbar-items"></div>
+  <div class="bonzi-tray-btn" data-click="bonzi:toggle-panel" title="BonziBUDDY">
+    <img src="/img/bonzi.gif" alt="🦍" data-error="bonzi-tray">
   </div>
   <div class="taskbar-clock" id="clock">12:00</div>
 </div>
 
-<script src="js/windows.js?v=7"></script>
-<script src="js/system.js?v=5"></script>
-<script src="js/steam.js?v=5"></script>
-<script src="js/bonzi.js?v=5"></script>
-<script src="js/winamp.js?v=6"></script>
-<script src="js/projects.js?v=5"></script>
-<script src="js/mtg.js?v=5"></script>
-<script src="js/solitaire.js?v=5"></script>
-<script src="js/pt73.js?v=5"></script>
+<script type="module" src="/src/main.ts"></script>
 </body>
 </html>

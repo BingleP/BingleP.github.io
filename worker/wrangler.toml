@@ -5,7 +5,7 @@ account_id = "c4643698f02ea6d8457169e9c336275b"
 
 # Deploy with: npx wrangler deploy
 #
-# After deploying, set your Gemini API key as a secret (never put it here):
-#   npx wrangler secret put GEMINI_API_KEY
+# After deploying, set your Groq API key as a secret (never put it here):
+#   npx wrangler secret put GROQ_API_KEY
 #
 # Then paste your worker URL into index.html where it says REPLACE_WITH_YOUR_WORKER_URL
