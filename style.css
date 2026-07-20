@@ -106,8 +106,8 @@ body {
 }
 
 .icon-img img {
-  width: 80%;
-  height: 80%;
+  width: 32px;
+  height: 32px;
   max-width: 48px;
   max-height: 48px;
   object-fit: contain;
