@@ -101,7 +101,17 @@ body {
   border-right: 2px solid var(--btn-shadow);
   border-bottom: 2px solid var(--btn-shadow);
   box-shadow: 1px 1px 0 var(--btn-dark-shadow);
+  overflow: hidden;
   transition: all 0.1s var(--easing);
+}
+
+.icon-img img {
+  width: 80%;
+  height: 80%;
+  max-width: 48px;
+  max-height: 48px;
+  object-fit: contain;
+  display: block;
 }
 
 .icon-item:hover .icon-img {
@@ -899,7 +909,7 @@ body {
 .bonzi-msg.user { background: #2a1a4a; color: #c8a8ff; align-self: flex-end; }
 .bonzi-msg.bonzi { background: #1a0a2e; color: #e8d0ff; border-left: 3px solid #9b30e8; }
 .bonzi-input-row { display: flex; gap: 4px; padding: 6px; border-top: 2px solid #2a1a4e; background: #0d0d1a; }
-.bonzi-input { flex: 1; font-family: 'VT323'; font-size: 16px; background: #1a0a2e; color: #e8d0ff; border: 2px inset #333; padding: 3px 6px; }
+.bonzi-input { flex: 1; min-width: 0; font-family: 'VT323'; font-size: 16px; background: #1a0a2e; color: #e8d0ff; border: 2px inset #333; padding: 3px 6px; }
 .bonzi-input:focus { outline: none; }
 .bonzi-send { font-family: 'VT323'; font-size: 16px; background: #2a1a4a; color: #d4b0ff; border-top: 2px solid #4a3a6a; border-left: 2px solid #4a3a6a; border-right: 2px solid #0a0020; border-bottom: 2px solid #0a0020; padding: 2px 10px; cursor: pointer; }
 .bonzi-send:active { border-top: 2px solid #0a0020; border-left: 2px solid #0a0020; border-right: 2px solid #4a3a6a; border-bottom: 2px solid #4a3a6a; }
