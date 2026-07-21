@@ -1,3 +1,5 @@
+import { isMobileLayout } from './breakpoints';
+
 let activeDragWin: HTMLElement | null = null;
 let isDragging = false;
 let dragStartX = 0, dragStartY = 0, baseLeft = 0, baseTop = 0;
@@ -44,6 +46,16 @@ export function openWindow(id: string) {
   if (!win) return;
   win.style.display = 'flex';
   win.classList.remove('minimized');
+  if (!isMobileLayout()) {
+    const vw = window.innerWidth;
+    const vh = window.innerHeight - 36;
+    const w = win.offsetWidth || parseInt(win.dataset.winWidth || '300');
+    const h = win.offsetHeight || parseInt(win.dataset.winHeight || '200');
+    const left = Math.min(parseInt(win.style.left || '0') || 0, vw - w - 20);
+    const top = Math.min(parseInt(win.style.top || '0') || 0, vh - h - 20);
+    win.style.left = Math.max(10, left) + 'px';
+    win.style.top = Math.max(10, top) + 'px';
+  }
   focusWindow(id);
 }
 
@@ -102,34 +114,34 @@ function initWindowDrag(win: HTMLElement) {
   const titlebar = win.querySelector<HTMLElement>('.titlebar');
   if (!titlebar) return;
 
-  if (window.innerWidth > 700) {
-    const handle = document.createElement('div');
-    handle.className = 'resize-handle';
-    win.appendChild(handle);
+  const handle = document.createElement('div');
+  handle.className = 'resize-handle';
+  win.appendChild(handle);
 
-    handle.addEventListener('mousedown', (e) => {
-      isResizing = true;
-      resizeWin = win;
-      rsX = e.clientX; rsY = e.clientY;
-      rsW = win.offsetWidth; rsH = win.offsetHeight;
-      e.preventDefault(); e.stopPropagation();
-    });
-  }
+  handle.addEventListener('mousedown', (e) => {
+    if (isMobileLayout()) return;
+    isResizing = true;
+    resizeWin = win;
+    rsX = e.clientX; rsY = e.clientY;
+    rsW = win.offsetWidth; rsH = win.offsetHeight;
+    e.preventDefault(); e.stopPropagation();
+  });
 
   titlebar.addEventListener('mousedown', (e) => {
-    if (window.innerWidth <= 700) return;
+    if (isMobileLayout()) return;
     isDragging = true;
     activeDragWin = win;
     baseLeft = win.offsetLeft;
     baseTop = win.offsetTop;
     dragStartX = e.clientX;
     dragStartY = e.clientY;
+    win.classList.add('dragging');
     focusWindow(win.id);
   });
 
   let tDragStartX = 0, tDragStartY = 0, tBaseLeft = 0, tBaseTop = 0;
   titlebar.addEventListener('touchstart', (e) => {
-    if (window.innerWidth <= 700) return;
+    if (isMobileLayout()) return;
     const t = e.touches[0];
     isDragging = true;
     activeDragWin = win;
@@ -137,6 +149,7 @@ function initWindowDrag(win: HTMLElement) {
     tBaseTop = win.offsetTop;
     tDragStartX = t.clientX;
     tDragStartY = t.clientY;
+    win.classList.add('dragging');
     focusWindow(win.id);
   }, { passive: true });
 
@@ -157,6 +170,8 @@ function initWindowDrag(win: HTMLElement) {
     activeDragWin.style.left = (tBaseLeft + dx) + 'px';
     activeDragWin.style.top = (tBaseTop + dy) + 'px';
     activeDragWin.style.transform = '';
+    void activeDragWin.offsetHeight;
+    activeDragWin.classList.remove('dragging');
     activeDragWin = null;
   });
 
@@ -189,6 +204,8 @@ document.addEventListener('mouseup', (e) => {
   activeDragWin.style.left = (baseLeft + dx) + 'px';
   activeDragWin.style.top = (baseTop + dy) + 'px';
   activeDragWin.style.transform = '';
+  void activeDragWin.offsetHeight;
+  activeDragWin.classList.remove('dragging');
   activeDragWin = null;
 });
 
@@ -213,7 +230,7 @@ document.getElementById('desktop')?.addEventListener('contextmenu', (e) => {
 });
 
 const pt73Win = document.getElementById('win-pt73');
-if (pt73Win && window.innerWidth > 700) {
+if (pt73Win) {
   let lastW = 0;
   new ResizeObserver(() => {
     const w = pt73Win.offsetWidth;
@@ -233,16 +250,15 @@ if (pt73Win && window.innerWidth > 700) {
   }).observe(pt73Win);
 }
 
-if (window.innerWidth > 700) {
-  const solWin = document.getElementById('win-solitaire');
-  const solBody = document.getElementById('sol-game-body');
-  if (solWin && solBody) {
-    let baseW = 0;
-    new ResizeObserver(() => {
-      if (!baseW) baseW = solWin.clientWidth;
-      solBody.style.zoom = String(solWin.clientWidth / baseW);
-    }).observe(solWin);
-  }
+const solWin = document.getElementById('win-solitaire');
+const solBody = document.getElementById('sol-game-body');
+if (solWin && solBody) {
+  let baseW = 0;
+  new ResizeObserver(() => {
+    if (isMobileLayout()) return;
+    if (!baseW) baseW = solWin.clientWidth;
+    solBody.style.zoom = String(solWin.clientWidth / baseW);
+  }).observe(solWin);
 }
 
 function initWindowGeometry(win: HTMLElement) {

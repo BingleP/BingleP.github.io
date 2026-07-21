@@ -39,6 +39,7 @@ body {
   font-family: 'Nunito', sans-serif;
   background-color: var(--desktop-bg);
   background-image: var(--desktop-bg-gradient);
+  height: 100dvh;
   height: 100vh;
   overflow: hidden;
   color: var(--text-dark);
@@ -47,6 +48,7 @@ body {
 #desktop {
   position: relative;
   width: 100%;
+  height: calc(100dvh - 36px);
   height: calc(100vh - 36px);
   padding: 20px;
 }
@@ -154,6 +156,8 @@ body {
   transition: transform 0.25s var(--easing), opacity 0.2s var(--easing);
   z-index: 10;
 }
+
+.window.dragging { transition: none !important; }
 
 .window.active { z-index: 100; }
 
@@ -382,7 +386,7 @@ body {
   border-right: 2px solid var(--btn-shadow);
   border-bottom: 2px solid var(--btn-shadow);
   box-shadow: 2px 2px 0 var(--btn-dark-shadow);
-  z-index: 2000;
+  z-index: 8600;
   flex-direction: row;
 }
 
@@ -530,7 +534,7 @@ body {
   border-right: 2px solid var(--btn-shadow);
   border-bottom: 2px solid var(--btn-shadow);
   box-shadow: 2px 2px 0 var(--btn-dark-shadow);
-  z-index: 3000;
+  z-index: 8700;
   min-width: 180px;
   padding: 2px 0;
 }
@@ -750,7 +754,7 @@ body {
 
 #win-mtg .window-body { text-align: center; }
 
-.mtg-card-img { width: 220px; border-radius: 10px; display: block; margin: 0 auto 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+.mtg-card-img { width: 220px; max-width: 100%; border-radius: 10px; display: block; margin: 0 auto 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
 .mtg-btn {
   display: block; width: 100%; padding: 6px; font-family: 'VT323', monospace;
   font-size: 16px; background: var(--btn-face); color: var(--accent);
@@ -776,6 +780,9 @@ body {
 .iss-iframe {
   display: block;
   border: none;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 660/371;
 }
 
 .steam-body {
@@ -1111,12 +1118,13 @@ body {
   letter-spacing: 1px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 700px), (max-height: 500px) {
   #desktop {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: calc(100dvh - 48px);
     height: calc(100vh - 48px);
     padding: 12px 12px 80px;
     -webkit-overflow-scrolling: touch;
@@ -1149,16 +1157,22 @@ body {
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
+    height: auto !important;
+    min-height: unset !important;
     transform: none !important;
     opacity: 1 !important;
   }
 
   .window.minimized { display: none !important; }
 
+  .resize-handle { display: none !important; }
+
   .taskbar {
     height: 48px;
     padding: 0 10px;
   }
+
+  #taskbar-items { overflow-x: auto; }
 
   .start-btn {
     font-size: 18px;
@@ -1190,6 +1204,21 @@ body {
   .pt73-sidebar { width:100%; min-width:unset; border-right:none; border-bottom:2px solid var(--win-border-dark); }
   .pt73-eplist { max-height:180px; }
   .pt73-iframe-wrap { height:200px; }
+
+  #bonzi-panel {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+    bottom: 56px !important;
+    max-height: 55dvh;
+  }
+
+  #floating-bonzi { display: none !important; }
+
+  #error-popup .error-box {
+    width: calc(100% - 32px);
+    max-width: 420px;
+  }
 }
 
 @font-face {

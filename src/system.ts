@@ -1,4 +1,5 @@
 import { updateTaskbar, openWindow } from './windows';
+import { isMobileLayout, onLayoutChange } from './breakpoints';
 
 let soundPlayed = false;
 
@@ -147,17 +148,24 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-if (window.innerWidth <= 700) {
+if (isMobileLayout()) {
   document.getElementById('bonzi-panel')?.classList.add('bonzi-hidden');
-  document.querySelectorAll('.icon-item').forEach(icon => {
-    icon.addEventListener('click', () => {
-      const dblHandler = icon.getAttribute('data-dblclick');
-      if (dblHandler) {
-        const match = dblHandler.match(/^window:(.+)$/);
-        if (match) openWindow(match[1]);
-      }
-    });
-  });
 }
+
+onLayoutChange((mobile) => {
+  if (mobile) {
+    document.getElementById('bonzi-panel')?.classList.add('bonzi-hidden');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if (!isMobileLayout()) return;
+  const icon = (e.target as Element).closest('[data-dblclick]') as HTMLElement | null;
+  if (!icon) return;
+  const action = icon.getAttribute('data-dblclick');
+  if (!action) return;
+  const match = action.match(/^window:(.+)$/);
+  if (match) openWindow(match[1]);
+});
 
 export { startScreensaver, stopScreensaver };
