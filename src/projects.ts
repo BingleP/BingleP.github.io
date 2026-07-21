@@ -7,6 +7,10 @@ export async function loadProjects() {
 
   try {
     const res = await fetch('https://api.github.com/users/BingleP/repos?sort=updated&per_page=20');
+    if (!res.ok) {
+      body.innerHTML = `<div style="padding:16px;color:var(--text-mid);">GitHub API error (${res.status})${res.status === 403 ? ' — rate limit hit. Try again later.' : ''}</div>`;
+      return;
+    }
     const repos: GitHubRepo[] = await res.json();
     const filtered = repos.filter(r => !r.fork && r.name !== 'BingleP.github.io');
 

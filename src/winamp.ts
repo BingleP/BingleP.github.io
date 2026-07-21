@@ -71,7 +71,7 @@ export function winampPause() {
 
 export function winampStop() {
   const iframe = document.getElementById('winamp-iframe') as HTMLIFrameElement;
-  if (iframe) iframe.src = '';
+  if (iframe) iframe.src = 'about:blank';
   const display = document.getElementById('wa-track-display');
   if (display) display.textContent = '♫ stopped ♫';
   document.querySelectorAll('.wa-track').forEach(el => el.classList.remove('playing'));

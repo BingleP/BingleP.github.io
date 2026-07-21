@@ -170,9 +170,12 @@ export function pt73Season(s: number) {
 
 function pt73Play(videoId: string, label: string, el: HTMLElement) {
   const iframe = document.getElementById('pt73-iframe') as HTMLIFrameElement;
-  if (iframe) iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+  if (iframe && iframe.dataset.vid !== videoId) {
+    iframe.dataset.vid = videoId;
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&rel=0`;
+  }
   const now = document.getElementById('pt73-nowplaying');
-  if (now) now.innerHTML = `▶ <span>${label}</span>`;
+  if (now) now.innerHTML = `▶ <span>${label}</span> <span style="font-size:11px;opacity:0.6;">— muted</span>`;
   document.querySelectorAll('.pt73-ep').forEach(e => e.classList.remove('playing'));
   el.classList.add('playing');
 }

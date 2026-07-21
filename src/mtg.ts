@@ -6,6 +6,7 @@ export async function loadMTGCard() {
   wrap.innerHTML = '<div style="padding:20px;color:var(--text-mid);">Drawing a card...</div>';
   try {
     const res = await fetch('https://api.scryfall.com/cards/random');
+    if (!res.ok) throw new Error('Scryfall error');
     const card: ScryfallCard = await res.json();
     const img = card.image_uris?.normal ?? card.card_faces?.[0]?.image_uris?.normal;
     if (!img) throw new Error('no image');

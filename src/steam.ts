@@ -18,12 +18,18 @@ export async function loadSteamData() {
 
   try {
     const res = await fetch(BONZI_WORKER_URL + 'steam');
-    if (!res.ok) return;
+    if (!res.ok) { showError(); return; }
     const d: SteamPlayer = await res.json();
-    if ((d as any).error) return;
+    if ((d as any).error) { showError(); return; }
     cachedData = d;
     renderSteam(d);
-  } catch { /* ignore */ }
+  } catch { showError(); }
+
+  function showError() {
+    if (nameEl) nameEl.textContent = "COULDN'T LOAD";
+    if (statusEl) { statusEl.textContent = '○ Profile unavailable'; statusEl.style.color = '#888'; }
+    if (recentEl) recentEl.innerHTML = '<div style="opacity:0.5;">Worker may be down. Try again later.</div>';
+  }
 
   function renderSteam(d: SteamPlayer) {
     if (nameEl) nameEl.textContent = d.name.toUpperCase();

@@ -1,4 +1,7 @@
 import { isMobileLayout } from './breakpoints';
+import { loadSteamData } from './steam';
+import { loadProjects } from './projects';
+import { loadMTGCard } from './mtg';
 
 let activeDragWin: HTMLElement | null = null;
 let isDragging = false;
@@ -44,6 +47,7 @@ export function closeWindow(id: string) {
 export function openWindow(id: string) {
   const win = document.getElementById(id);
   if (!win) return;
+  const wasHidden = win.style.display === 'none';
   win.style.display = 'flex';
   win.classList.remove('minimized');
   if (!isMobileLayout()) {
@@ -57,6 +61,11 @@ export function openWindow(id: string) {
     win.style.top = Math.max(10, top) + 'px';
   }
   focusWindow(id);
+  if (wasHidden) {
+    if (id === 'win-steam') loadSteamData();
+    else if (id === 'win-projects') loadProjects();
+    else if (id === 'win-mtg') loadMTGCard();
+  }
 }
 
 const TASK_ICONS: Record<string, string> = {
@@ -234,6 +243,7 @@ if (pt73Win) {
   let lastW = 0;
   new ResizeObserver(() => {
     const w = pt73Win.offsetWidth;
+    if (w === 0) { lastW = 0; return; }
     if (w === lastW) return;
     lastW = w;
     const t = pt73Win.querySelector<HTMLElement>('.titlebar');
